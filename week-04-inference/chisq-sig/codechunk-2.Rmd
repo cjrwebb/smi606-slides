@@ -1,0 +1,16 @@
+---
+title: ""
+author: ""
+date: ""
+output: html_document
+---
+
+#### Input
+
+```{r setup, include=TRUE, eval=FALSE}
+
+dice_rolls_summary <- dice_rolls_summary %>%
+    mutate(expected = sum(n) / 6)
+dice_rolls_summary
+
+```

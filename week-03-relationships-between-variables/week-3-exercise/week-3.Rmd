@@ -1,0 +1,279 @@
+---
+title: 'Week 3: Practical Exercise'
+author: "Calum Webb"
+date: "27/09/2022"
+output: pdf_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+
+#################################################################################
+#################################################################################
+###########################           IMPORTANT       ###########################
+#################################################################################
+#################################################################################
+
+#' Before you can "knit" this document - a.k.a. turn it into a pdf - you need to
+#' install LaTeX on your computer (this is a typesetting language). The easiest
+#' way to do this is to use the tinytex package in R.
+
+#' Uncomment and run the two lines of code below (and remember to re-comment them
+#' afterwards otherwise it will reinstall itself every time you knit the document!) 
+#' to install LaTeX onto your computer. After this, test everything is working
+#' by clicking the "Knit" button at the top of your script in Rstudio.
+
+#install.packages('tinytex')
+#tinytex::install_tinytex()
+
+#' If this does not work, please speak to one of us in class and, for now, change
+#' the "pdf_document" text above (where it says: output: pdf_document) to 
+#' html_document as a temporary solution.
+
+#################################################################################
+#################################################################################
+#################################################################################
+#################################################################################
+
+
+
+# Above this text is the .yaml header - seperated by three --- and ended with three --- this is where the title of the document and its output is included (you can change html_document to pdf_document to print a pdf).
+
+# This is a code chunk (starts with ``` and ends with ```). The section after the ``` in the curly braces {} tells R that the code in this chunk is R code (r), that the chunk is named setup, and the this code chunk should not be included in the final output (include=FALSE)
+
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+## R Markdown Reminder
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>. 
+
+In R Markdown you need to style your writing in plain text - it will then read this plain text and format it however you want it to be formatted. For example, headings always begin with a # sign like above. The more # signs, the smaller the heading. **Bold** text is text with two asterixes or __underscores__ around it and *italicised* text is text with only one asterix or _underscore_ around it.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+library(tidyverse)
+library(rcompanion)
+library(janitor)
+ssa <- read_rds("ssa_tidied.rds")
+ssa
+```
+
+You can run the code in the chunks just like you would in a normal R script: just highlight it and click run or press control/command and enter while your typing cursor is on it.
+
+## Introduction
+
+This week we are going to be taking a break from writing `R` code itself and will be focusing on interpreting the code that is output.
+
+Below, you will find snippets of `R` code that have been written by a researcher studying the associations between age, education, views on immigration, and Scottish identity.
+
+Only one problem — the researcher (like your module leader) — has totally neglected to add comments about what they have done and what the interpretation of their results should be! Wow, they are so lazy. It is _definitely_ not something I would do and leave as a problem for future me.
+
+It is your job to run and interpret the code left behind and write below what the research results are and their interpretation. You should write a brief description of everything for a general audience, even if it is something that should feel self-explanatory like a data visualisation. Not only is it generally good practice to put your interpretation of a graph into words, it makes your research more accessible for people with visual impairments. 
+
+Before you are given each of the steps, below is a description of the data being used and the variables in the data. 
+
+## Description of data
+
+This data is an extract taken from the 2014 Scottish Social Attitudes Survey (https://natcen.ac.uk/our-research/research/scottish-social-attitudes/) conducted by NatCen. It includes variables about attitudes towards welfare, Scottish Independence, Scottish identity, and political affiliation. This extract is taken from the materials in Fogarty (2019). It includes a somewhat small but representative sample of between around 1,000 and 2,000 people aged over 16 and living in Scotland.
+
+## Description of variables
+
+The following variables are included in the data extract. You don't need to commit these to memory, but you may need to come back and refer to this list to understand and interpret the results below.
+
+* __pserial__ = respondent serial number (identifier)
+* __rsex__ = respondent's sex
+* __rage__ = respondent's age
+* __incsour__ = respondent's income source
+* __leftrigh__ = respondent's position on a left-right political ideology scale
+  * 1 = Most Left Leaning, 5 = More Right Leaning
+* __libauth__ = respondent's position on a libertarian-authoritarian political ideology scale
+  * 1 = Most Libertarian Leaning, 5 = Most Authoritarian Leaning
+* __employment__ = respondent's employment status
+* __employmentdum__ = simplified employment status (employed or unemployed)
+* __party_allg__ = respondent's political party allegiance
+* __gov_trust__ = the extent to which the respondent says they trust the __British__ government
+* __tax_view__ = respondent's views on taxation and taxes
+* __eu_policy__ = respondent's views on the UK's relationship with the EU
+* __ev_cameron__ = respondent's evaluation of then Prime Minister David Cameron
+  * 0 to 10 with 0 = "very bad" and 10 = "very good"
+* __ev_salmond__ = respondent's evaluation of then First Minister Alex Salmond
+  * 0 to 10 with 0 = "very bad" and 10 = "very good"
+* __knowind__ = how much the respondent reports they feel they know about the Scottish independence vote
+* __likely_vote__ = respondent's self reported likelihood of voting in the independence referendum
+  * 0 to 10 with 0 = "very unlikely" and 10 = "very likely"
+* __referend_vote__ = respondent's expected vote in the independence referendum
+* __union_benef__ = respondent's view on who benefits from the Union (between Scotland and England)
+* __refvote_dum__ = simplified expected referendum vote (those who answered either Yes or No)
+* __uk_scot_spend_fair__ = respondent's view on the share of UK spending that Scotland receives
+* __scot_identity__ = respondent's reported strength of Scottish identity
+  * 1 to 7 with 1 = "very weak" and 7 = "very strong"
+* __highest_quals__ = highest education qualification attained
+* __dole_fct__ = respondent's view on whether benefits are too high, too low, or neither too high or too low
+* __imig_fct__ = respondent's view on how immigration to Scotland should change in the future
+* __imig_fct_3__ = simplified view on how immigration should change in the future
+
+## Aim
+
+Identify the associations between age (`rage`), education (`highest_quals`), views on immigration (`imig_fct_3`), and strength of Scottish identity (`scot_identity`)?
+
+## Research questions
+
+* Does strength of Scottish identity vary by age?
+* Are people with different levels of qualifications more or less likely to identify strongly with their nationality?
+* Are people with lower educational qualifications more likely to hold the view that immigration should be reduced?
+
+
+
+## Research Question 1: Does strength of Scottish identity vary by age?
+
+```{r}
+
+ssa %>%
+  ggplot() +
+    geom_hex(
+      aes(x = rage, y = scot_identity), bins = 10
+    )
+
+```
+
+```{r}
+
+cor(ssa$rage, ssa$scot_identity, 
+    use = "complete.obs",
+    method = "pearson")
+
+cor(ssa$rage, ssa$scot_identity, 
+    use = "complete.obs",
+    method = "spearman")
+
+```
+
+
+### Describe how the association between strength of Scottish national identity and age was visualised, and what the visualisation suggests.
+
+
+*Write your answer in here*
+
+
+### Describe the strength of the association in terms of correlation - state whether you would describe the association as very weak, weak, moderate, strong, or very strong and explain the direction of the association (e.g. as X increases, Y increases/decreases).
+
+
+*Write your answer in here*
+
+
+
+## Research Question 2: Are people with different levels of qualifications more or less likely to identify strongly with their nationality?
+
+```{r}
+
+ssa %>%
+  filter(!is.na(highest_quals)) %>% # Remove missing responses
+  ggplot() +
+    geom_boxplot(
+      aes(x = highest_quals, y = scot_identity)
+    ) +
+  coord_flip() # Flip the coordinates to make labels easier to read
+
+```
+
+```{r}
+
+library(modeest)
+
+ssa %>%
+  filter(!is.na(highest_quals)) %>% # Remove missing responses
+  group_by(highest_quals) %>%
+  summarise(
+    mean_scotid = mean(scot_identity, na.rm = TRUE),
+    median_scotid = median(scot_identity, na.rm = TRUE),
+    mfv_scotid = mfv(scot_identity, na_rm = TRUE),
+    sample_size = n()
+  ) 
+
+```
+
+### Describe how strength of Scottish identity varies by highest qualification held. Make reference to descriptive statistics.
+
+
+*Write your answer in here*
+
+
+### What other type of visualisation could the researcher have used here? 
+
+
+*Write your answer in here*
+
+
+## Research Question 3: Are people with lower educational qualifications more likely to hold the view that immigration should be reduced?
+
+```{r}
+
+ssa %>%
+  filter(!is.na(highest_quals) & !is.na(imig_fct_3)) %>% # Remove missing responses
+  tabyl(highest_quals, imig_fct_3) %>% # create a contingency table
+  adorn_percentages("row") %>% # convert to proportions within education categories
+  pivot_longer(-1, names_to = "imig_fct_3") %>% # convert to long format
+  mutate(imig_fct_3 = factor(imig_fct_3, levels = c("Reduced", "Same", "Increased"))) %>% # add order to immigration factors
+  ggplot() +
+    geom_col(
+      aes(x = highest_quals, fill = imig_fct_3, y = value),
+      position = "dodge" # creates side-by-side bar chart
+    ) +
+  coord_flip() + # Flip the coordinates to make labels easier to read
+  ylab("Proportion of Respondents")
+
+```
+
+```{r}
+
+library(janitor)
+
+ssa %>%
+  tabyl(highest_quals, imig_fct_3)
+
+```
+
+```{r}
+
+library(janitor)
+
+ssa %>%
+  filter(!is.na(highest_quals) & !is.na(imig_fct_3)) %>% # remove missing
+  tabyl(highest_quals, imig_fct_3) %>% # create cross table
+  adorn_totals(where = "col") %>% # add totals
+  adorn_percentages(denominator = "row") %>% # create percentages
+  adorn_pct_formatting() # format percentages
+
+```
+
+### Describe how attiudes towards immigration differ based on educational qualifications held; which types of qualifications are most strongly associated with views that immigration should be reduced and which are most strongly associated with views that it should be increased? Remember to use both percentages and frequency counts (raw numbers of people in the sample) in your description. 
+
+
+*Write your answer in here*
+
+
+```{r}
+
+cramerV(ssa$highest_quals, ssa$imig_fct_3)
+
+```
+
+### Interpret the Cramer's V statistic: does it suggest the association between education and attitudes towards immigration is strong, moderate, weak, or negligible and why?
+
+*Write your answer in here*
+
+### What other descriptive statistic could the researchers have used to describe the relationship between the two variables? Would there be any benefits to using the alternative statistic you suggested compared to Cramer's V, and if so, what are they?
+
+*Write your answer in here*
+
+
+## Week 3 Challenge
+
+Come up with two additional research questions (they can be about anything, they don't have to just be about Scottish identity or immigration) you could investigate using this dataset. Produce relevant visualisations and descriptive statistics for exploring the associations that can answer your research questions. Remember to describe your findings!
+
+
+

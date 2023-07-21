@@ -1,0 +1,11 @@
+names_uss,labels_uss
+state,State
+neo_nazi_hgs,Active Neo-Nazi hate groups in this state?
+anti_imig_hgs,Active anti-immigrant hate groups in this state?
+pc_bachelors_ed,Percentage of the population with bachelors or higher education qualifications
+population,"Population (in 100,000s)"
+pc_age_65_plus,Percentage of the population aged 65 or older
+pc_black_pop,Percentage of the population who identify as black
+pc_hh_with_internet,Percentage of households with internet
+latitude,Latitude (higher = more northern)
+longitude,Longitude (higher - more western)

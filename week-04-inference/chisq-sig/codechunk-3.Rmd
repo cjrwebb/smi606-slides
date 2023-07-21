@@ -1,0 +1,14 @@
+---
+title: ""
+author: ""
+date: ""
+output: html_document
+---
+
+#### Input
+
+```{r setup, include=TRUE, eval=FALSE}
+
+chisq.test(x = dice_rolls_summary$n, p = dice_rolls_summary$expected, rescale.p = TRUE)
+
+```

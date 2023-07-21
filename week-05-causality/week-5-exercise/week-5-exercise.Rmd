@@ -1,0 +1,345 @@
+---
+title: "Week 5 R Exercise"
+author: "Calum Webb"
+date: "21/10/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+
+# Remember to load the packages we will be using!
+# Install them first using the console if they are not
+# detected!
+
+# If you can't get pdfs to knit, change the above to "html_document" or just run the code in R and don't worry about knitting the final document
+
+library(tidyverse)
+library(janitor)
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Part 1
+
+## Running statistical inference tests
+
+This .Rmd file will take you through three statistical inference tests that can be run in `R` using data from different kinds of research studies. 
+
+Your first task will be to run the analyses (in `R`), interpret the output, and write what kind of causal inference *could* be made based on the description of the study. 
+
+Your second task will be to write the code to perform some additional statistical tests (ones you will have already seen the code for), and practice interpreting the output.
+
+## Efficacy of Small Class Sizes in Early Education (from Imai, 2017)
+
+*You are not expected to write any original code in this example! You are just expected to interpret it.*
+
+The Student-Teacher Achievement Ratio Project (STAR) was a four year longitudinal study on the effect of class size in early US grade levels on educational performance and personal development. It was run between 1985 and 1989.
+
+During the study, students were randomly assigned to either small classes, regular classes, or regular classes with teaching aids. It followed 11,601 students from Tennessee, USA.
+
+
+```{r}
+
+# Run this code to read in and tidy up the data - you don't need to write anything else in here!
+
+star_data <- read_csv("star.csv")
+
+star_data <- star_data %>%
+  mutate(
+    race = case_when(race == 1 ~ "white",
+                     race == 2 ~ "black",
+                     race == 3 ~ "asian",
+                     race == 4 ~ "hispanic",
+                     race == 5 ~ "native american",
+                     race == 6 ~ "other",
+                     TRUE ~ NA_character_),
+    classtype = case_when(classtype == 1 ~ "small",
+                          classtype == 2 ~ "regular",
+                          classtype == 3 ~ "regular+aid",
+                          TRUE ~ NA_character_),
+    hsgrad = case_when(hsgrad == 1 ~ "graduated",
+                       hsgrad == 0 ~ "did not graduate",
+                       TRUE ~ NA_character_)
+  )
+
+
+# Additional data filtering only students in the small classes for either 4 years or not at all
+star_data_4years <- star_data %>%
+   filter(yearssmall == 4 | yearssmall == 0) 
+
+
+
+```
+
+### Research Question 1: Did students who were in different types of classes for all four years have different outcomes on their 4th Grade standardised Maths score.
+
+Variables:
+
+* classtype: The randomised condition of class that students were in
+* g4math: The student's score on a standardised maths test.
+
+To answer this research question, the researchers used an ANOVA test and a Tukey Honest Significant Difference test.
+
+```{r}
+
+# Analysis of Variance Test - Continuous outcome goes on the left hand side of the ~ sign. Grouping variable goes on the right hand side of the ~.
+
+aov_star_maths <- aov(g4math ~ classtype, data = star_data_4years)
+summary(aov_star_maths)
+
+```
+
+Interpret the output from the ANOVA test above and answer the following questions:
+
+---
+
+1. Why did the researchers use an ANOVA test for this particular combination of variables?
+
+
+
+2. What does the p-value for this test indicate about the effect of the small class sizes? Assume a critical value of 0.05.
+
+
+
+3. What can we infer about the causal effect of small class sizes on Grade 4 Maths test outcomes from this? 
+
+
+
+4. On what basis are we making this causal inference (robust dependence and/or consequential manipulation and why)? 
+
+
+
+---
+
+The researchers then used a Tukey Honest Significant Difference test to look specifically at the differences between the three classtype groups.
+
+
+```{r}
+
+TukeyHSD(aov_star_maths)
+
+```
+
+---
+
+1. What was the mean difference between the small class sizes and the regular class sizes?
+
+
+---
+
+### Research Question 2: Did students who were in different types of classes for all four years have different outcomes in their chances of graduating from High School?
+
+Next, the researchers wanted to test whether those children who had been in the small or regular class sizes for four years had different likelihoods of graduating high school. They used a chi-squared test of association to test whether there was an association between class size type and high school graduation outcome.
+
+Variables:
+
+* classtype: The randomised condition of class that students were in
+* hsgrad: Whether the student graduated high school or not
+
+```{r}
+
+# Create a crosstab of hsgrad and classtype
+
+star_data_4years %>%
+  janitor::tabyl(classtype, hsgrad, show_na = FALSE) %>%
+  adorn_percentages("row") %>%
+  adorn_pct_formatting()
+
+
+# Run a chi-squared test of association between classtype and hsgrad
+
+star_data_4years %>%
+  janitor::tabyl(classtype, hsgrad, show_na = FALSE) %>%
+  janitor::chisq.test()
+
+
+```
+
+
+---
+
+1. Why did the researchers choose to use a chi-squared test of association for this analysis?
+
+
+2. Using the bivariate descriptive statistics from the tabyl above, describe the differences in overall graduation rates between students in the different class sizes.
+
+
+3. What was the result of this chi-squared test of association? Interpret the p-value — was the association between high school graduation rates and class type significant? Assume a critical value of 0.05.
+
+
+4. What can we infer about the causal effect of class size on high school graduation on this study, and what basis for causality can we use?
+
+
+
+---
+
+### Research Question 3: Did the students in the small class sizes have better 4th Grade Maths scores if they were in the small sized classes for a greater number of years?
+
+
+```{r}
+
+# Filter only students who were allocated to the small class sizes
+star_data_small <- star_data %>%
+  filter(classtype == "small")
+
+# Run a correlation test (with p-value) for the correlation between the number of years in the small class size and the 4th grade Maths score
+cor.test(star_data_small$yearssmall, star_data_small$g4math, use = "complete.obs")
+
+```
+
+
+---
+
+1. Report the correlation between the number of years the children spent in small classes and the 4th Grade Maths scores. How strong was the correlation? What direction was it in and what does this mean with regards to answering our research question.
+
+
+2. Report the outcome of the statistical significance test on this correlation. Assume a critical value of 0.05.
+
+
+3. If this result was significant, what would our basis for causal inference be and why?
+
+
+
+---
+
+
+# Part 2
+
+You have now seen the code for running a chi-squared test of association, a correlation test (with hypothesis test), and an ANOVA test. This part will see you writing the code to conduct these tests on additional data.
+
+## Racial discrimination in the labour market (adapted from Imai, 2017)
+
+Based on the work of Marianne Bertrand and Sendhil Mullainathan (2004), two social resarchers conducted an experiment where they sent CVs to job advertisements and randomly varied the name on the CV so that it was stereotypically African-American sounding or stereotypically white European-American sounding names. They then recorded which CVs received a call back from the employer and which did not.
+
+```{r}
+
+# Reading and tidying the data - You don't need to add code here!
+
+cv_data <- read_csv("resume.csv")
+
+# Create new variable of race and sex combination of name chosen and change call variable to be a character variable (1 = received a call back, 0 = did not receive a call back)
+cv_data <- cv_data %>%
+  mutate(race_and_sex = paste(race, sex),
+         call = ifelse(call == 1, "Called back", "Did not call back"))
+
+```
+
+---
+
+* Task 1: Get descriptive statistics for the proportion of which types of stereotypical names received calls back and which did not.
+
+```{r}
+
+# Write your own code in here to complete the above task!
+
+```
+
+* Task 2: Write the code below to conduct **the appropriate** hypothesis test on the relationship between these two variables
+
+```{r}
+
+# Write your own code in here to complete the above task!
+
+```
+
+* Task 3: Interpret the output of the above two pieces of code and write about your findings, remember to cover the following: describe the differences found; report whether they were statistically significant (use a critical value of 0.05); report what we can infer about causality in this example.
+
+
+
+
+---
+
+## Local authority deprivation and numbers of children in the care system (adapted from Webb, et al. 2020)
+
+This example uses data on the Indices of Multiple Deprivation score for 150 local authorities in England (exluding the City of London and the Isles of Scilly) and the rates of children in care per 10,000. Researchers across several universities in the UK were interested in identifying the association between poverty and child welfare interventions (such as children being taken into care), to test whether there was a similar relationship to what is found in outcomes to do with health. This was called the Child Welfare Inequalities Project. All data was collected around the years 2011-2012 by the Department for Education and the Department for Communities and Local Government.
+
+The relevant variables in this dataset are:
+
+* imd_score: The level of deprivation in the local authorities. A higher score means more deprivation.
+* cla_rate: The rate per 10,000 children in the local authority currently living in the care system.
+
+```{r}
+
+# Read in the CWIP data - You don't need to add any extra code here!
+cwip_data <- read_csv("cwip_ex.csv")
+
+```
+
+---
+
+* Task 1: Identify the most appropriate descriptive statistic for summarising the relationship between imd_score and cla_rate.
+
+
+* Task 2: Use R to calculate this descriptive statistic and interpret it for a general audience: what is the relationship between deprivation and children looked after rate and how strong or weak is this relationship?
+
+```{r}
+
+# Write your own code in here to complete the above task!
+
+```
+
+
+* Task 3: Use R to test a hypothesis associated with descriptive statistic. Interpret the p-value associated with the test statistic using a critical value of 0.05. Is it meaningful to use inferential statistics in this case? Why/why not?
+
+```{r}
+
+# Write your own code in here to complete the above task!
+
+```
+
+
+* Task 4: What can be said about the causal association between poverty and rates of children in care based on this data and analysis? Explain your answer.
+
+
+
+---
+
+
+# Week 5 Challenge
+
+I have included two tidied datasets from Open Data sources from the Leibniz Institute for Social Sciences GESIS database (https://www.gesis.org/home). These are:
+
+* `eurosceptic.rds`: Data from the 'Eurosceptic Cues and Citizen Attitudes' study by Galina Zapryanova, University of Mannheim. (https://data.gesis.org/sharing/#!Detail/10.7802/1318)
+* `nonprof_simple.rds`: Data from the Quality certifications for nonprofits, charitable giving, and donor's trust study by Maja Adena et al. (https://data.gesis.org/sharing/#!Detail/10.7802/1.2121)
+
+
+---
+
+## Eurosceptic Cues and Citizen Attitudes
+
+This dataset and its associated questionnaire file (`eurosceptic-questionnaire.pdf`, which can act as a codebook) is from a survey experiment study where the researchers randomly presented survey respondents in Germany, France, and the UK with different eurosceptic statements by elites. 
+
+They then asked the respondents to answer several questions about support for EU integration, support for national contributions to EU bailouts, attitudes towards immigration, and beliefs about democracy. They also asked them how they would vote in there were (another) referendum on EU membership.
+
+### Possible questions:
+
+* Did exposure to different eurosceptic messages from elites result in significantly different responses about how the respondent felt about supporting EU integration?
+
+* Was satisfaction with national democracy associated with satisfaction of EU democracy?
+
+* Did respondents from different countries have significantly different views on the statement that immigration enriches culture?
+
+* Was there an association between treatment group and respondent's view on how they would vote if there were a second Brexit referendum?
+
+* Or, come up with your own!
+
+---
+
+## Quality certifications for nonprofits, charitable giving, and donor's trust
+
+This data is taken from an experiment by Adena et al. (https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2961882) where participants were subject to an experiment where they were either presented with information about a charity (Bjorn Schulz Foundation) that included that this charity had a quality certificate (treat1 = B), or were not presented with information about the quality certificate (treat1 = A).
+
+The participant was awarded prize money in the experiment and, before finding out if they had been awarded the prize, they were required to say what amount they would like to donate to the charity.
+
+They were also given a questionnaire about the trust they had in the charity and about the trust they had in people in general.
+
+## Possible research questions
+
+* Did exposure to the quality certification result in people donating more of their prize money to the foundation?
+
+* Did exposure to the quality certification result in higher ratings of trust in the foundation?
+
+* Was trust in the work of nonprofits associated with general trust?
+
+* Or come up with your own!
+

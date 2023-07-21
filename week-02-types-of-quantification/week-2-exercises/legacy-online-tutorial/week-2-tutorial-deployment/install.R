@@ -1,0 +1,7 @@
+install.packages("devtools")
+install.packages("learnr")
+install.packages("tidyverse")
+install.packages("modeest")
+install.packages("janitor")
+install.packages("skimr")
+devtools::install_github("https://github.com/rstudio/gradethis")

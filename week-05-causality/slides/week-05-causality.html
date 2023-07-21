@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>SMI606: Week 5 — Causality</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Calum Webb" />
+    <meta name="date" content="2023-07-21" />
+    <script src="week-05-causality_files/header-attrs/header-attrs.js"></script>
+    <link href="week-05-causality_files/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="week-05-causality_files/tile-view/tile-view.js"></script>
+    <link href="week-05-causality_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="week-05-causality_files/panelset/panelset.js"></script>
+    <script src="week-05-causality_files/xaringanExtra-progressBar/progress-bar.js"></script>
+    <link href="week-05-causality_files/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <script src="week-05-causality_files/clipboard/clipboard.min.js"></script>
+    <link href="week-05-causality_files/shareon/shareon.min.css" rel="stylesheet" />
+    <script src="week-05-causality_files/shareon/shareon.min.js"></script>
+    <link href="week-05-causality_files/xaringanExtra-shareagain/shareagain.css" rel="stylesheet" />
+    <script src="week-05-causality_files/xaringanExtra-shareagain/shareagain.js"></script>
+    <script src="week-05-causality_files/mark.js/mark.min.js"></script>
+    <link href="week-05-causality_files/xaringanExtra-search/search.css" rel="stylesheet" />
+    <script src="week-05-causality_files/xaringanExtra-search/search.js"></script>
+    <script>window.addEventListener('load', function() { window.xeSearch = new RemarkSearch({"position":"bottom-left","caseSensitive":false,"showIcon":true,"autoSearch":false}) })</script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="css/custom.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+class: middle
+background-size: contain
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+# .tuos_purple[SMI606: Week 5&lt;br&gt;Causality]
+
+&lt;br&gt;&lt;br&gt;
+
+**Dr. Calum Webb**&lt;br&gt;
+Sheffield Methods Institute, the University of Sheffield.&lt;br&gt;
+[c.j.webb@sheffield.ac.uk](mailto:c.j.webb@sheffield.ac.uk)
+
+
+
+
+
+<div>
+<style type="text/css">.xaringan-extra-logo {
+width: 180px;
+height: 128px;
+z-index: 0;
+background-image: url(header/smi-logo-white.png);
+background-size: contain;
+background-repeat: no-repeat;
+position: absolute;
+top:1em;right:2em;
+}
+</style>
+<script>(function () {
+  let tries = 0
+  function addLogo () {
+    if (typeof slideshow === 'undefined') {
+      tries += 1
+      if (tries < 10) {
+        setTimeout(addLogo, 100)
+      }
+    } else {
+      document.querySelectorAll('.remark-slide-content:not(.inverse):not(.hide_logo)')
+        .forEach(function (slide) {
+          const logo = document.createElement('div')
+          logo.classList = 'xaringan-extra-logo'
+          logo.href = null
+          slide.appendChild(logo)
+        })
+    }
+  }
+  document.addEventListener('DOMContentLoaded', addLogo)
+})()</script>
+</div>
+
+
+
+
+<style>.panelset{--panel-tab-background: #F8F8F8;--panel-tab-active-background: #F8F8F8;--panel-tab-hover-background: #F8F8F8;}</style>
+
+<style>.xe__progress-bar__container {
+  top:0;
+  opacity: 1;
+  position:absolute;
+  right:0;
+  left: 0;
+}
+.xe__progress-bar {
+  height: 0.25em;
+  background-color: #F8F8F8;
+  width: calc(var(--slide-current) / var(--slide-total) * 100%);
+}
+.remark-visible .xe__progress-bar {
+  animation: xe__progress-bar__wipe 200ms forwards;
+  animation-timing-function: cubic-bezier(.86,0,.07,1);
+}
+@keyframes xe__progress-bar__wipe {
+  0% { width: calc(var(--slide-previous) / var(--slide-total) * 100%); }
+  100% { width: calc(var(--slide-current) / var(--slide-total) * 100%); }
+}</style>
+
+
+
+
+
+
+
+---
+class: middle
+
+
+.pull-right[
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+# Sign In
+
+]
+---
+class: middle
+
+## Learning Objectives
+
+.panelset[
+
+.panel[.panel-name[What will I learn?]
+
+By the end of this week you will:
+
+* Be able to describe what we mean by causality and how we can use statistical methods to explore probabilistic causation.
+
+* Be able to explain three bases upon which causal inference can be made: robust dependence, consequential manipulation, and generative process.
+
+* Be able to critically assess these foundations of causal inference.
+
+* Be introduced to some tools for developing causal models (Directed Acyclic Graphs).
+
+* Be able to identify which types of research design and data are appropriate for making causal inference. 
+
+
+]
+
+.panel[.panel-name[How does this week fit into my course?]
+
+* It is increasingly important for new social scientists to have a good working knowledge of causality and causal analysis.
+
+* Being able to synthesize different forms of research into generative processes (e.g. DAGs) is increasingly a goal of postgraduate and postdoctoral research projects.
+
+* This week's content will provide some of the fundamental building blocks for more advanced methods (e.g. Structural Equation Modelling, Longitudinal Modelling, A-B testing) you may need to learn in your career or may wish to cover in the rest of your studies.
+
+
+]
+
+
+]
+
+
+
+???
+
+---
+
+class: inverse, middle
+
+
+# What do we mean by causality?
+
+
+---
+
+class: middle
+
+# 'Causality'
+
+Using the work and definitions developed by sociologist John H. Goldthorpe (2001).
+
+
+.pull-left[
+
+### Deterministic Causality
+
+* In philosophy and theology, the idea of causality as a deterministic force: Given enough information about past events, every outcome can, in theory, be explained or predicted.
+
+[Hoefer, 2003. *Causal Determinism*. Stanford Encyclopedia of Philosophy.](https://plato.stanford.edu/entries/determinism-causal/)
+
+]
+
+.pull-right[
+
+### Probabilistic Causality
+
+* Causes raise the probability of their effects, some of which may be screened off or superseded by other causal relations. &lt;br&gt;&amp;nbsp;
+
+[*Hitchcock, 2018. Probabilistic Causation. Stanford Encyclopedia of Philosophy*](https://plato.stanford.edu/entries/causation-probabilistic/)
+
+]
+
+
+---
+
+class: inverse, middle
+
+### [S]uppose that Billy and Suzy each throw a rock at a bottle, and that each has a certain probability of hitting and breaking it. As it happens, *Suzy’s rock hits the bottle, and Billy’s doesn’t. As things actually happened, we would say that Suzy’s throw caused the bottle to shatter, while Billy’s didn’t*. Nonetheless, Billy’s throw increased the probability that the bottle would shatter ... Billy’s throw had a tendency to shatter the bottle; it was a potential cause of the bottle shattering; it was the sort of thing that generally causes shattering; but it did not actually cause the bottle to shatter.
+
+[*Hitchcock, 2018. Probabilistic Causation. Stanford Encyclopedia of Philosophy*](https://plato.stanford.edu/entries/causation-probabilistic/)
+
+
+---
+
+class: inverse, middle
+
+### [S]uppose that Billy and Suzy each throw a rock at a bottle, and that each has a certain probability of hitting and breaking it. As it happens, Suzy’s rock hits the bottle, and Billy’s doesn’t. As things actually happened, we would say that Suzy’s throw caused the bottle to shatter, while Billy’s didn’t. Nonetheless, *Billy’s throw increased the probability that the bottle would shatter* ... *Billy’s throw had a tendency to shatter the bottle; it was a potential cause of the bottle shattering; it was the sort of thing that generally causes shattering; but it did not actually cause the bottle to shatter*.
+
+[*Hitchcock, 2018. Probabilistic Causation. Stanford Encyclopedia of Philosophy*](https://plato.stanford.edu/entries/causation-probabilistic/)
+
+
+---
+class: middle, inverse
+
+# Causation as "robust dependence": temporal causality
+
+
+---
+
+class: middle
+
+# Causation as Robust Dependence
+
+Causality can be argued to exist when we can observe a consistent, temporal causal effect.
+
+&gt; #### "A variable, X, 'Granger causes' Y if, after taking into account all information apart from values of X, these values still add to one's ability to predict future values of Y."
+
+.right[Goldthorpe, 2001: 2]
+
+--
+
+* Does knowing the value of X at a preceding time point improve our accuracy when predicting Y, after accounting for other competing explanations?
+
+--
+
+* Measurements of X and controls (Z) **must** preceed measurements of Y.
+
+--
+
+* Can be __deepened through 'Lazarfeldian elaboraton'__
+  * Identify a 'signal' and 'response'
+  * Iteratively introduce possible confounding factors and see if the pattern between 'signal' and 'response' stays the same (or continues to exist)
+
+
+???
+
+
+---
+
+class: middle
+background-color: white
+
+
+.center[
+
+&lt;img src="images/figure_2.png" width="100%" /&gt;
+
+]
+
+---
+
+class: middle
+background-color: white
+
+.center[
+
+&lt;img src="images/IMG_4238.JPG" width="90%" /&gt;
+
+*Source: Dr. Jennifer Kwan @jkwan_md*
+
+]
+
+
+
+---
+
+class: middle
+
+# Causation as Robust Dependence
+
+__Weaknesses of Granger causality__
+
+* **Easy for this approach to end up being atheoretical**, with causality claimed purely on the basis of statistical models.
+  * "[S]ociologists have strongly criticized the supposition that statistical techniques can in them- selves provide adequate causal explanations of social phenomena"
+  
+--
+
+* Is it possible to __fully incorporate all of the possible confounding variables__, or to adequately measure some causes.
+  * "[A]vailable sociological theory may just not be strong enough to help produce models that can be treated as genuinely 'structural' — i.e. so parameterized that their co-efficients are sufficiently invariant and autonomous to sustain claims about the consequences of changes in the variables deemed to be 'exogenous'."
+
+
+---
+class: middle, inverse
+
+# Causation as "consequential manipulation": experiments
+
+
+---
+
+class: middle
+
+# Causation as Consequential Manipulation
+
+Causation as some environmental factor that, when manipulated (or left alone), can be demonstrated to cause some change in an outcome variable of interest.
+
+&gt; #### "Here, attention centres specifically on 'the consequences of performing particular acts' or, in other words, on establishing causation through experimental methods."
+
+.right[Goldthorpe, 2001: 4]
+
+* If I manipulate this thing, does the result change (probabilistically thinking)? If so, the thing I manipulated can be said to have caused a change in something else.
+
+--
+
+* Something __must__ be manipulated or manipulatable, and exposure to the change or difference must be either randomly chosen *or* be unrelated to the variables of interest (as in a random experiment).
+
+---
+
+background-color: white
+
+# Causation as Consequential Manipulation
+
+.pull-left[
+
+**Exercise**
+
+&lt;br&gt;
+
+At the beginning of this session, chocolate buttons were randomly allocated behind the computer lab computers.
+
+If you got chocolate buttons, you are the treatment group. If you did not get chocolate buttons, you are the control group.
+
+* H&lt;sub&gt;0&lt;/sub&gt;: Being given chocolate buttons will have no effect on students' enjoyment of learning quantitative methods.
+
+Please now fill out the following form: https://forms.gle/sigw2jprMohiaBZM8 
+
+]
+
+.pull-right[
+
+&lt;img src="images/qr-ex-1.png" width="85%" /&gt;
+
+]
+
+
+
+
+---
+
+background-color: white
+
+# Causation as Consequential Manipulation
+
+
+.pull-left[
+
+&lt;br&gt;&lt;br&gt;
+
+### .tuos_purple[How feasible are these kind of studies in your field? What are the potential weaknesses (having just been subjected to one)?]
+
+[Jamboard Link](https://jamboard.google.com/d/1DaUbdjOyK69Al_FRR1mGC8SNNxe1LlJ2H-3Ky2wq9tc/edit?usp=sharing)
+
+]
+
+.pull-right[
+
+&lt;img src="images/qr-ex-2.png" width="85%" /&gt;
+
+
+
+]
+
+
+---
+class: middle, inverse
+
+# Causation as "generative process": DAGs and the New Science of Causality
+
+
+---
+class: middle
+background-color: white
+
+# Causation as Generative Process
+
+
+.pull-left[
+
+* __Start with a theoretical model__ of a generative causal process based on a variety of evidence (qual + quants).
+
+* __Develop the processes in this model__, ideally down to the 'methodological individual' — individual actions, characteristics, and events (if appropriate).
+
+* Design hypotheses and research studies to __test the causal associations between each of the processes__. Some may be "stronger" causal evidence, others may be weaker by necessity.
+
+* Aim for __falsification__ of the processes and __adaptation__ of the theoretical model, not "once-and-for-all" __validation__.
+
+]
+
+.pull-right[
+
+&lt;br&gt;&lt;br&gt;
+
+&lt;img src="images/dag-example.png" width="85%" /&gt;
+
+*Directed Acyclic Graph example by [Malcolm Barrett](https://cran.r-project.org/web/packages/ggdag/vignettes/intro-to-dags.html)*
+
+]
+
+
+???
+
+Exercise: DAG walkthrough on Jamboard
+
+
+---
+
+background-color: white
+
+# DAGS: The Total Effect (Estimand)
+
+
+&lt;img src="week-05-causality_files/figure-html/unnamed-chunk-7-1.png" width="1200" height="350" /&gt;
+
+.center[We start with the thing we want to estimate (our estimand), in this case the strength of the association between a person's secondary school outcomes and their university degree classification.]
+
+
+---
+
+background-color: white
+
+# DAGS: Confounders and the Direct Effect
+
+
+&lt;img src="week-05-causality_files/figure-html/unnamed-chunk-8-1.png" width="1200" height="350" /&gt;
+
+.center[We know that there will be certain confounders in our data: things that influence both the predictor/cause (Prior Education) and the outcome/effect (Degree Classification). We need to control for these things to get an unbiased estimate of the effect. For example, here, we might want to only include people who studied the same subjects.]
+
+
+---
+
+background-color: white
+
+# DAGS: Pipes, Direct and Indirect Effects
+
+
+&lt;img src="week-05-causality_files/figure-html/unnamed-chunk-9-1.png" width="1200" height="350" /&gt;
+
+.center["Pipes" occur when the effects of the 'cause' operates through some mechanism(s), for example, the effect of prior education on degree outcome is partially mediated through prior education teaching more effective study skills. You may or may not want to condition effects based on mediators.]
+
+---
+
+background-color: white
+
+# DAGS: "Blocked" Pipes: Post-treatment Bias
+
+
+&lt;img src="week-05-causality_files/figure-html/unnamed-chunk-10-1.png" width="1200" height="350" /&gt;
+
+.center[We can also imagine some of these pipes being 'blockers' rather than mediators — test scores will obviously dictate degree classification and may fully mediate prior education, so conditioning on test scores as well as degree classification would incorrectly negate any effect of prior education.]
+
+---
+
+background-color: white
+
+# DAGS: Collider Bias
+
+
+&lt;img src="week-05-causality_files/figure-html/unnamed-chunk-11-1.png" width="1200" height="350" /&gt;
+
+.center[Collider bias is an often overlooked source of bias that occurs where the relationship between a cause and an outcome is conditioned on something that is a common consequence of both; e.g. here past educational performance will likely impact a person's self-rated academic ability.]
+
+
+---
+
+class: middle
+background-color: white
+
+# Collider Bias
+
+
+
+&lt;img src="week-05-causality_files/figure-html/unnamed-chunk-13-1.png" width="100%" /&gt;
+
+
+---
+
+background-color: white
+
+class: middle
+
+# Collider Bias
+
+&lt;img src="week-05-causality_files/figure-html/unnamed-chunk-14-1.png" width="100%" /&gt;
+
+---
+
+class: middle
+background-color: white
+
+# Collider Bias
+
+&lt;img src="week-05-causality_files/figure-html/unnamed-chunk-15-1.png" width="100%" /&gt;
+
+
+---
+
+background-color: white
+
+# Collider Bias
+
+&lt;img src="week-05-causality_files/figure-html/unnamed-chunk-16-1.png" width="1200" height="350" /&gt;
+
+.center[What can happen when we have a collider that determines selection?]
+
+---
+
+class: inverse, middle
+
+# Do restaurants in better locations have better quality food?
+
+
+---
+class: middle
+background-color: white
+
+# Collider Bias
+
+
+
+.pull-left[
+
+&lt;img src="week-05-causality_files/figure-html/unnamed-chunk-18-1.png" width="450" height="350" /&gt;
+
+]
+
+.pull-right[
+
+&lt;img src="week-05-causality_files/figure-html/unnamed-chunk-19-1.png" width="450" height="350" /&gt;
+
+]
+
+.center[Before including whether a restaurant is open or closed we find no relationship.]
+
+---
+class: middle
+background-color: white
+
+# Collider Bias
+
+.pull-left[
+
+&lt;img src="week-05-causality_files/figure-html/unnamed-chunk-20-1.png" width="450" height="350" /&gt;
+
+]
+
+.pull-right[
+&lt;img src="week-05-causality_files/figure-html/unnamed-chunk-21-1.png" width="450" height="350" /&gt;
+]
+
+.center[But when only including currently open restaurants...]
+
+
+---
+
+background-color: white
+
+# DAGS: Putting it all together
+
+&lt;img src="week-05-causality_files/figure-html/unnamed-chunk-22-1.png" width="1200" height="350" /&gt;
+
+.center[You can follow the rules of '*do*-calculus' to create adjustment sets to find out what kinds of confounding variables you should condition on to identify the total and/or direct effects; the model and findings can then be developed, and their causal claims challenged.]
+
+
+---
+
+class: middle
+
+# DAGS: Dagitty and Further Reading
+
+
+```r
+dagitty::adjustmentSets(dag, exposure = "Prior Education", outcome = "Degree Classification", effect = "total")
+```
+
+```
+## { Subject(s) Studied }
+```
+
+```r
+dagitty::adjustmentSets(dag, exposure = "Prior Education", outcome = "Degree Classification", effect = "direct")
+```
+
+```
+## { Study Skills, Subject(s) Studied }
+```
+
+.pull-left-big[
+
+* Peters, J, et al. "Elements of Causal Inference". [Open Access Version Available](https://mitpress.mit.edu/9780262037310/elements-of-causal-inference/) from MIT Press.
+* Pearl, J. et al. "Causal Inference in Statistics: A Primer", or "The Book of Why". 
+* McElreath, R. "Statistical Rethinking: A Bayesian course with examples in R and Stan. 2nd Edition" 
+
+]
+
+.pull-right-small[
+
+.center[
+&lt;img src="images/book-why.jpg" alt="Book cover of The Book of Why by Pearl and Mackenzie" width="30%" /&gt;
+]
+
+]
+
+
+---
+class: middle, inverse
+
+# Which kinds of research design support causal analyses?
+
+---
+
+## Research Designs &amp; Statistical Causal Analyses
+
+.pull-left[
+
+* __Survey__
+  * Cross-sectional
+  * Longitudinal
+  
+* __Experiment__
+  * Randomised Controlled Trials
+  * Survey Experiments
+  * Natural Experiments
+  
+* __Observation__
+  * Administrative Data
+  * Scraped/"Big" Data
+  * Observational or Sensor Data
+
+]
+
+
+---
+
+## Research Designs &amp; Statistical Causal Analyses
+
+.pull-left[
+
+* __Survey__
+  * __Cross-sectional__
+  * Longitudinal
+  
+* __Experiment__
+  * Randomised Controlled Trials
+  * Survey Experiments
+  * Natural Experiments
+  
+* __Observation__
+  * Administrative Data
+  * Scraped/"Big" Data
+  * Observational or Sensor Data
+
+]
+
+.pull-right[
+
+#### __Cross-sectional Survey__
+
+Face-to-face or postal questionnaire-based data collection. 
+
+* Usually a very large sample size (&gt;200,000) and representative of the population.
+* However, __usually not possible to make causal inferences from__ based on either robust dependence or consequential manipulation.
+* UNLESS, the cross-sectional survey either
+  * Included data on something where an argument for a natural experiment could be made.
+  * Included a survey experiment design in it.
+  
+Example:
+
+* [Labour Force Survey](https://beta.ukdataservice.ac.uk/datacatalogue/studies/study?id=1756)
+
+]
+
+
+---
+
+## Research Designs &amp; Statistical Causal Analyses
+
+.pull-left[
+
+* __Survey__
+  * Cross-sectional
+  * __Longitudinal__
+  
+* __Experiment__
+  * Randomised Controlled Trials
+  * Survey Experiments
+  * Natural Experiments
+  
+* __Observation__
+  * Administrative Data
+  * Scraped/"Big" Data
+  * Observational or Sensor Data
+
+]
+
+.pull-right[
+
+#### __Longitudinal Survey__
+
+Face-to-face or postal questionnaire-based data collection. 
+
+* Usually a smaller but often substantial (~5000-15,000) representative sample, __but__ longitudinal surveys follow the same people for multiple years.
+* However, __usually possible to make causal inferences from__ on the basis of __robust dependence__.
+* But may also include:
+  * Included data on something where an argument for a natural experiment could be made.
+  * Included a survey experiment design in it.
+  
+Example:
+
+* [UK HLS/Understanding Society](https://www.understandingsociety.ac.uk/documentation/access-data)
+
+]
+
+
+---
+
+## Research Designs &amp; Statistical Causal Analyses
+
+.pull-left[
+
+* __Survey__
+  * Cross-sectional
+  * Longitudinal
+  
+* __Experiment__
+  * __Randomised Controlled Trials__
+  * Survey Experiments
+  * Natural Experiments
+  
+* __Observation__
+  * Administrative Data
+  * Scraped/"Big" Data
+  * Observational or Sensor Data
+
+]
+
+.pull-right[
+
+#### __Randomised Controlled Trial__
+
+A trial of some treatment(s) on some outcome where participants are randomly assigned to either treatment or control groups.
+
+* Usually a small sample, not often representative.
+* Specifically designed to __allow for causal inference based on__ __consequential manipulation__.
+
+  
+Example:
+
+* [Adena, Alizade &amp; Bohner, 2019. Quality certifications for nonprofits, charitable giving, and donor's trust](https://search.gesis.org/research_data/SDN-10.7802-1.2121)
+
+]
+
+
+---
+
+## Research Designs &amp; Statistical Causal Analyses
+
+.pull-left[
+
+* __Survey__
+  * Cross-sectional
+  * Longitudinal
+  
+* __Experiment__
+  * Randomised Controlled Trials
+  * __Survey Experiments__
+  * Natural Experiments
+  
+* __Observation__
+  * Administrative Data
+  * Scraped/"Big" Data
+  * Observational or Sensor Data
+
+]
+
+.pull-right[
+
+#### __Survey Experiment__
+
+A trial of some treatment(s) on some outcome where participants are randomly assigned to either treatment or control groups, however, this is tested through randomising questions and/or question wording or prompts in a survey.
+
+* Usually a small sample, not often representative but can be when incorporated into a large longitudinal or cross-sectional survey as a module.
+* Specifically designed to __allow for causal inference based on__ __consequential manipulation__.
+
+  
+Example:
+
+* [Zapryanova, 2016. Eurosceptic Cues and Citizen Attitudes](https://search.gesis.org/research_data/SDN-10.7802-1318)
+
+]
+
+
+---
+
+## Research Designs &amp; Statistical Causal Analyses
+
+.pull-left[
+
+* __Survey__
+  * Cross-sectional
+  * Longitudinal
+  
+* __Experiment__
+  * Randomised Controlled Trials
+  * Survey Experiments
+  * __Natural Experiments__
+  
+* __Observation__
+  * Administrative Data
+  * Scraped/"Big" Data
+  * Observational or Sensor Data
+
+]
+
+.pull-right[
+
+#### __Natural Experiment__
+
+A naturally occuring scenario where people are randomised into a suitable treatment or control group by circumstances outside of the researcher's control, and as such, can be compared to assess causal effects by consequential manipulation. Data can come from administrative records, surveys, or both.
+
+* Usually a small sample, not often representative.
+* An organic scenario that __allows for causal inference based on__ __consequential manipulation__.
+
+  
+Example:
+
+* [The Oregon Health Insurance Experiment](https://www.nber.org/programs-projects/projects-and-centers/oregon-health-insurance-experiment?page=1&amp;perPage=50)
+
+.small["[i]n early 2008, Oregon opened a waiting list for its Medicaid program for low-income adults that had previously been closed to new enrollment. Approximately 90,000 people signed up for the available 10,000 openings. The state drew names from this waiting list by lottery to fill the openings."]
+
+]
+
+
+???
+
+list: http://economicspsychologypolicy.blogspot.com/2015/06/list-of-19-natural-experiments.html
+
+
+
+---
+
+## Research Designs &amp; Statistical Causal Analyses
+
+.pull-left[
+
+* __Survey__
+  * Cross-sectional
+  * Longitudinal
+  
+* __Experiment__
+  * Randomised Controlled Trials
+  * Survey Experiments
+  * Natural Experiments
+  
+* __Observation__
+  * __Administrative Data__
+  * Scraped/"Big" Data
+  * Observational or Sensor Data
+
+]
+
+.pull-right[
+
+#### __Administrative Data__
+
+Data that is primarily collected for an administrative purpose which can be re-purposed for social science research. Commonly comes from government departments, schools, and welfare, tax, or healthcare administration.
+
+* Often an enormous sample, usually the majority of the population and often close to 100%.
+* Often collected over a person's lifespan and updated, therefore __allowing for causal inference by robust dependence__ (or by consequent manipulation in the case of natural experiments, e.g. Universal Credit rollout).
+
+  
+Example:
+
+* [Continuous Recording of Social Housing Lettings and Sales (CORE)](https://beta.ukdataservice.ac.uk/datacatalogue/series/series?id=2000107#!/abstract)
+
+]
+
+
+---
+
+## Research Designs &amp; Statistical Causal Analyses
+
+.pull-left[
+
+* __Survey__
+  * Cross-sectional
+  * Longitudinal
+  
+* __Experiment__
+  * Randomised Controlled Trials
+  * Survey Experiments
+  * Natural Experiments
+  
+* __Observation__
+  * Administrative Data
+  * __Scraped/"Big" Data__
+  * Observational or Sensor Data
+
+]
+
+.pull-right[
+
+#### __Scraped Data__
+
+Data that is largely unstructured but publicly available on the internet or in some other form (like a pdf). This data is then 'scraped' and sorted into a dataset using its underlying web structure (e.g. its HTML code).
+
+* Sometimes not much of a meaningful sample, e.g. unlikely to be a good sample of people, might be a good sample of interactions on a platform (e.g. Tweets on Twitter) if selected randomly.
+* Often longitudinal in nature but sometimes temporality is lost if not scraped repeatedly (e.g. prices of items on Amazon, tweets that get deleted)
+* __Some potential for causal inference by robust dependence or consequent manipulation.__
+
+  
+Example:
+
+* [Scraping Twitter data in R](https://utstat.toronto.edu/~nathan/teaching/sta4002/Class1/scrapingtwitterinR-NT.html)
+
+
+]
+
+
+---
+
+## Research Designs &amp; Statistical Causal Analyses
+
+.pull-left[
+
+* __Survey__
+  * Cross-sectional
+  * Longitudinal
+  
+* __Experiment__
+  * Randomised Controlled Trials
+  * Survey Experiments
+  * Natural Experiments
+  
+* __Observation__
+  * Administrative Data
+  * Scraped/"Big" Data
+  * __Observational or Sensor Data__
+
+]
+
+.pull-right[
+
+#### __Observational or Sensor Data__
+
+Traditionally, observational data is collected by researchers watching and recording events that happen. Increasingly, collected by sensors (e.g. geotracking of devices, wearable medical devices).
+
+* Not frequently used in university social science, but much data like this is held by large corporations (e.g. Google, Apple, Fitbit, Garmin).
+* Often has a temporal component, so __can feasibly be used for establishing robust dependence__. Could form the basis for a natural experiment. __Researcher can manipulate environment__ in some way and then try and observe cause through __consequential manipulation__, but is this ethical?
+
+  
+Example:
+
+* [Weekly People-Movement GPS Patterns in Spain during the pandemic](https://data.world/citydataai/spain-regions)
+* [Pokemon Go](https://kotaku.com/the-creators-of-pokemon-go-mapped-the-world-now-theyre-1838974714) / Strava / Garmin / Fitbit
+
+]
+
+
+---
+class: middle, inverse
+
+# Recap: The difference between inference (inferential statistics) and causality (causal inference)
+
+
+---
+class: middle
+
+# Inference
+&gt; #### Can we generalise from our sample to the population of interest?
+
+#### Is our data a sample or is it the entire population?
+
+* If the data is of the entire population of interest inference (p-values) **are usually not meaningful** because we have nothing larger than our sample we can generalise to.
+
+--
+
+#### Is our sample a random sample or otherwise *representative* of our population?
+
+* If our sample *is not* representative of our population then __we cannot safely make inferences about the whole population from it__, and should not use p-values, *unless* our data is from an experimental design where we are making inferences based on comparing control and treatment group.
+
+.center[If our data *is* a sample *and* that sample is representative of the wider population of interest, or a result of an experiment, we can use hypothesis testing (p-values).]
+
+--
+
+.center[&lt;strong&gt;The answers are not in the data!&lt;/strong&gt;]
+
+---
+class: middle
+
+# Causality
+&gt; #### Can we say anything about whether changes in one variable *causes* changes in another?
+
+#### Does our study/analysis look at how *preceding* changes in one variable are associated with _subsequent_ changes in another variable? (Robust Dependence/Granger Causality)
+
+* For example, lagged panel models, cross-lagged panel models. If no, we __cannot infer anything about causality.__
+
+--
+
+#### Does our study use an experimental design or leverage a natural experiment? (Consequential Manipulation)
+
+* If it does, then we __can__ make causal inferences about the __effect of the treatment on the outcome__.
+
+--
+
+#### Does our study present a theoretically-sound causal model and condition appropriately on possible confounders/colliders and other 'backdoor paths'? (Generative Process)
+
+* If it does, then we can __accept the evidence as causal but encourage falsification and development of our model__.
+
+--
+
+.center[&lt;strong&gt;The answers are not in the data!&lt;/strong&gt;]
+
+---
+
+class: middle
+
+# R Exercise
+
+* This week, you will be practicing running the inferential statistics tests we covered last week using data from a **mixture** of studies (some where causation can be established, some where it cannot).
+
+* Download the `week-5-exercise.zip` file on the Blackboard page and open the Rproject file. Open the `week-5-exercise.Rmd`.
+
+* Go through the exercises. There is a challenge at the end with some open data experiments!
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"slideNumberFormat": "%current%",
+"highlightStyle": "github",
+"highlightLines": true,
+"sealed": false,
+"ratio": "16:9",
+"self_contained": true,
+"countIncrementalSlides": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<style>
+.my-header {
+	background-color: #440099;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	height: 70px;
+	width: 100%;
+	text-align: left;
+}
+</style>
+
+<script>
+document
+  .querySelectorAll(
+    '.remark-slide-content' +
+    ':not(.inverse)' +
+    // add additional classes to exclude here, e.g.
+    // ':not(.inverse)' +
+    ':not(.hide-logo)'
+  )
+  .forEach(el => {
+    el.innerHTML += '<div class="my-header"></div>';
+  });
+</script>
+
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

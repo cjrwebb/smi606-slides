@@ -1,0 +1,15 @@
+---
+title: ""
+author: ""
+date: ""
+output: html_document
+---
+
+#### Input
+
+```{r setup, include=TRUE, eval=FALSE}
+
+dice_rolls_summary <- tabyl(dice_rolls$rolls)
+dice_rolls_summary
+
+```

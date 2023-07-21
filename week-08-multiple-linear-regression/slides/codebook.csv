@@ -1,0 +1,54 @@
+lfs_names,lfs_labels
+ten1,Accommodation details
+housex,housing tenure
+sexx,Sex
+age,Age of respondent
+ages,Age groups in 5 year intervals
+ntnlty12,Nationality
+regionx,Region
+numchild04,Number of children aged 0-4
+numchild516,Number of children aged 5-16
+ayfl19,Age youngest child in family under 19
+ethukeul,Ethnicity (9 categories) UK level
+fbx,whether born outside the UK
+arrivalx,Year of arrival in UK
+marstax,Marital status
+liv12w,Whether living together as couple
+marcivx,Whether married/Civil Partner (living with or separated)
+inecac05,Basic economic activity (ILO definition) (reported)
+statusx,Economic status
+ilodefr,Economic activity (reported) from MM05
+grsswk,Gross weekly pay in main job (Government scheme or employee)
+hourpay,Gross hourly pay
+soc10m,Occupation (main job)
+sc10mmj,Major occupation group (main job)
+nsecm10x,NS-SEC category (SOC2010 based) (with labels)
+jobtyp,Permanent or temporary job
+conmpy,Yr started working for current employer
+ptimex,Whether part-time (self-reported)
+ptimehrs,Whether part-time (work <31 hours per week)
+ttushr,Total usual hours in main job
+publicr,Public or private sector (reported)
+manager,Managerial status (reported)
+secjob,Whether had 2nd job in reference week
+ytetjb,Whether had paid job in addition to scheme
+wrking,Whether did paid work in reference week
+ownbus,Unpaid work for own business
+relbus,Unpaid work for relatives business
+statr,Employment status in main job (reported)
+look4,Looking for paid work in 4 weeks ending reference week
+lkyt4,Looking for scheme place in last 4 weeks (ending reference week)
+start,Able to start work within 2 weeks
+wait,Waiting to take up job already obtained
+likewk,Not looking but would like a paid job
+ystart,Reason not able to start work within 2 weeks
+nolwm,Main reason not looking for work
+hiqual15,Highest qualification/trade apprenticeship
+hiqul15d,Highest qualification (detailed grouping)
+levqul15,Level of highest qualification held
+edage,Age when completed full time education
+bhealthx,Bad Health that limits paid work
+casenop,Case Number
+hserialp,Number uniquely identifies a household
+pwt18,Person weight 2018
+pwt18x,Person weight (mean=1)

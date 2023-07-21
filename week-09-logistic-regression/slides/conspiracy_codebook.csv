@@ -1,0 +1,21 @@
+varnames,varlabels
+ind_ser,Serial number
+consp_clim,Conspiracy beliefs - global warming is a hoax
+consp_alien,Conspiracy beliefs - government covers up knowledge of aliens
+consp_moon,Conspiracy beliefs - moon landings were staged
+rsex,DV: Respondents sex
+rage,DV: Respondents age
+hedqual_rec,DV: Highest educational qualification
+h_hincome,Household income before tax
+ever_wk,If ever worked
+games,Whether R has played any digital games in last 12 months
+psc_jb_rec,DV: Parents' employment in science
+sci_int_p_rec,DV: Parental interest in science
+religious,DV: Religiosity
+gor_name,Government Office Region
+nssec3,NS-SEC 3 analytic classes (derived variable)
+rurality,Area respondent lives in is rural or urban?
+imd_quartile,Index of Multiple Deprivation rank (quartile)
+tr_journ,Trust as an accurate source of info - News orgs
+tr_sci_un,Trust as an accurate source of info - University Scientists
+openness,Openness to new ideas/experiences scale (Higher = more openness)

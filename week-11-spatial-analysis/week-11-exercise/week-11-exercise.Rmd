@@ -1,0 +1,427 @@
+---
+title: "Week 11 Exercise: Spatial Analysis"
+author: "Calum Webb"
+date: "06/12/2021"
+output: pdf_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+In this week's practical exercise, you will be re-creating some of the maps shown in the lecture slides and creating your own map for a city of region of interest (other than Sheffield). You will be exploring how house-buying activities in your area of interest have changed over a two-decade period — whether the most popular areas for purchasing homes have changed and whether the most popular home-buying areas have become more concentrated or more dispersed using Moran's I. 
+
+Let's start by loading the libraries required.
+
+```{r}
+
+# Remember to install the packages you haven't used before! You should run the install.packages() functions in the console (bottom left pane) rather than leaving them uncommented in the script
+
+# install.packages("tidyverse")
+# install.packages("sf")
+# install.packages("leaflet")
+# install.packages("spdep")
+
+library(tidyverse) # For joining and manipulating data
+library(sf) # For reading and working with spatial data
+library(leaflet) # For creating interactive maps
+library(spdep) # For Moran's I statistics
+
+
+```
+
+## Part I: Reading in Spatial Data and joining it to social science data
+
+We are going to start by reading in our spatial data and joining it to some social science data about the small areas (LSOAs). We're then going to filter the data so just one city or region is mapped (as it takes quite a lot of processing power to create a large map of all 35,000-ish LSOAs!)
+
+We use `st_read` from the `sf` package to read in our shapefile data. This is called `lsoa-england-wales-boundaries` and is saved in the `data` folder. We'll save it to an object called `lsoa_boundaries`.
+
+We'll also read in the LSOA population weighted centroids and social science data, as we'll be using these for calculating Moran's I.
+
+```{r}
+
+# Read in LSOA boundaries
+lsoa_boundaries <- st_read("data/lsoa-england-wales-boundaries/")
+
+# Read in LSOA centroids
+lsoa_centroids <- st_read("data/lsoa-england-wales-centroids/")
+
+# Read in additional data (which includes house buying popularity)
+housing_data <- read_csv("data/lsoa_data_tidy.csv")
+
+
+```
+
+Next, we'll use the `left_join` function from the `tidyverse` package to join the LSOA housing data onto the LSOA boundaries and LSOA centroids data. We'll call the new merged data `lsoa_boundaries_c` and `lsoa_centroids_c`, where the c stands for "combined"
+
+```{r}
+
+# Join LSOA boundaries and housing data by ID columns lsoa11cd and lsoa_code
+lsoa_boundaries_c <- left_join(lsoa_boundaries, housing_data, by = c("lsoa11cd" = "lsoa_code"))
+
+# Join LSOA centroids and housing data by ID columns lsoa11cd and lsoa_code
+lsoa_centroids_c <- left_join(lsoa_centroids, housing_data, by = c("lsoa11cd" = "lsoa_code"))
+
+```
+
+
+---
+
+## Part II: Filtering our data down to a single city/region/county
+
+There are two possible ways we could go about filtering our data down to just one city or region. We could use a simple filter match from the `utla17nm` variable, which contains larger 'upper tier local authority' regions. We can view the names of these in alphabetical order by running the following code:
+
+```{r}
+
+sort(unique(lsoa_boundaries_c$utla17nm))
+
+```
+
+We could then filter the data to include just LSOAs in these upper tier local authority regions by using the dplyr filter function. For example, if we wanted every small area in South Yorkshire, we could use the following code:
+
+```{r}
+
+syorks_data <- lsoa_boundaries_c %>%
+  filter(utla17nm == "South Yorkshire")
+
+syorks_data
+
+```
+
+Note that Sheffield is not an option for the `utla17nm` variable — but we can see in the `lsoa11nm` there are clear lower-level place names that we could use. There's no easy way to see all the options, but we could make a sensible guess using the `str_detect` function which is part of tidyverse. Here are a couple of examples:
+
+```{r}
+
+# Boundaries and centroids for Sheffield
+sheff_boundaries <- lsoa_boundaries_c %>%
+  filter(str_detect(lsoa11nm, "Sheffield"))
+sheff_boundaries
+
+sheff_centroids <- lsoa_centroids_c %>%
+  filter(str_detect(lsoa11nm, "Sheffield"))
+sheff_centroids
+
+# Boundaries and centroids for Torbay
+torbay_boundaries <- lsoa_boundaries_c %>%
+  filter(str_detect(lsoa11nm, "Torbay")) 
+
+torbay_centroids <- lsoa_centroids_c %>%
+  filter(str_detect(lsoa11nm, "Torbay")) 
+
+```
+
+
+* Use either of the above options to filter the LSOA boundaries and LSOA centroids data down to a city or region of your choosing. If you can't think of one, try and create a filtered version of the data for all small areas in the 'Inner London' `utla17nm` region.
+
+```{r}
+
+# Write your own code here.
+
+```
+
+
+---
+
+## Part III: Re-calculating relative popularity of areas for home buying for our filtered data.
+
+At the moment, the `housesales_1998_quantiles` variables are currently reflecting the popularity of house buying in small areas nationally, not locally. We need to re-calcuate them in our filtered data to make them reflect popularity relative to all small areas in the region/city/county. We can simply overwrite them using the `mutate` and `ntile` function. Here is an example using the Sheffield data:
+
+```{r}
+
+sheff_boundaries <- sheff_boundaries %>%
+  mutate(
+    housesales_1998_quantiles = ntile(x = housesales_1998, n = 20),
+    housesales_2018_quantiles = ntile(x = housesales_2018, n = 20)
+  )
+
+sheff_centroids <- sheff_centroids %>%
+  mutate(
+    housesales_1998_quantiles = ntile(x = housesales_1998, n = 20),
+    housesales_2018_quantiles = ntile(x = housesales_2018, n = 20)
+  )
+
+```
+
+The `ntile` function creates `n` (here, 20) equal sized groups based on the lowest-to-highest values of `x` (here, `housesales_1998`/`housesales_2018`). You can think of these in terms of percentiles. 100 Percentiles divided by 20 equals 5, which means than if a small area's `housesales_1998_quantiles` value is 1 it means it was in the least popular 5% of all of the small areas. Conversely, if a small area's `housesales_1998_quantiles` is 20, it means it was in the most popular 5% of all of the small areas. This can help us make comparisons over time where we might have a general increase or decrease in the range of houses sold.
+
+* Using the above code as a template, re-calculate the `housesales_1998_quantiles` and `housesales_2018_quantiles` for your city or region of interest. (or for Inner London if you can't think of anything)
+
+```{r}
+
+# Write your own code here.
+
+```
+
+---
+
+## Part IV: Plotting our data with a (static) choropleth map
+
+Now we can start plotting our spatial data. Let's start by just mapping the 1998 house sales popularity data so that we can adjust our plotting options to make our map readable and visually appealing. We can start with a basic plot of the areas. We use `geom_sf` to plot our spatial data.
+
+```{r}
+
+sheff_boundaries %>%
+  ggplot() +
+  geom_sf()
+
+```
+
+The first thing to check is whether the resulting map looks vaguely like what you would expect from the data you've filtered (e.g. it's not the whole map, it doesn't have odd stretches of nowhere and all of the small areas are roughly contiguous (connected)). This looks okay, so we can proceed to fill our spatial areas based on their values of `housesales_1998_quantiles`.
+
+Because we want the values of the fill to be based on a variable, we need to put this within an `aes` function.
+
+```{r}
+
+sheff_boundaries %>%
+  ggplot() +
+  geom_sf(aes(fill = housesales_1998_quantiles))
+
+```
+
+This looks okay, but I personally find the boundary lines to be too intrusive. They obscure a lot of the fill in the more densely populated small areas. We can turn them off by setting the `colour` arhument in `geom_sf` to "transparent" (NB: In `geom_sf` colour/color refers to the colour of the lines, fill refers to the colour inbetween the lines.)
+
+```{r}
+
+sheff_boundaries %>%
+  ggplot() +
+  geom_sf(aes(fill = housesales_1998_quantiles), colour = "transparent")
+
+```
+
+I personally think this looks much better. We could probably improve it further though. We can use the `theme_void()` function to remove all of the grid lines and labels of the plot, since these are not very helpful to us (maybe if we were ship navigators or air traffic controllers!)
+
+```{r}
+
+sheff_boundaries %>%
+  ggplot() +
+  geom_sf(aes(fill = housesales_1998_quantiles), colour = "transparent") +
+  theme_void()
+
+```
+
+This has the benefit of making our map bigger and more readable! We could do even better if we moved our legend to the top or bottom. We can do this using the `theme()` function. We can also change its title if we wanted.
+
+
+```{r}
+
+sheff_boundaries %>%
+  ggplot() +
+  geom_sf(aes(fill = housesales_1998_quantiles), colour = "transparent") +
+  theme_void() +
+  theme(legend.position = "bottom") +
+  labs(fill = "House Buying Popularity (20 = Highest)")
+
+```
+
+Lastly, we could change the fill colour. One in-built colourblind friendly option is `scale_fill_viridis_c()`, but we could also create our own colour palette using `scale_fill_gradient()` or by using other packages, like the `scico` package which includes scientifically validated packages which avoid distorting variation: https://github.com/thomasp85/scico (https://cran.r-project.org/web/packages/scico/index.html). 
+
+Here is a handy chart showing the named colours in `R`: http://sape.inf.usi.ch/sites/default/files/ggplot2-colour-names.png 
+
+```{r}
+
+# Colour palette viridis
+sheff_boundaries %>%
+  ggplot() +
+  geom_sf(aes(fill = housesales_1998_quantiles), colour = "transparent") +
+  theme_void() +
+  theme(legend.position = "bottom") +
+  labs(fill = "House Buying Popularity (20 = Highest)") +
+  scale_fill_viridis_c()
+
+# Custom colour palettes using scale_fill_gradient
+sheff_boundaries %>%
+  ggplot() +
+  geom_sf(aes(fill = housesales_1998_quantiles), colour = "transparent") +
+  theme_void() +
+  theme(legend.position = "bottom") +
+  labs(fill = "House Buying Popularity (20 = Highest)") +
+  scale_fill_gradient(low = "lemonchiffon", high = "palevioletred")
+
+```
+
+
+* Try creating your own custom colour palette for the Sheffield Data
+
+```{r}
+
+# Write your own code here.
+
+```
+
+* Now try replicating the plot for Sheffield but mapping the 2018 housebuying quantiles instead
+
+```{r}
+
+# Write your own code here.
+
+```
+
+* Finally, try creating comparable maps for your area of interest — if you couldn't think of one earlier, create a comparable map for Inner London.
+
+```{r}
+
+# Write your own code here.
+
+```
+
+
+---
+
+## Part V: Interactive Choropleth Maps
+
+A common complaint of static choropleth maps is that it's hard to distinguish between highly populated areas and, even when it is possible, it can be very difficult for people unfamiliar with maps of the region to identify different areas as there are no markers. Interactive maps that use open source road and area name markers can be very useful here. 
+
+One (somewhat) user-friendly option for this in `R` is the `leaflet` package. However, `leaflet` uses very different syntax to what we have seen so far. It also required a longitudinal-latitudinal projection version of the spatial data, which we do not have by default. So, in order to create a `leaflet` interactive map, we need to follow these steps:
+
+* Create a version of our spatial data where it has been transformed to a longlat projection that leaflet can work with
+* Create a palette function for our variable (where it's easiest to stick with viridis)
+* Create the leaflet plot.
+
+We will work through each step with the Sheffield boundaries data. First, we use the `st_transform` function to convert our data's projection. I'll save the result as `sheff_boundaries_leaflet`. Don't worry too much about what the text in the `crs` argument means.
+
+```{r}
+
+sheff_boundaries_leaflet <- st_transform(x = sheff_boundaries, crs = CRS("+proj=longlat +datum=WGS84"))
+
+```
+
+Next, we create a colour palette for our variable/s of interest. Because our variables here are on the same scale (1-20), we only need to create one palette for both and can use either the housesales_1998_quantiles or the housesales_2018_quantiles variable to create it. Here, I've called it `homes_palette`.
+
+```{r}
+
+homes_palette <- colorNumeric(palette = "viridis", 
+                              domain = sheff_boundaries_leaflet$housesales_1998_quantiles,
+                              na.color = "transparent")
+
+```
+
+Lastly, we can create the `leaflet` plot. When we run this, it will show in our viewer where we could then output it as a html file if we wanted to put it online.
+
+To explain what each part of the code means:
+
+* `leaflet(data = sheff_boundaries_leaflet) %>%` First, we call 'leaflet' to tell R we want to create an interactive leaflet map. We then use the pipe (%>%) for the next argument.
+*  `addPolygons(stroke = FALSE, fillColor = ~homes_palette(housesales_1998_quantiles), fillOpacity = 0.7) %>%` This part of the code is used for drawing the boundaries (polygons). The option `stroke = FALSE` refers to us telling leaflet to not draw lines around our polygons; `fillColor = ~homes_palette(housesales_1998_quantiles)` tells R we want to use the homes_palette function we created earlier to fill our polygons according to their value in the `housesales_1998_quantiles` variable; `fillOpacity = 0.7` tells leaflet how much transparency we want our polygon fills to have — we want them to be filled solid enough for us to clearly be able to tell the difference between popular and unpopular areas, but not so solid that we cannot read the place names underneath when we zoom in. You may want to adjust this to your liking!
+* `addTiles() %>%` adds the underlying map information from OpenStreetMap — this is where the place names, roads, parks, etc. come from.
+* `addLegend(pal = homes_palette, values = ~housesales_1998_quantiles)` finally, `addLegend` adds the legend to explain the colour coding. `pal = homes_palette` tells leaflet we want to use the palette we created earlier, `values = ~housesales_1998_quantiles` reiterates to leaflet that we want to base the range on the `housesales_1998_quantiles` variable — this might seem redundant but it's just because we are used to the convenience of ggplot!
+
+```{r}
+
+leaflet(data = sheff_boundaries_leaflet) %>%
+  addPolygons(stroke = FALSE,
+              fillColor = ~homes_palette(housesales_1998_quantiles),
+              fillOpacity = 0.7) %>%
+  addTiles() %>%
+  addLegend(pal = homes_palette,
+            values = ~housesales_1998_quantiles)
+
+```
+
+* Okay, before you try creating your own interactive map for your area of choice, try changing the above code to create a leaflet map for the `housesales_2018_quantiles` variable instead of the 1998 version.
+
+```{r}
+
+# Write your own code here.
+
+```
+
+* Now, try following the three steps above to create the leaflet maps for your areas of interest. Again, if you couldn't decide on one, do this for the Inner London region.
+
+```{r}
+
+# Write your own code here.
+
+```
+
+---
+
+## Part VI: Moran's I
+
+Lastly, we can calculate our Moran's I using our centroid data. Just like using `leaflet`, it can be a little tricky to calculate Moran's I in `R`, but we can break it down into a few steps:
+
+* Get our centroid coordinates using `st_coordinates` from the `sf` package.
+* Use these to calculate a Euclidean distance matrix, using the built in `dist` function. We also need to change it to formally be a `matrix` object using `as.matrix()`
+* Invert this `matrix` to create a closeness matrix scaled between 0 and 1 by dividing 1 by every value in the Euclidean distance matrix. I then also need to replace all of the diagonals in the matrix with 0 because they will be 0 by default and result in 1/0 which = Infinity in R.
+* Then I can run the Moran's I test using `moran.test` from the `spdep` package.
+
+First, I'll get my coordinates for Sheffield's centroids:
+
+```{r}
+
+sheff_coords <- st_coordinates(sheff_centroids)
+
+```
+
+Then, I'll calculate a distance matrix using `dist()` and convert it into a true matrix object using `as.matrix`
+
+```{r}
+
+sheff_dist <- dist(sheff_coords)
+sheff_dist <- as.matrix(sheff_dist)
+
+```
+
+Now I can scale and invert the matrix using the following code:
+
+```{r}
+
+# scale/invert matrix
+sheff_close <- 1/sheff_dist
+# set diagonals to 0
+diag(sheff_close) <- 0
+
+```
+
+Now I can run the Moran's I test using the `moran.test` function. It can also be helpful to change the scientific notation rules when using this function. For example, if I run `options(scipen = 10)` first, it will mean that scientific notation will only be used when the number printed by `R` is greater than 10 digits.
+
+* `x` = our variable of interest, which we hypothesise may be spatially clustered or dispersed
+* `listw` = our scaled closeness matrix.
+* `mat2listw` = A convenience function that turns our matrix object into a `listw` object specific to use by `spdep`
+
+Be aware that the Moran's I test can take a little while to run!
+
+```{r}
+
+options(scipen = 10)
+
+moran.test(x = sheff_centroids$housesales_1998_quantiles,
+           listw = mat2listw(sheff_close))
+
+```
+
+If I wanted to calculate the Moran's I for any other variable in the data, all I would need to do is change the `x` argument in the `moran.test` function. I do not need to recreate the spatial closeness/distance matrix. 
+
+For example, to get the Moran's I for the 2018 housing sales quantiles I would only need to change the code to this:
+
+```{r}
+
+moran.test(x = sheff_centroids$housesales_2018_quantiles,
+           listw = mat2listw(sheff_close))
+
+```
+
+
+* Follow the above steps, using the template code, to calculate the Moran's I for the house buying popularity variables in the area you chose. If you couldn't think of an area, you could do this for Inner London. 
+
+```{r}
+
+# Write your own code here.
+
+```
+
+* Did the popular areas for home buying become more or less clustered after 20 years in your example? Or were they approximately the same degree of clustered/dispersed (though the location of the clusters may have changed).
+
+
+
+
+---
+
+## Week 11 Challenge
+
+* Map, and calculate a Moran's I statistic for the proportion of older people living in income deprivation (`idaopi_2019`) in the area you chose. 
+* Try and read in, join, and plot the proportion of people voting to leave the EU in each Westminster Constituency on the constituency cartogram developed by the House of Commons Library (`constituencies-cartogram.gpkg`). You may need to check slides 21 to 24 for how to work with geopackage files. 
+* Try estimating a spatial autocorrelation model using the code on slide 64 as a template. Look at the linear association between house buying popularity quantile in 1998 (independent variable) and house buying popularity quantile in 2018 (dependent variable), before and after adjusting for spatial autocorrelation using a spatial lag regression model with the `spaMM` package. Warning: This is a difficult challenge and spatial lag regression models can take a while to estimate!
+
+
+

@@ -1,0 +1,498 @@
+---
+title: "Week 10 Exercise: Cluster Analysis"
+author: "Calum Webb"
+date: "27/11/2021"
+output: pdf_document
+editor_options: 
+  chunk_output_type: console
+---
+
+In this practical activity we will be using cluster analysis to try and explore whether there are underlying clusters of crime incidence in US states and English Community Safety Partnerships, using data from the CORGIS Dataset Project (https://corgis-edu.github.io/corgis/csv/state_crime/) and the Office for National Statistics (https://www.ons.gov.uk/peoplepopulationandcommunity/crimeandjustice/datasets/recordedcrimedatabycommunitysafetypartnershiparea). The researchers in this activity are interested in finding out if states/community partnerships simply cluster into 'high' or 'low' crime, or whether there are clusters of specific types of crime (assault, murder, sexual crime, theft, etc.)
+
+First, you will be asked to follow along and interpret the output from some code analysing clusters of crime in US states. Then, you will be asked to use this code as a template to explore clusters of crime in community safety partnerships in England.
+
+## Part I: Clusters of Crime Types in US States
+
+Start by loading (or installing and then loading) the relevant libraries used for cluster analysis. 
+
+```{r}
+
+# Don't forget to install any packages you don't have installed.
+#install.packages("tidyverse")
+#install.packages("cluster")
+#install.packages("factoextra")
+
+library(tidyverse)
+library(cluster)
+library(factoextra)
+
+```
+
+First, the researchers read in the data and save it in an object called `usa_data`
+
+```{r}
+
+usa_data <- read_csv("state_crime_rates.csv")
+usa_data 
+
+```
+
+Next, the researchers decide that because their variables of interest are all continuous they will start by using k-means to try and identify relevant clusters. They start by removing any non-numeric variables from their dataset, keeping only the numeric ones.
+
+```{r}
+
+usa_data_prepped <- usa_data %>%
+  select(-state)
+
+```
+
+They start by using the `factoextra` package, and the `fviz_nbclust` function to try and determine how many clusters they should try to identify.
+
+```{r}
+
+# Silhouette Plot
+fviz_nbclust(x = usa_data_prepped, 
+             FUNcluster = kmeans, 
+             method = "silhouette")
+
+# Gap statistic plot
+fviz_nbclust(x = usa_data_prepped, 
+             FUNcluster = kmeans, 
+             method = "gap")
+
+```
+
+* Interpret the above plots: what is the optimal number of clusters according to the silhouette statistic and what is the optimal number of clusters according to the gap statistic?
+
+
+The optimal number of clusters according to the silhouette statistic is 2, whereas the optimal number of clusters according to the gap statistic is 3.
+
+
+
+---
+
+The researchers decide that they will create a 2-cluster solution (as suggested by the silhouette plot), as well as a 3-cluster solution suggested by the gap statistic. They use the `kmeans` to first estimate the clusters, they then visualise the clusters using the `fviz_cluster` function.
+
+```{r}
+
+# run kmeans analysis
+set.seed(2021)
+usa_k2 <- kmeans(usa_data_prepped, centers = 2)
+usa_k2
+
+# run kmeans analysis
+set.seed(2021)
+usa_k3 <- kmeans(usa_data_prepped, centers = 3)
+usa_k3
+
+# visualise clusters - 2 cluster
+fviz_cluster(usa_k2,
+             data = usa_data_prepped)
+
+# visualise clusters - 3 cluster
+fviz_cluster(usa_k3,
+             data = usa_data_prepped)
+
+```
+
+* Approximately what proportion of variance could be explained by the cluster membership solution chosen in the 2-cluster and 3-cluster solutions?
+
+The proportion of variance explained in the 2 cluster solution was around 63.4%, whereas the proportion explained in the 3 cluster solution was 79%.
+
+
+
+* Do the clusters look well defined? Are there any states that may have been misclassified by the algorithm?
+
+Both 2-clusters and 3 cluster solutions appear to have some overlap. For example, in the two cluster solution the states on row 17, 23, 27, 41, 45, and 34 are all clustered together on the border of the two clusters and could therefore be valid for either.
+
+The 3-cluster solution seems to have slightly more unique clusters, although at the same point (around where cluster 41 is) there appears to be some overlap.
+
+
+
+---
+
+The researchers then decide to add the cluster membership to the original data and then explore how the clusters differ in mean values of each crime rate.
+
+```{r}
+
+# Add cluster results to data and save in `usa_data_results`
+usa_data_results <- usa_data %>%
+  mutate(
+    cluster_k2 = usa_k2$cluster,
+    cluster_k3 = usa_k3$cluster
+  )
+
+# Summarise all numeric variables with their mean
+# Tip: Uncomment the %>% view() section of the code to view all output
+usa_data_results %>%
+  group_by(cluster_k2) %>%
+  summarise_all(~mean(., na.rm = TRUE)) # %>% view()
+
+usa_data_results %>%
+  group_by(cluster_k3) %>%
+  summarise_all(~mean(., na.rm = TRUE)) # %>% view()
+
+```
+
+* Describe and label the two kinds of clusters found in the 2-cluster solution.
+
+The two cluster solution appears to be broken into high-crime and low-crime clusters. Cluster 1 has higher average incidence of all forms of recorded crime whereas cluster 2 has lower average incidence of all forms of crime.
+
+
+* Describe and label the three kinds of clusters found in the 3-cluster solution.
+
+The three cluster solution appears to have clustered the states into low, middling, and high incidence of crime, with cluster 1 being the lowest and cluster 3 being the highest.
+
+
+---
+
+The researchers then decide to check whether they find similar results when using hierarchical cluster analysis. 
+
+They decide that since all of their data is continuous, they will create a dissimilarity matrix based on Euclidean distance.
+
+```{r}
+
+usa_d <- daisy(usa_data_prepped, metric = "euclidean")
+
+```
+
+They decide to use two different methods for hierarchical cluster analysis: the Ward's linkage method and complete linkage method.
+
+```{r}
+
+set.seed(2021)
+usa_ward     <- hclust(d = usa_d, method = "ward.D")
+set.seed(2021)
+usa_complete <- hclust(d = usa_d, method = "complete")
+
+```
+
+Then then visualise a dendrogram of their results.
+
+```{r}
+
+plot(usa_ward)
+
+plot(usa_complete)
+
+```
+
+* Based on the two dendrograms, how many different clusters might be reasonable to extract from the data and why?
+
+HCA using Ward linkage seems to show three well-defined clusters, as does HCA using complete linkage.
+
+
+
+---
+
+The researchers decide to test a 3-cluster (Ward and complete) solution to their data clustering. They use the `cutree` function to achieve this.
+
+```{r}
+
+usa_ward_k3 <- cutree(usa_ward, k = 3)
+usa_comp_k3 <- cutree(usa_complete, k = 3)
+
+```
+
+They add the cluster results to their data and generate some descriptive statistics for each solution.
+
+```{r}
+
+usa_data_hca_results <- usa_data %>%
+  mutate(
+    ward_k3 = usa_ward_k3,
+    comp_k3 = usa_comp_k3
+  )
+
+# Results for 3 cluster ward
+usa_data_hca_results %>%
+  group_by(ward_k3) %>%
+  summarise_all(~mean(., na.rm = TRUE)) # %>% view()
+
+# Results for 3 cluster complete
+usa_data_hca_results %>%
+  group_by(comp_k3) %>%
+  summarise_all(~mean(., na.rm = TRUE)) # %>% view()
+
+
+```
+
+
+* Write a description and labels for the 3-cluster solution found through Ward's linkage
+
+The Ward linkage HCA appears to show three clusters of states that could be labelled high crime (1), medium crime (2), and low crime (3).
+
+* Write a description and labels for the 3-cluster solution found through complete linkage
+
+Complete data linkage appears to have found clusters very similar to Ward linkage and k-means. With the exception of violent robbery, cluster 1 represents the highest rates of crime on average, cluster 2 represents the middle rates of crime, and cluster 3 represents low rates of crime.
+
+
+* How would you summarise the research? Did the researchers find evidence that state-level crime fell into distinct categories of crimes committed, or did clusters largely reflect rates of all crimes?
+
+
+Cluster analysis did not seem to suggest that, at the state level, communities face very different clusters characterised by types of crime. Rather, the clustering of crime was associated with the prevalence of all forms of crime rather than specific forms.
+
+
+
+
+---
+
+## Part II: Clusters of Crime Types in English Community & Safety Partnerships
+
+Now we'll explore whether we find similar or different results for crime rates in English Community and Safety Partnerships. 
+
+* Start by loading the `"england_crime_rates.csv"` data into `R` using the `read_csv` function. Save the result to an object called `english_crime`.
+
+```{r}
+
+english_crime <- read_csv("england_crime_rates.csv")
+english_crime
+
+```
+
+* Check the kinds of variables in the data and decide whether you could use k-means, Hierarchical Cluster Analysis, or both methods for exploring clusters of crime.
+
+
+Both k-means and Hierarchical Cluster Analysis could be used for analysing this data as all variables of interest are continuous.
+
+
+
+---
+
+
+* Create a version of the data that contains only the numeric type variables and store it in an object called `english_crime_prepped` so that it can be used for k-means and HCA.
+
+```{r}
+
+english_crime_prepped <- english_crime %>%
+  select_if(is.numeric)
+
+```
+
+
+---
+
+Let's start with k-means analysis. 
+
+* Use the `fviz_nbclust` function from the `factoextra` package to identify the optimal cluster solution under both the silhouette method and the gap statistic method. 
+
+```{r}
+
+fviz_nbclust(english_crime_prepped, FUNcluster = kmeans, method = "silhouette")
+
+fviz_nbclust(english_crime_prepped, FUNcluster = kmeans, method = "gap")
+
+```
+
+* How many clusters do the silhouette and gap statistic methods recommend respectively?
+
+The silhouette method recommends a three cluster solution and the gap statistic recommends a two cluster solution.
+
+
+---
+
+* Create a 3-cluster and a 2-cluster solution for the English crime data using the `kmeans` function. Remember to save the results to an object for later use.
+
+```{r}
+
+set.seed(2021)
+english_km2 <- kmeans(english_crime_prepped, centers = 2)
+set.seed(2021)
+english_km3 <- kmeans(english_crime_prepped, centers = 3)
+
+```
+
+* Visualise the 2 cluster and 3 cluster solutions using the `fviz_clusters` function.
+
+```{r}
+
+fviz_cluster(english_km2, data = english_crime_prepped, geom = "point")
+
+fviz_cluster(english_km3, data = english_crime_prepped, geom = "point")
+
+```
+
+
+* By calling the k-means objects created earlier, report the proportion of variance that can be explained by the 2-cluster solution and the 3-cluster solution.
+
+```{r}
+
+english_km2
+english_km3
+
+```
+
+
+* Do you find any particular solution preferable?
+
+The three-cluster solution feels more intuitive as the inclusion of the points at the top of the graph within cluster 1 looks less approporite than an additional cluster. In addition, the variance explained in the three cluster solution was 63.9%, compared to 45.8%, which seems to be an appropriate trade off for the benefit of an additional cluster.
+
+
+
+---
+
+Now, we need to describe the clusters. 
+
+* By either calling the clusters, or adding them to the original data and then calculating summary statistic by group, get summary statistics for all of the clusters from the 2-cluster and 3- cluster solution.
+
+```{r}
+
+english_crime_km_results <- english_crime %>%
+  mutate(
+    cluster_km2 = english_km2$cluster,
+    cluster_km3 = english_km3$cluster,
+  ) 
+
+english_crime_km_results %>%
+  group_by(cluster_km2) %>%
+  summarise_if(is.numeric, mean) # %>% view()
+
+english_crime_km_results %>%
+  group_by(cluster_km3) %>%
+  summarise_if(is.numeric, mean) # %>% view()
+
+
+```
+
+* Describe the clusters found in the 2-cluster and 3-cluster solution.
+
+
+__2 Cluster Solution__
+
+The two cluster solution appears to show a straightforward split between low crime (cluster 2) and high crime (cluster 1).
+
+__3 Cluster Solution__
+
+The three cluster solution shows some potentially more interesting results. Cluster 1 appears to be characterised by relatively high property, vehicle, and drug crime (high robbery, high theft, high vehicle offences), but with relatively normal levels of other forms of crime. In contrast, cluster 3 appears to be characterised by high levels of violent crime, sexual offences, public order offences, and criminal damage and arson. Cluster 2 seems to represent relatively low crime. The three clusters could be labelled as follows:
+
+Cluster 1 — High Incidence Property Crime Communities
+Cluster 2 — Low Overall Crime Communities
+Cluster 3 — High Incidence Interpersonal Crime Communities
+
+
+
+* Is there evidence in either of these cluster solutions of areas being clustered into different types of criminal offences, or do clusters only reflect low or high crime as in the United States?
+
+
+Yes, as opposed to the US data the three cluster solution appears to show the English community safety partnerships can be classified by prevalence of certain types of crime as well as overall crime. 
+
+
+---
+
+Let's also see if we get similar results from a hierarchical cluster analysis. Before we can do that, we need to pick an appropriate dissimilarity/distance measure and linkage method. Your answers may start to differ from mine here — that's totally fine and to me expected! A lot of cluster analysis is subjective.
+
+* What might be an appropriate distance measure for this data and why? (Hint: see slide 55)
+
+Manhattan distance may be an appropriate measure of dissimilarity due to the large number of variables included in the data (8).
+
+
+* What might be an appropriate linkage method for this data and why? (Hint: see slide 58)
+
+Ward, Centroid, and Median linkage should be avoided because the distance matrix will be based on Manhattan and now Euclidean distance. Further, single linkage may not be appropriate as we do not assume a 'chain of command' type hierarchy in the data. As such, complete or average linkage may be most appropriate. 
+
+
+* Create a distance matrix for the English data using the dissimilarity measure of your choice.
+
+```{r}
+
+english_crime_d <- daisy(english_crime_prepped, metric = "manhattan")
+
+```
+
+
+---
+
+Now we can run the Hierarchical Cluster Analysis algorithm (or algorithms, if trying multiple) that we decided on about.
+
+* Use the `hclust` function to cluster the data according to the linkage method that you chose. Don't forget to save the result to a new object.
+
+```{r}
+
+set.seed(2021)
+english_crime_comp <- hclust(english_crime_d, method = "complete")
+
+set.seed(2021)
+english_crime_avg <- hclust(english_crime_d, method = "average")
+
+```
+
+* Plot the results of your HCA with a dendrogram using the `plot` function
+
+```{r}
+
+plot(english_crime_comp) # Maybe 4
+
+plot(english_crime_avg) # Maybe 4
+
+```
+
+* Come up with a sensible number of clusters from the above plots that you think the data could be clustered into. Write how many clusters you think there may be in the data based on each dendrogram (if more than one).
+
+Four seems to be an appropriate number of clusters for both dendrograms, though there could be some equally valid larger numbers of clusters. The average linkage dendrogram appears to have two singleton clades (Community 183 & 41), which may indicate outliers or potentially bad fitting clusters. Four also appears to be a defensible number of clusters for the average linkage dendrogram.
+
+Because of the singleton clades in the average linkage, it will not be explored further. The complete linkage will be explored further.
+
+
+
+---
+
+Now we can cut our dendrogram into the number of clusters we believe we identified to explore how we might describe them. 
+
+* Use the `cutree` function to cut your dendrogram(s) into the chosen number of clusters.
+
+```{r}
+
+english_hca_comp_results <- cutree(english_crime_comp, k = 4)
+
+```
+
+* Add your cluster solution(s) to the original data using the mutate function and the stored results above.
+
+```{r}
+
+english_crime_hca_results <- english_crime %>%
+  mutate(
+    hca_comp = english_hca_comp_results,
+  )
+
+```
+
+* Now produce some bivariate statistics showing how the crime rates differ by cluster.
+
+```{r}
+
+english_crime_hca_results %>%
+  select(-1, -2) %>%
+  group_by(hca_comp) %>%
+  summarise_all(~mean(., na.rm = TRUE))# %>% view()
+
+```
+
+* Describe the clusters found above (including from multiple linkage methods, if relevant). If possible, label the clusters found.
+
+
+Complete Linkage Cluster (4)
+
+Cluster 1: Average violence against person, average sexual offences, relatively low robbery, average theft offences, average vehicle offences, average criminal damage and arson offences, average drug offences, average public order offences. This cluster appears to represent "typical" communities with average levels of crime.
+
+Cluster 2: Low violence against the person, low sexual offences, low robbert, low theft, low vehicle offences, low criminal damage and arson, low drug offences, low public order offences. This cluster appears to represent low-crime communities.
+
+Cluster 3: Very high violence against the person, high sexual offences, average robbery, fairly high theft, average vehicle offences, very high criminal damage and arson, fairly high drug offences, very high public order offences. This cluster appears to represent high-crime communities characterised by interpersonal violent crime and public order violations.
+
+Cluster 4: Average violence against the person, average sexual offences, very high robbert, very high theft, very high vehicle offences, average criminal damage and arson, high drug offences, average public order offences. This cluster appears to represent high-crime communities characterised by material or property-related crime (e.g. theft, robbery, and vehicle crime).
+
+
+* Do these clusters differ from the clusters found using k-means? Which do you prefer as a typology of crime in English community and safety partnerships and why?
+
+The HCA analysis led to one additional cluster being identified, which split 'low crime' between average and low crime. This may be useful in practice (e.g. in comparing low-crime areas to high crime areas), but equally the distinction is not overly interesting so a simple 3 cluster solution may be appropriate. 
+
+Conceptually, I prefer the four cluster solution found by HCA because it does also appear to have made the differences between the property-dominated high-crime areas and the interpersonal violence and disorder-dominated high-crime areas more distinct, with a better reference category in the low-crime cluster for further analysis. 
+
+
+
+---
+
+## Week 10 Challenge
+
+* Practice using some of the skills we learned in Week 3 (bivariate data visualisation and statistics) to further illustrate the differences and similarities between your favoured cluster analysis of the English crime data. This might make it easier to see the characteristics of clusters than using the means of all variables; it might also show you some interesting differences in terms of variation.
+

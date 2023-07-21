@@ -1,0 +1,413 @@
+---
+title: "Week 10 Exercise: Cluster Analysis"
+author: "Calum Webb"
+date: "27/11/2021"
+output: pdf_document
+editor_options: 
+  chunk_output_type: console
+---
+
+In this practical activity we will be using cluster analysis to try and explore whether there are underlying clusters of crime incidence in US states and English Community Safety Partnerships, using data from the CORGIS Dataset Project (https://corgis-edu.github.io/corgis/csv/state_crime/) and the Office for National Statistics (https://www.ons.gov.uk/peoplepopulationandcommunity/crimeandjustice/datasets/recordedcrimedatabycommunitysafetypartnershiparea). The researchers in this activity are interested in finding out if states/community partnerships simply cluster into 'high' or 'low' crime, or whether there are clusters of specific types of crime (assault, murder, sexual crime, theft, etc.)
+
+First, you will be asked to follow along and interpret the output from some code analysing clusters of crime in US states. Then, you will be asked to use this code as a template to explore clusters of crime in community safety partnerships in England.
+
+## Part I: Clusters of Crime Types in US States
+
+Start by loading (or installing and then loading) the relevant libraries used for cluster analysis. 
+
+```{r}
+
+# Don't forget to install any packages you don't have installed.
+#install.packages("tidyverse")
+#install.packages("cluster")
+#install.packages("factoextra")
+
+library(tidyverse)
+library(cluster)
+library(factoextra)
+
+```
+
+First, the researchers read in the data and save it in an object called `usa_data`
+
+```{r}
+
+usa_data <- read_csv("state_crime_rates.csv")
+usa_data 
+
+```
+
+Next, the researchers decide that because their variables of interest are all continuous they will start by using k-means to try and identify relevant clusters. They start by removing any non-numeric variables from their dataset, keeping only the numeric ones.
+
+```{r}
+
+usa_data_prepped <- usa_data %>%
+  select(-state)
+
+```
+
+They start by using the `factoextra` package, and the `fviz_nbclust` function to try and determine how many clusters they should try to identify.
+
+```{r}
+
+# Silhouette Plot
+fviz_nbclust(x = usa_data_prepped, 
+             FUNcluster = kmeans, 
+             method = "silhouette")
+
+# Gap statistic plot
+fviz_nbclust(x = usa_data_prepped, 
+             FUNcluster = kmeans, 
+             method = "gap")
+
+```
+
+* Interpret the above plots: what is the optimal number of clusters according to the silhouette statistic and what is the optimal number of clusters according to the gap statistic?
+
+
+
+
+
+---
+
+The researchers decide that they will create a 2-cluster solution (as suggested by the silhouette plot), as well as a 3-cluster solution suggested by the gap statistic. They use the `kmeans` to first estimate the clusters, they then visualise the clusters using the `fviz_cluster` function.
+
+```{r}
+
+# run kmeans analysis
+set.seed(2021)
+usa_k2 <- kmeans(usa_data_prepped, centers = 2)
+usa_k2
+
+# run kmeans analysis
+set.seed(2021)
+usa_k3 <- kmeans(usa_data_prepped, centers = 3)
+usa_k3
+
+# visualise clusters - 2 cluster
+fviz_cluster(usa_k2,
+             data = usa_data_prepped)
+
+# visualise clusters - 3 cluster
+fviz_cluster(usa_k3,
+             data = usa_data_prepped)
+
+```
+
+* Approximately what proportion of variance could be explained by the cluster membership solution chosen in the 2-cluster and 3-cluster solutions?
+
+
+
+* Do the clusters look well defined? Are there any states that may have been misclassified by the algorithm?
+
+
+---
+
+The researchers then decide to add the cluster membership to the original data and then explore how the clusters differ in mean values of each crime rate.
+
+```{r}
+
+# Add cluster results to data and save in `usa_data_results`
+usa_data_results <- usa_data %>%
+  mutate(
+    cluster_k2 = usa_k2$cluster,
+    cluster_k3 = usa_k3$cluster
+  )
+
+# Summarise all numeric variables with their mean
+# Tip: Uncomment the %>% view() section of the code to view all output
+usa_data_results %>%
+  group_by(cluster_k2) %>%
+  summarise_all(~mean(., na.rm = TRUE)) # %>% view()
+
+usa_data_results %>%
+  group_by(cluster_k3) %>%
+  summarise_all(~mean(., na.rm = TRUE)) # %>% view()
+
+```
+
+* Describe and label the two kinds of clusters found in the 2-cluster solution.
+
+
+
+
+* Describe and label the three kinds of clusters found in the 3-cluster solution.
+
+
+
+
+---
+
+The researchers then decide to check whether they find similar results when using hierarchical cluster analysis. 
+
+They decide that since all of their data is continuous, they will create a dissimilarity matrix based on Euclidean distance.
+
+```{r}
+
+usa_d <- daisy(usa_data_prepped, metric = "euclidean")
+
+```
+
+They decide to use two different methods for hierarchical cluster analysis: the Ward's linkage method and complete linkage method.
+
+```{r}
+
+set.seed(2021)
+usa_ward     <- hclust(d = usa_d, method = "ward.D")
+set.seed(2021)
+usa_complete <- hclust(d = usa_d, method = "complete")
+
+```
+
+Then then visualise a dendrogram of their results.
+
+```{r}
+
+plot(usa_ward)
+
+plot(usa_complete)
+
+```
+
+* Based on the two dendrograms, how many different clusters might be reasonable to extract from the data and why?
+
+
+
+
+
+---
+
+The researchers decide to test a 3-cluster (Ward and complete) solution to their data clustering. They use the `cutree` function to achieve this.
+
+```{r}
+
+usa_ward_k3 <- cutree(usa_ward, k = 3)
+usa_comp_k3 <- cutree(usa_complete, k = 3)
+
+```
+
+They add the cluster results to their data and generate some descriptive statistics for each solution.
+
+```{r}
+
+usa_data_hca_results <- usa_data %>%
+  mutate(
+    ward_k3 = usa_ward_k3,
+    comp_k3 = usa_comp_k3
+  )
+
+# Results for 3 cluster ward
+usa_data_hca_results %>%
+  group_by(ward_k3) %>%
+  summarise_all(~mean(., na.rm = TRUE)) # %>% view()
+
+# Results for 3 cluster complete
+usa_data_hca_results %>%
+  group_by(comp_k3) %>%
+  summarise_all(~mean(., na.rm = TRUE)) # %>% view()
+
+
+```
+
+
+* Write a description and labels for the 3-cluster solution found through Ward's linkage
+
+
+
+* Write a description and labels for the 3-cluster solution found through complete linkage
+
+
+* How would you summarise the research? Did the researchers find evidence that state-level crime fell into distinct categories of crimes committed, or did clusters largely reflect rates of all crimes?
+
+
+
+
+---
+
+## Part II: Clusters of Crime Types in English Community & Safety Partnerships
+
+Now we'll explore whether we find similar or different results for crime rates in English Community and Safety Partnerships. 
+
+* Start by loading the `"england_crime_rates.csv"` data into `R` using the `read_csv` function. Save the result to an object called `english_crime`.
+
+```{r}
+
+# Write in your R code here
+
+```
+
+* Check the kinds of variables in the data and decide whether you could use k-means, Hierarchical Cluster Analysis, or both methods for exploring clusters of crime.
+
+
+
+---
+
+
+* Create a version of the data that contains only the numeric type variables and store it in an object called `english_crime_prepped` so that it can be used for k-means and HCA.
+
+```{r}
+
+# Write in your R code here
+
+```
+
+
+---
+
+Let's start with k-means analysis. 
+
+* Use the `fviz_nbclust` function from the `factoextra` package to identify the optimal cluster solution under both the silhouette method and the gap statistic method. 
+
+```{r}
+
+# Write in your R code here
+
+```
+
+* How many clusters do the silhouette and gap statistic methods recommend respectively?
+
+
+
+---
+
+* Create a 3-cluster and a 2-cluster solution for the English crime data using the `kmeans` function. Remember to save the results to an object for later use.
+
+```{r}
+
+# Write in your R code here
+
+```
+
+* Visualise the 2 cluster and 3 cluster solutions using the `fviz_clusters` function.
+
+```{r}
+
+# Write in your R code here
+
+```
+
+
+* By calling the k-means objects created earlier, report the proportion of variance that can be explained by the 2-cluster solution and the 3-cluster solution.
+
+```{r}
+
+# Write in your R code here
+
+```
+
+
+* Do you find any particular solution preferable?
+
+
+
+---
+
+Now, we need to describe the clusters. 
+
+* By either calling the clusters, or adding them to the original data and then calculating summary statistic by group, get summary statistics for all of the clusters from the 2-cluster and 3- cluster solution.
+
+```{r}
+
+# Write in your R code here
+
+
+```
+
+* Describe the clusters found in the 2-cluster and 3-cluster solution.
+
+
+
+* Is there evidence in either of these cluster solutions of areas being clustered into different types of criminal offences, or do clusters only reflect low or high crime as in the United States?
+
+
+
+
+---
+
+Let's also see if we get similar results from a hierarchical cluster analysis. Before we can do that, we need to pick an appropriate dissimilarity/distance measure and linkage method. Your answers may start to differ from mine here — that's totally fine and to me expected! A lot of cluster analysis is subjective.
+
+* What might be an appropriate distance measure for this data and why? (Hint: see slide 55)
+
+
+
+* What might be an appropriate linkage method for this data and why? (Hint: see slide 58)
+
+
+
+* Create a distance matrix for the English data using the dissimilarity measure of your choice.
+
+```{r}
+
+# Write in your R code here
+
+```
+
+
+---
+
+Now we can run the Hierarchical Cluster Analysis algorithm (or algorithms, if trying multiple) that we decided on about.
+
+* Use the `hclust` function to cluster the data according to the linkage method that you chose. Don't forget to save the result to a new object.
+
+```{r}
+
+# Write in your R code here
+
+```
+
+* Plot the results of your HCA with a dendrogram using the `plot` function
+
+```{r}
+
+# Write in your R code here
+
+```
+
+* Come up with a sensible number of clusters from the above plots that you think the data could be clustered into. Write how many clusters you think there may be in the data based on each dendrogram (if more than one).
+
+
+
+---
+
+Now we can cut our dendrogram into the number of clusters we believe we identified to explore how we might describe them. 
+
+* Use the `cutree` function to cut your dendrogram(s) into the chosen number of clusters.
+
+```{r}
+
+# Write in your R code here
+
+```
+
+* Add your cluster solution(s) to the original data using the mutate function and the stored results above.
+
+```{r}
+
+# Write in your R code here
+
+```
+
+* Now produce some bivariate statistics showing how the crime rates differ by cluster.
+
+```{r}
+
+# Write in your R code here
+
+```
+
+* Describe the clusters found above (including from multiple linkage methods, if relevant). If possible, label the clusters found.
+
+
+
+
+* Do these clusters differ from the clusters found using k-means? Which do you prefer as a typology of crime in English community and safety partnerships and why?
+
+
+
+
+---
+
+## Week 10 Challenge
+
+* Practice using some of the skills we learned in Week 3 (bivariate data visualisation and statistics) to further illustrate the differences and similarities between your favoured cluster analysis of the English crime data. This might make it easier to see the characteristics of clusters than using the means of all variables; it might also show you some interesting differences in terms of variation.
+

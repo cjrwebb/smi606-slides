@@ -1,0 +1,427 @@
+---
+title: "Week 9 Exercise - Multiple Logistic Regression"
+output: pdf_document
+editor_options: 
+  chunk_output_type: console
+---
+
+This week we are learning how to estimate logistic regression models in R. For this example, we will be using data from the US Census and the Southern Poverty Law Center about active hate groups in the United States (source: https://www.splcenter.org/hate-map). 
+
+In this practical we are going to explore which state-level variables are associated with higher or lower likelihoods of the state having at least one active Neo-Nazi or anti-immigration hate group in 2020. 
+
+
+```{r}
+
+# Load packages we will be using: remember to install them
+# first with install.packages() if you do not have them.
+library(tidyverse) # for data tidying and plotting
+library(ggeffects) # for partial plots
+library(caret) # for testing accuracy
+library(performance) # for testing accuracy through k-fold validation
+library(broom) # for turning model summaries into tibbles with tidy()
+
+# Read in the data sample
+hate_data <- read_rds("hate_group_data.rds")
+
+# Print a preview of the data
+hate_data
+
+```
+
+---
+
+## Part I
+
+## Logistic Regression: Predicting States with Active Neo-Nazi Hate Groups
+
+In this case, the researchers want to see how the percentage of the population with Bachelors or higher levels of education (`pc_bachelors_ed`), the percentage of the population aged 65 plus (`pc_age_65_plus`), the percentage of the population who identify as black in the US census (`pc_black_pop`), the latitude of the state (to see if hate groups are more common in Southern states or Northern States) (`latitude`) and the percentage of households in the state with access to the internet (`pc_hh_with_internet`), change the probabilities of a state having an active hate group. They also want to control for the size of the population (in 100,000s) (`population`).
+
+They create a logistic regression model using the `glm()` function and a `family = binomial(link = "logit")` argument.
+
+```{r}
+
+model_1 <- glm(data = hate_data,
+                  formula = neo_nazi_hgs ~ 
+                              pc_bachelors_ed + population + pc_age_65_plus +
+                              pc_black_pop + pc_hh_with_internet + latitude,
+                  family = binomial(link = "logit"))
+
+summary(model_1)
+
+```
+
+Remember that, in this case we have data for all US states in 2020 - this means we may not be particularly interested in the p-values and are more interested in the effects of each variable (as we may not be trying to generalise to a larger population).
+
+* Using the `exp()` function to create exponentiated odds, describe how changes in the percentage of the population with bachelors or higher education (`pc_bachelors_ed`) is associated with changes in the likelihood of a state having an active Neo-Nazi hate group.
+
+
+
+
+* Using the `exp()` function to create exponentiated odds, describe how changes in the population size (`population`) is associated with changes in the likelihood of a state having an active Neo-Nazi hate group.
+
+
+
+
+* Using the `exp()` function to create exponentiated odds, describe how changes in the percentage of people aged 65 or over (`pc_age_65_plus`) is associated with changes in the likelihood of a state having an active Neo-Nazi hate group.
+
+
+
+
+
+* Using the `exp()` function to create exponentiated odds, describe how changes in the percentage of the population who identify as black in the census (`pc_black_pop`) is associated with changes in the likelihood of a state having an active Neo-Nazi hate group.
+
+
+
+
+
+* Using the `exp()` function to create exponentiated odds, describe how changes in the percentage of households with access to the internet (`pc_hh_with_internet`) is associated with changes in the likelihood of a state having an active Neo-Nazi hate group.
+
+
+
+
+
+* Lastly, using the `exp()` function to create exponentiated odds, describe how changes in the latitude of the state's capital (`latitude`) is associated with changes in the likelihood of a state having an active Neo-Nazi hate group. Keep in mind that an increase of 1 degree in latitude means the state is further North. 
+
+
+
+
+---
+
+They decide to tidy their model using `broom::tidy()` so that they can create a new column with the exponentiated odds for each independent variable using the `mutate` function.
+
+```{r}
+
+# Tidy model
+model_1_tidy <- broom::tidy(model_1)
+
+# Add exponentiated odds
+model_1_tidy %>%
+  mutate(
+    exp_odds = exp(estimate)
+  )
+
+```
+
+Note that these figures are written in scientific notation. 8.37e- 1 is equal to 0.837; 1.03e+ 0 is equal to 1.03; 9.31e- 1 is equal to 0.931; and so on.
+
+* Check that your answers above match the exponentiated odds generated above. If they differ, why do they differ? This will also help you practice interpreting scientific notation.
+
+
+---
+
+Next, the researchers decide to try and plot the predicted probabilities for a few of their variables: `pc_bachelors_ed`, `population`, `pc_hh_with_internet`, and `latitude`. They use the `ggeffects` package to achieve this.
+
+```{r}
+
+# ggeffects:ggeffect can quickly plot predicted probabilities for both categorical
+# and continuous predictors - especially useful for logistic regression
+# models! Note that any plot you create with ggeffect can be added to using 
+# standard ggplot functions, like ggtitle, xlab, or theme_classic!
+ggeffect(model_1, terms = "pc_bachelors_ed") %>%
+  plot() +
+  ggtitle("Predicted probability of an active Neo Nazi Hate Group") +
+  xlab("Percentage with Bachelors or Higher Education") +
+  theme_classic()
+
+```
+
+
+* What is the predicted probability (approximately) of active Neo-Nazi hate groups in states with a bachelors degree/higher education rate of 25%?
+
+
+
+* What is the predicted probability (approximately) of a state having active Neo-Nazi hate groups in states with a bachelors degree or higher education rate of 40%?
+
+
+
+
+---
+
+```{r}
+
+ggeffect(model_1, terms = "population") %>%
+  plot() 
+
+```
+
+* Add a sensible title and X and Y labels to the plot to make it look nicer, using added ggplot code.
+
+```{r}
+
+# Write your own code in here
+
+```
+
+
+---
+
+* Create a predicted probabilities plot for the remaining two variables of interest: the percentage of households with internet access (`pc_hh_with_internet`) and the latitude of the state capital (`latitude`).
+
+* The effect of the percentage of households with internet access
+
+```{r}
+
+# Write your own code in here
+
+```
+
+* The effect of the latitude of the state capital
+
+```{r}
+
+# Write your own code in here
+
+```
+
+
+---
+
+Next, the researchers decide they want to find out how accurate their model is. In other words, if they had information about all of their independent variables, but not about whether there were any active Neo-Nazi hate groups in the state, how accurately would they be able to guess whether there were any? This is one way of assessing model fit when we cannot use something like the R-squared value.
+
+First, they want to use a conventional Confusion Matrix and measurement of accuracy. In order to do this, they first need to calculate the predictions from their model.
+
+---
+
+The `predict` function can be used to generate the predicted probability for all
+cases in the sample, based on the model. This is added as a new column to the data
+using the mutate function
+
+```{r}
+
+hate_data <- hate_data %>%
+  mutate(
+    predictions = predict(model_1, type = "response", newdata = hate_data)
+  )
+
+
+```
+
+You can plot a simple histogram of the predictions to see how they look. They should look like a spread of proportions (between 0 and 1).
+
+```{r}
+
+hist(hate_data$predictions)
+
+```
+
+We want to test how many predictions would have been correct - to do this we are going to say that predictions equal to 50% or greater will be our model predicting that the state *does* have an active Neo-Nazi group (1), whereas predictions less than 50% will be our model predicting that the state *does not* have an active Neo-Nazi group (0)
+
+```{r}
+
+hate_data <- hate_data %>%
+  mutate(
+    # Overwrite the predictions variable where prediction >= 0.5 is 1 and
+    # a prediction less than 0.5 is 0. Keep missing as missing
+    predictions = case_when(is.na(predictions) ~ NA_real_, 
+                           predictions >= 0.5 ~ 1,
+                           TRUE ~ 0
+                           )
+  ) 
+
+
+```
+
+We can use the 'confusionMatrix()' function from the `caret` package to calculate the accuracy of our model predictions.
+
+```{r}
+
+caret::confusionMatrix(data = factor(hate_data$predictions),
+                       reference = factor(hate_data$neo_nazi_hgs))
+
+```
+
+The caret confusion matrix gives us quite a lot of information, but the important parts for our purposes are: the two-by-two table at the top, the Accuracy value, the No Information Rate, and the probability that the model's accuracy is better than the No Information Rate (P-Value [Acc > NIR]).
+
+__The Confusion Matrix__
+The 2x2 table tells us how our predictions (rows) matched up with or deviated from our real values. In this case, our model was able to correctly predict 12 of the 19 states with active Neo-Nazi hate groups. It was also able to correctly identify 28 of the 32 states that did not have active Neo-Nazi hate groups.
+
+__Accuracy__
+The accuracy value gives us the proportion of cases in our data that were correctly classified by the logistic regression model. Here, our model correctly classified around 78.4% of states as having or not having active Neo-Nazi hate groups.
+
+__No Information Rate__
+The No Information Rate tells us the proportion we would expect to be able to get correct just by knowing the proportion of states that had Neo-Nazi hate groups, on average, and then randomly guessing for each state. In this case, if we had just randomly guessed we would be expected to have correctly classified around 62.75% of them. 
+
+__P-Value [Acc > NIR]__
+This is the p-value for whether our model performs significantly better than what we would expect from the random range of correct classifications we would expect to get with no information. If it is less than 0.05, we could reject the idea that our model is no better than just randomly guessing.
+
+---
+
+A confusion matrix is not the only way we can assess accuracy. We can also use something called k-fold cross-validation. K-fold cross validation provides a measure of accuracy by randomly splitting the sample into a subset of mutually exclusive groups (k subsets) before checking how well the model performs on all of those different groups on average.
+
+Because we have such a small sample size it wouldn't be wise for us to choose a high number of 'folds', but we can still check accuracy with the k-fold cross-validation algorithm using the `performance` R package.
+
+```{r}
+
+# Here I set the random number generator using set.seed() so that the whole class gets the same results
+# because the k-folds will be chosen in the same way
+set.seed(10000)
+
+# Then I run the performance_accuracy function from the performance package
+performance::performance_accuracy(model_1, k = 3)
+
+```
+
+The k-fold cross-validation seems to be telling us approximately the same thing as our conventional Confusion Matrix accuracy test - the average accuracy across folds was around 78.73%. However, we probably can't be too sure in this case because our population is so small — generally a good number of k-folds is 10, but if we tried to do this with our data it would mean only around 5 cases would be in each fold. 
+
+---
+
+Finally, the researchers checked for any issues of multicollinearity in their independent variables. The `performance` package includes a function to check this in much the same way as the `car` package.
+
+```{r}
+
+performance::multicollinearity(model_1)
+
+```
+
+* Was there any evidence of problematic multicollinearity in this model, based on the VIF statistics?
+
+
+
+
+We can also check for outliers using the same plot function we used in multiple linear regression. The `performance` package also has a function to check for outliers, but it is not always very informative.
+
+```{r}
+
+plot(model_1, which = 4)
+plot(model_1, which = 5)
+
+performance::check_outliers(model_1)
+
+```
+
+* Was there any evidence of outliers or leverage points? If so, which states may be outliers and what would you recommend doing to ensure the model estimates are not bias?
+
+
+
+Lastly, the researchers check whether there is any evidence of autocorrelation using a Durbin-Watson test.
+
+```{r}
+
+car::durbinWatsonTest(model_1)
+
+```
+
+* Was there any evidence of significant autocorrelation within the residuals from the model?
+
+
+
+---
+
+## Part II
+
+## Logistic Regression: Predicting States with Active Anti-Immigrant Hate Groups
+
+* Using the above code as a template, create a similar logistic regression model predicting whether states have an active anti-immigrant hate group below. 
+
+```{r}
+
+# Write your own code here
+
+```
+
+* Use the `broom::tidy()` function to create a tidy tibble version of your model results, and then create a new column in this tibble for the exponentiated (`exp()`) coefficients of the changes in log odds.
+
+```{r}
+
+# Write your own code here
+
+```
+
+* Interpret the coefficients in your model: how are changes in each independent variable associated with changes in the log odds of a state having an active anti-immigrant hate group?
+
+
+
+
+---
+
+* Pick two of the results that you find particularly interesting and create partial plots showing the predicted probabilities of a state having an active anti-immigrant hate group across values of these variables.
+
+```{r}
+
+# Write your own code here
+
+```
+
+```{r}
+
+# Write your own code here
+
+```
+
+---
+
+Mutate the predictions required to run the `confusionMatrix()` function from the `caret` package, and then run this function. 
+
+```{r}
+
+# Write your own code here
+
+```
+
+* Report the results of the confusion matrix, the accuracy rate, the no information rate, and the p-value associated with the difference between your model's accuracy and the no information accuracy rate.
+
+
+
+
+---
+
+Try assessing your model's accuracy using k-fold validation with the `performance::performance_accuracy()` function from the `performance` package.
+
+```{r}
+
+# Write your own code here
+
+```
+
+
+---
+
+We also need to check our assumptions. First, check whether there are any issues with multicollinearity in your model.
+
+```{r}
+
+# Write your own code here
+
+```
+
+* Report the VIF results below. Are there any problems with multicollinearity in the model? If so, why? If not, why not?
+
+
+
+
+Next, write the code to check whether there are any outliers using both the `performance` package and the base `plot()` package.
+
+
+```{r}
+
+# Write your own code here
+
+```
+
+* Are there any states you might consider outliers? If there are potential outliers, what would you recommend doing to check if these are unduly influencing the estimates of some independent variables?
+
+
+
+
+Lastly, check whether the residuals from this model are independent (that there is no autocorrelation). You can do this using either the `car` or the `performance` packages.
+
+```{r}
+
+# Write your own R code here
+
+```
+
+
+
+
+
+---
+
+## Week 9 Challenge
+
+* For more practice, create a new binary categorical variable where 1 is equal to a state having neither an active Neo Nazi hate group, nor an active anti-immigration hate group, and 0 is equal to the state having either an active Neo-Nazi hate group, or an active anti-immigration hate group, or both. Then, create a logistic regression model predicting states that have neither active anti-immigration nor active Neo-Nazi hate groups and report the results. 
+
+However, if you feel like you'd prefer to challenge yourself by looking at some data you might use for assessment two feel free to do that instead!
+
+
+

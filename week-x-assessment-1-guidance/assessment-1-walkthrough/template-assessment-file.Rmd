@@ -1,0 +1,54 @@
+---
+title: "Assessment 1"
+author: "Your Student Number Here"
+date: ""
+output: pdf_document
+---
+
+```{r, include=FALSE}
+
+#################################################################################
+#################################################################################
+###########################           IMPORTANT       ###########################
+#################################################################################
+#################################################################################
+
+#' Before you can "knit" this document - a.k.a. turn it into a pdf - you need to
+#' install LaTeX on your computer (this is a typesetting language). The easiest
+#' way to do this is to use the tinytex package in R.
+
+#' Uncomment and run the two lines of code below (and remember to re-comment them
+#' afterwards otherwise it will reinstall itself every time you knit the document!) 
+#' to install LaTeX onto your computer. After this, test everything is working
+#' by clicking the "Knit" button at the top of your script in Rstudio.
+
+#install.packages('tinytex')
+#tinytex::install_tinytex()
+
+#' If this does not work, please speak to one of us in class and, for now, change
+#' the "pdf_document" text above (where it says: output: pdf_document) to 
+#' html_document as a temporary solution.
+
+#################################################################################
+#################################################################################
+#################################################################################
+#################################################################################
+
+
+
+```
+
+# A heading
+
+
+## A sub-heading
+
+
+### A lower-level subheading
+
+```{r}
+
+# A standard R chunk - use these to put your code in
+
+
+```

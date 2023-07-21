@@ -1,0 +1,142 @@
+---
+title: "Assessment 1"
+author: "Your Student Number Here"
+date: ""
+output: pdf_document
+---
+
+```{r, include=FALSE}
+
+#################################################################################
+#################################################################################
+###########################           IMPORTANT       ###########################
+#################################################################################
+#################################################################################
+
+#' Before you can "knit" this document - a.k.a. turn it into a pdf - you need to
+#' install LaTeX on your computer (this is a typesetting language). The easiest
+#' way to do this is to use the tinytex package in R.
+
+#' Uncomment and run the two lines of code below (and remember to re-comment them
+#' afterwards otherwise it will reinstall itself every time you knit the document!) 
+#' to install LaTeX onto your computer. After this, test everything is working
+#' by clicking the "Knit" button at the top of your script in Rstudio.
+
+#install.packages('tinytex')
+#tinytex::install_tinytex()
+
+#' If this does not work, please speak to one of us in class and, for now, change
+#' the "pdf_document" text above (where it says: output: pdf_document) to 
+#' html_document as a temporary solution.
+
+#################################################################################
+#################################################################################
+#################################################################################
+#################################################################################
+
+
+
+```
+
+# A heading
+
+
+## A sub-heading
+
+
+### A lower-level subheading
+
+```{r}
+
+# A standard R chunk - use these to put your code in
+library(tidyverse)
+
+dat <- read_csv("dwp-mhclg-dat.csv")
+
+dat %>%
+  ggplot() +
+  geom_histogram(aes(x = child_poverty_rate))
+
+chil_pov_summ <- dat %>%
+  summarise(
+    Variable = "Child Poverty Rate",
+    mean = mean(child_poverty_rate, na.rm = TRUE),
+    med = median(child_poverty_rate, na.rm = TRUE),
+    sd = sd(child_poverty_rate, na.rm = TRUE),
+    q10 = quantile(child_poverty_rate, probs = 0.1, na.rm = TRUE),
+    q90 = quantile(child_poverty_rate, probs = 0.9, na.rm = TRUE)
+  ) 
+
+
+dat %>%
+  ggplot() +
+  geom_histogram(aes(x = homelessless_per_10k))
+
+homeless_summ <- dat %>%
+  summarise(
+    Variable = "Homelessness Rate per 10k",
+    mean = mean(homelessless_per_10k, na.rm = TRUE),
+    med = median(homelessless_per_10k, na.rm = TRUE),
+    sd = sd(homelessless_per_10k, na.rm = TRUE),
+    q10 = quantile(homelessless_per_10k, probs = 0.1, na.rm = TRUE),
+    q90 = quantile(homelessless_per_10k, probs = 0.9, na.rm = TRUE)
+  ) 
+
+
+bind_rows(chil_pov_summ, homeless_summ) %>%
+  knitr::kable(digits = 1, 
+               col.names = c("Variable", "Mean", "Median", "SD", "10th Percentile", "90th Percentile"))
+
+
+```
+
+
+
+```{r}
+
+#Bivariate statistics
+
+dat %>%
+  ggplot() +
+  geom_point(aes(x = child_poverty_rate, y = homelessless_per_10k))
+
+cor(dat$child_poverty_rate, dat$homelessless_per_10k, method = "pearson", use = "complete.obs")
+
+cor.test(dat$child_poverty_rate, dat$homelessless_per_10k, method = "pearson", use = "complete.obs")
+
+```
+
+
+```{r}
+
+# Linear regression
+homeless_model <- lm(data = dat, homelessless_per_10k ~ child_poverty_rate)
+summary(homeless_model)
+
+```
+
+```{r}
+
+# Assumptions checking
+
+dat %>%
+  ggplot() +
+  geom_point(aes(x = child_poverty_rate, y = homelessless_per_10k)) +
+  geom_smooth(aes(x = child_poverty_rate, y = homelessless_per_10k), method = "lm", se = FALSE)
+
+
+# linearity
+plot(homeless_model, which = 1)
+
+# normality of residuals
+plot(homeless_model, which = 2)
+
+# Heteroscedasticity
+plot(homeless_model, which = 3)
+
+# Outliers and leverage points
+plot(homeless_model, which = 4)
+4/276
+plot(homeless_model, which = 5)
+
+```
