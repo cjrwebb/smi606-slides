@@ -283,7 +283,7 @@ We will work through each step with the Sheffield boundaries data. First, we use
 
 ```{r}
 
-sheff_boundaries_leaflet <- st_transform(x = sheff_boundaries, crs = CRS("+proj=longlat +datum=WGS84"))
+sheff_boundaries_leaflet <- st_transform(x = sheff_boundaries, crs = st_crs("+proj=longlat +datum=WGS84"))
 
 ```
 

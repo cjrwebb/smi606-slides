@@ -4,7 +4,7 @@
     <title>SMI606: Week 7 — Bivariate Linear Regression</title>
     <meta charset="utf-8" />
     <meta name="author" content="Calum Webb" />
-    <meta name="date" content="2023-07-21" />
+    <meta name="date" content="2023-08-25" />
     <script src="week-07-bivariate-lm_files/header-attrs/header-attrs.js"></script>
     <link href="week-07-bivariate-lm_files/tile-view/tile-view.css" rel="stylesheet" />
     <script src="week-07-bivariate-lm_files/tile-view/tile-view.js"></script>
@@ -420,6 +420,42 @@ class: middle
 
 ]
 
+
+---
+class: middle
+
+## Finding the best fitting line
+
+.pull-left[
+
+#### How do we find the best fitting line? A competition!
+
+* Honour system - no cheating!
+
+* Open the [Shiny app](https://webb.shinyapps.io/find-line/) in your web browser, or download and run the source code in `R`
+
+* In pairs, your task is to get the best fitting line to the data that the app has generated for you by manipulating the intercept and slope values with the sliders.
+
+* Once you've decided on the best fitting line, check the actual results from the linear regression and see how far off you were. Check the residuals plot and see how it changes between your estimate and the linear regression one.
+
+* Whoever gets the closest guess wins!
+
+
+]
+
+
+.pull-right[
+
+&lt;img src="images/qrcode_webb.shinyapps.io.png" width="100%" /&gt;
+
+[https://webb.shinyapps.io/find-line/](https://webb.shinyapps.io/find-line/)
+
+]
+
+
+
+
+
 ---
 class: middle
 
@@ -467,7 +503,7 @@ The slope and intercept of the line can be found using the __Ordinary Least Squa
 .pull-right[
 
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-7-1.png" width="500" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-8-1.png" width="500" height="450" /&gt;
 
 ]
 
@@ -488,7 +524,7 @@ The slope and intercept of the line can be found using the __Ordinary Least Squa
 .pull-right[
 
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-8-1.png" width="500" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-9-1.png" width="500" height="450" /&gt;
 
 
 ]
@@ -512,7 +548,7 @@ The slope and intercept of the line can be found using the __Ordinary Least Squa
 .pull-right[
 
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-9-1.png" width="500" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-10-1.png" width="500" height="450" /&gt;
 
 
 ]
@@ -545,7 +581,7 @@ lab_model &lt;- lm(data = un_data,
 .pull-right[
 
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-11-1.png" width="500" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-12-1.png" width="500" height="450" /&gt;
 
 
 ]
@@ -580,7 +616,7 @@ Let's break down these equations into each of their steps so we can get an under
 .pull-right-big[
 
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-13-1.png" width="700" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-14-1.png" width="700" height="450" /&gt;
 
 ]
 
@@ -604,7 +640,7 @@ One of the terms in the equation is `\(\bar{x}\)` (x bar or bar x), which is ref
 .pull-right-big[
 
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-14-1.png" width="700" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-15-1.png" width="700" height="450" /&gt;
 
 ]
 
@@ -628,7 +664,7 @@ The other bar, `\(\bar{y}\)` (y bar), refers to the mean of the y variable. Our 
 .pull-right-big[
 
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-15-1.png" width="700" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-16-1.png" width="700" height="450" /&gt;
 
 ]
 
@@ -649,7 +685,7 @@ We can see that in the numerator one of the terms is the sum ( `\(\sum_{\substac
 .pull-right-big[
 
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-16-1.png" width="700" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-17-1.png" width="700" height="450" /&gt;
 
 ]
 
@@ -672,7 +708,7 @@ Similarly, we also have a term for the equivalent for y - the difference between
 .pull-right-big[
 
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-17-1.png" width="700" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-18-1.png" width="700" height="450" /&gt;
 
 ]
 
@@ -694,7 +730,7 @@ Notice that when we take the product of `\((\color{magenta}{y_i - \bar{y}})\)` a
 .pull-right-big[
 
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-18-1.png" width="700" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-19-1.png" width="700" height="450" /&gt;
 
 ]
 
@@ -716,7 +752,7 @@ As a result, we can think about the distance from the mean of y and each specifi
 .pull-right-big[
 
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-19-1.png" width="700" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-20-1.png" width="700" height="450" /&gt;
 
 ]
 
@@ -738,7 +774,7 @@ Because the rectangles are overlapping, I'm going to seperate them out now but k
 .pull-right-big[
 
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-20-1.png" width="700" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-21-1.png" width="700" height="450" /&gt;
 
 ]
 
@@ -760,7 +796,7 @@ Now we have each of the squares and the distances of X that they cover (keep in 
 .pull-right-big[
 
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-21-1.png" width="700" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-22-1.png" width="700" height="450" /&gt;
 
 ]
 
@@ -782,7 +818,7 @@ We also have the changes from the mean of Y that each of those distances corresp
 .pull-right-big[
 
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-22-1.png" width="700" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-23-1.png" width="700" height="450" /&gt;
 
 ]
 
@@ -803,7 +839,7 @@ Now, watch what happens to the distances when we divide by one of the `\(x - \ba
 .pull-right-big[
 
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-23-1.png" width="700" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-24-1.png" width="700" height="450" /&gt;
 
 ]
 
@@ -826,7 +862,7 @@ Now all of our changes are on the same scale.
 .pull-right-big[
 
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-24-1.png" width="700" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-25-1.png" width="700" height="450" /&gt;
 
 ]
 
@@ -848,7 +884,7 @@ If we take the average of all of these scaled changes, we end up with the averag
 .pull-right-big[
 
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-25-1.png" width="700" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-26-1.png" width="700" height="450" /&gt;
 
 ]
 
@@ -870,7 +906,7 @@ But the slope is only one part of the equation! How does the second equation get
 .pull-right-big[
 
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-26-1.png" width="700" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-27-1.png" width="700" height="450" /&gt;
 
 ]
 
@@ -891,7 +927,7 @@ Here?
 .pull-right-big[
 
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-27-1.png" width="700" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-28-1.png" width="700" height="450" /&gt;
 
 ]
 
@@ -912,7 +948,7 @@ Or here?
 .pull-right-big[
 
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-28-1.png" width="700" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-29-1.png" width="700" height="450" /&gt;
 
 ]
 
@@ -933,7 +969,7 @@ Or here??
 .pull-right-big[
 
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-29-1.png" width="700" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-30-1.png" width="700" height="450" /&gt;
 
 ]
 
@@ -954,7 +990,7 @@ Well, if you remember from earlier, we said that we know the line *must* cross t
 .pull-right-big[
 
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-30-1.png" width="700" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-31-1.png" width="700" height="450" /&gt;
 
 ]
 
@@ -975,7 +1011,7 @@ So what if we take that as a starting point and then **work backwards from the m
 .pull-right-big[
 
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-31-1.png" width="700" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-32-1.png" width="700" height="450" /&gt;
 
 ]
 
@@ -996,7 +1032,7 @@ One step...
 .pull-right-big[
 
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-32-1.png" width="700" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-33-1.png" width="700" height="450" /&gt;
 
 ]
 
@@ -1017,7 +1053,7 @@ Two steps...
 .pull-right-big[
 
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-33-1.png" width="700" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-34-1.png" width="700" height="450" /&gt;
 
 ]
 
@@ -1038,27 +1074,6 @@ Three steps...
 .pull-right-big[
 
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-34-1.png" width="700" height="450" /&gt;
-
-]
-
----
-
-# Aside: OLS: how does it work?
-
-.pull-left-small[
-
-`\(\hat{\beta_1} =  \frac{\sum_{\substack{i=1}}^n (\color{magenta}{y_i - \bar{y}}) (\color{blue}{x_i - \bar{x}} )}{\sum_{\substack{i=1}}^n(\color{blue}{x_i - \bar{x}})^2}\)`
-
-`\(\hat{\beta_0} = \color{magenta}{\bar{y}} - \hat{\beta_1}\color{blue}{\bar{x}}\)`
-
-Four steps...
-
-]
-
-.pull-right-big[
-
-
 &lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-35-1.png" width="700" height="450" /&gt;
 
 ]
@@ -1073,7 +1088,7 @@ Four steps...
 
 `\(\hat{\beta_0} = \color{magenta}{\bar{y}} - \hat{\beta_1}\color{blue}{\bar{x}}\)`
 
-And now our regression line is in contact the point at which X = 0: this gives us the intercept, the other part of the equation, of around 1.48.
+Four steps...
 
 ]
 
@@ -1115,7 +1130,7 @@ And now our regression line is in contact the point at which X = 0: this gives u
 
 `\(\hat{\beta_0} = \color{magenta}{\bar{y}} - \hat{\beta_1}\color{blue}{\bar{x}}\)`
 
-Even though the equations above look quite overwhelming, we can see visually exactly what they are doing to calculate the regression line. The result from those equations minimises the squared residuals.
+And now our regression line is in contact the point at which X = 0: this gives us the intercept, the other part of the equation, of around 1.48.
 
 ]
 
@@ -1123,6 +1138,27 @@ Even though the equations above look quite overwhelming, we can see visually exa
 
 
 &lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-38-1.png" width="700" height="450" /&gt;
+
+]
+
+---
+
+# Aside: OLS: how does it work?
+
+.pull-left-small[
+
+`\(\hat{\beta_1} =  \frac{\sum_{\substack{i=1}}^n (\color{magenta}{y_i - \bar{y}}) (\color{blue}{x_i - \bar{x}} )}{\sum_{\substack{i=1}}^n(\color{blue}{x_i - \bar{x}})^2}\)`
+
+`\(\hat{\beta_0} = \color{magenta}{\bar{y}} - \hat{\beta_1}\color{blue}{\bar{x}}\)`
+
+Even though the equations above look quite overwhelming, we can see visually exactly what they are doing to calculate the regression line. The result from those equations minimises the squared residuals.
+
+]
+
+.pull-right-big[
+
+
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-39-1.png" width="700" height="450" /&gt;
 
 ]
 
@@ -1145,7 +1181,7 @@ Even though the equations above look quite overwhelming, we can see visually exa
 .pull-right-big[
 
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-39-1.png" width="700" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-40-1.png" width="700" height="450" /&gt;
 
 ]
 
@@ -1669,7 +1705,7 @@ class: inverse, middle
 
 &lt;center&gt;
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-51-1.png" width="800" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-52-1.png" width="800" height="450" /&gt;
 
 &lt;/center&gt;
 
@@ -1680,7 +1716,7 @@ class: inverse, middle
 
 &lt;center&gt;
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-52-1.png" width="800" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-53-1.png" width="800" height="450" /&gt;
 
 &lt;/center&gt;
 
@@ -1726,7 +1762,7 @@ summary(eu_model)
 .pull-right[
 &lt;center&gt;
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-54-1.png" width="500" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-55-1.png" width="500" height="450" /&gt;
 
 
 
@@ -1767,7 +1803,7 @@ Checked with: Scatterplot (bivariate); residuals versus fitted values (multiple 
 
 
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-56-1.png" width="500" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-57-1.png" width="500" height="450" /&gt;
 
 ]
 
@@ -1784,33 +1820,6 @@ The most appropriate approximation of the relationship in the data is a straight
 Checked with: Scatterplot (bivariate); residuals versus fitted values (multiple regression, next week).
 
 * __Homoscedasticity__
-
-* __Outliers and leverage points__
-
-* __Normality of residuals__
-
-]
-
-.pull-right[
-
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-57-1.png" width="500" height="450" /&gt;
-
-]
-
-
----
-
-## Assumptions
-
-.pull-left[
-
-* __Linearity__
-
-* __Homoscedasticity__
-
-The spread of points around the regression line is approximately the same size at all points in the regression line.
-
-Checked with: Scatterplot (bivariate); spread-location plot (multiple regression, next week).
 
 * __Outliers and leverage points__
 
@@ -1851,6 +1860,33 @@ Checked with: Scatterplot (bivariate); spread-location plot (multiple regression
 
 ]
 
+
+---
+
+## Assumptions
+
+.pull-left[
+
+* __Linearity__
+
+* __Homoscedasticity__
+
+The spread of points around the regression line is approximately the same size at all points in the regression line.
+
+Checked with: Scatterplot (bivariate); spread-location plot (multiple regression, next week).
+
+* __Outliers and leverage points__
+
+* __Normality of residuals__
+
+]
+
+.pull-right[
+
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-60-1.png" width="500" height="450" /&gt;
+
+]
+
 ---
 
 ## Assumptions
@@ -1873,7 +1909,7 @@ Checked with: Scatterplot (bivariate); leverage plot (multiple regression)
 
 .pull-right[
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-60-1.png" width="500" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-61-1.png" width="500" height="450" /&gt;
 
 
 `$$Y = 28.62 + 0.29X$$`
@@ -1903,7 +1939,7 @@ Checked with: Scatterplot (bivariate); leverage plot (multiple regression)
 
 .pull-right[
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-61-1.png" width="500" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-62-1.png" width="500" height="450" /&gt;
 
 `$$Y = 38.39 + 0.19X$$`
 
@@ -1931,7 +1967,7 @@ Checked with: Scatterplot with regression line (bivariate); Q-Q plot (multiple r
 
 .pull-right[
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-62-1.png" width="500" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-63-1.png" width="500" height="450" /&gt;
 
 
 ]
@@ -1959,7 +1995,7 @@ Checked with: Scatterplot with regression line (bivariate); Q-Q plot (multiple r
 
 .pull-right[
 
-&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-63-1.png" width="500" height="450" /&gt;
+&lt;img src="week-07-bivariate-lm_files/figure-html/unnamed-chunk-64-1.png" width="500" height="450" /&gt;
 
 
 ]

@@ -341,6 +341,27 @@ So, imagine for a moment that we've been contracted by a Las Vegas casino who ha
 
 * We've been contracted by a Las Vegas casino who have discovered that half of their dice are loaded, and do not roll fairly. `r icons::fontawesome("user-secret")`
 
+]
+
+.pull-right[
+
+![](images/qrcode_webb.shinyapps.io.png)
+
+]
+
+
+---
+
+# Getting a feel for inferential statistics
+
+<br>
+
+.pull-left[
+
+* Load the `chisq-sig` Shiny app in R (follow the handout if you didn't do this in advance), or load the online version by going here: [https://webb.shinyapps.io/chisq-sig/](https://webb.shinyapps.io/chisq-sig/)
+
+* We've been contracted by a Las Vegas casino who have discovered that half of their dice are loaded, and do not roll fairly. `r icons::fontawesome("user-secret")`
+
 * Each of you have been given a (virtual) die that you can roll as many times as you like. You don't know whether you have a **fair** die or a **loaded die**. A loaded die will roll some numbers more often than others. `r icons::fontawesome("dice")`
 
 ]

@@ -265,8 +265,8 @@ class: middle
 
 ## Module design, timetable, and support
 
-__Time__: 12:00-13:50 Tuesdays (Week 1-5, 7-11)  
-__Location__: Room C28 in the Portobello Centre
+__Time & Location__: 12:00-12:50 in [The Wave](https://goo.gl/maps/KSuSKKoCcnbrhxRu6) Seminar Room 5, *then* 13:00-14:50 in [SUMS](https://goo.gl/maps/9rrkoAbDPLypUfjY6) Pool IT Room (Tuesdays, Week 1-5, 7-11)  
+*You can bring your lunch.* 
 
 __Consultation & Feedback Hours__: 16:00-17:00 Tuesdays (Week 1-12)  
 *Can be booked online or face-to-face. See: [how to book](https://calumwebb.co.uk/teaching/appointments/).*
@@ -274,6 +274,8 @@ __Consultation & Feedback Hours__: 16:00-17:00 Tuesdays (Week 1-12)
 ### Maths and Statistics Help (MASH)
 
 The Maths and Statistics Help (MASH) service on Glossop Road provide 1:1 and group support on learning statistics in `R`. You can book a tutorial by [visiting their webpages](https://www.sheffield.ac.uk/mash).
+
+**R for Ultra Beginners** Workshops will be running through the first few weeks of the semester!
 
 ---
 class: middle

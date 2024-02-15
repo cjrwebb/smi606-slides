@@ -4,7 +4,7 @@
     <title>SMI606: Week 4 — Inference</title>
     <meta charset="utf-8" />
     <meta name="author" content="Calum Webb" />
-    <meta name="date" content="2023-07-21" />
+    <meta name="date" content="2023-08-25" />
     <script src="week-04-inference_files/header-attrs/header-attrs.js"></script>
     <link href="week-04-inference_files/tile-view/tile-view.css" rel="stylesheet" />
     <script src="week-04-inference_files/tile-view/tile-view.js"></script>
@@ -182,8 +182,8 @@ class: middle
 
 ## Inferential statistics for hypothesis testing
 
-<div id="htmlwidget-810abc5f8dc02091abda" class="formattable_widget html-widget " style="width:100%;height:252px;" width="100%" height="252"></div>
-<script type="application/json" data-for="htmlwidget-810abc5f8dc02091abda">{"x":{"html":"<table class=\"table table-condensed\">\n <thead>\n  <tr>\n   <th style=\"text-align:right;\"> Variable Type <\/th>\n   <th style=\"text-align:right;\"> Nominal <\/th>\n   <th style=\"text-align:right;\"> Ordinal <\/th>\n   <th style=\"text-align:right;\"> Continuous <\/th>\n  <\/tr>\n <\/thead>\n<tbody>\n  <tr>\n   <td style=\"text-align:right;\"> <span style=\"font-weight: bold\">Nominal   <\/span> <\/td>\n   <td style=\"text-align:right;\"> Chi-squared Test of Association <\/td>\n   <td style=\"text-align:right;\">  <\/td>\n   <td style=\"text-align:right;\">  <\/td>\n  <\/tr>\n  <tr>\n   <td style=\"text-align:right;\"> <span style=\"font-weight: bold\">Ordinal   <\/span> <\/td>\n   <td style=\"text-align:right;\"> Chi-squared Test of Association <\/td>\n   <td style=\"text-align:right;\"> Chi-squared/Spearman Correlation t-test <\/td>\n   <td style=\"text-align:right;\">  <\/td>\n  <\/tr>\n  <tr>\n   <td style=\"text-align:right;\"> <span style=\"font-weight: bold\">Continuous<\/span> <\/td>\n   <td style=\"text-align:right;\"> ANOVA/t-test <\/td>\n   <td style=\"text-align:right;\"> ANOVA/t-test <\/td>\n   <td style=\"text-align:right;\"> Pearson/Spearman Correlation t-test <\/td>\n  <\/tr>\n<\/tbody>\n<\/table>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-05b0483841046f480b98" class="formattable_widget html-widget " style="width:100%;height:252px;" width="100%" height="252"></div>
+<script type="application/json" data-for="htmlwidget-05b0483841046f480b98">{"x":{"html":"<table class=\"table table-condensed\">\n <thead>\n  <tr>\n   <th style=\"text-align:right;\"> Variable Type <\/th>\n   <th style=\"text-align:right;\"> Nominal <\/th>\n   <th style=\"text-align:right;\"> Ordinal <\/th>\n   <th style=\"text-align:right;\"> Continuous <\/th>\n  <\/tr>\n <\/thead>\n<tbody>\n  <tr>\n   <td style=\"text-align:right;\"> <span style=\"font-weight: bold\">Nominal   <\/span> <\/td>\n   <td style=\"text-align:right;\"> Chi-squared Test of Association <\/td>\n   <td style=\"text-align:right;\">  <\/td>\n   <td style=\"text-align:right;\">  <\/td>\n  <\/tr>\n  <tr>\n   <td style=\"text-align:right;\"> <span style=\"font-weight: bold\">Ordinal   <\/span> <\/td>\n   <td style=\"text-align:right;\"> Chi-squared Test of Association <\/td>\n   <td style=\"text-align:right;\"> Chi-squared/Spearman Correlation t-test <\/td>\n   <td style=\"text-align:right;\">  <\/td>\n  <\/tr>\n  <tr>\n   <td style=\"text-align:right;\"> <span style=\"font-weight: bold\">Continuous<\/span> <\/td>\n   <td style=\"text-align:right;\"> ANOVA/t-test <\/td>\n   <td style=\"text-align:right;\"> ANOVA/t-test <\/td>\n   <td style=\"text-align:right;\"> Pearson/Spearman Correlation t-test <\/td>\n  <\/tr>\n<\/tbody>\n<\/table>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 
@@ -276,6 +276,27 @@ If you can start by loading up the Shiny app either on your phone by scanning th
 ???
 
 So, imagine for a moment that we've been contracted by a Las Vegas casino who have discovered that half of their dice are loaded and do not roll numbers fairly. The problem is, they don't know which of their dice are loaded and which of them are fair.
+
+---
+
+# Getting a feel for inferential statistics
+
+&lt;br&gt;
+
+.pull-left[
+
+* Load the `chisq-sig` Shiny app in R (follow the handout if you didn't do this in advance), or load the online version by going here: [https://webb.shinyapps.io/chisq-sig/](https://webb.shinyapps.io/chisq-sig/)
+
+* We've been contracted by a Las Vegas casino who have discovered that half of their dice are loaded, and do not roll fairly. &lt;svg viewBox="0 0 448 512" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M383.9 308.3l23.9-62.6c4-10.5-3.7-21.7-15-21.7h-58.5c11-18.9 17.8-40.6 17.8-64v-.3c39.2-7.8 64-19.1 64-31.7 0-13.3-27.3-25.1-70.1-33-9.2-32.8-27-65.8-40.6-82.8-9.5-11.9-25.9-15.6-39.5-8.8l-27.6 13.8c-9 4.5-19.6 4.5-28.6 0L182.1 3.4c-13.6-6.8-30-3.1-39.5 8.8-13.5 17-31.4 50-40.6 82.8-42.7 7.9-70 19.7-70 33 0 12.6 24.8 23.9 64 31.7v.3c0 23.4 6.8 45.1 17.8 64H56.3c-11.5 0-19.2 11.7-14.7 22.3l25.8 60.2C27.3 329.8 0 372.7 0 422.4v44.8C0 491.9 20.1 512 44.8 512h358.4c24.7 0 44.8-20.1 44.8-44.8v-44.8c0-48.4-25.8-90.4-64.1-114.1zM176 480l-41.6-192 49.6 32 24 40-32 120zm96 0l-32-120 24-40 49.6-32L272 480zm41.7-298.5c-3.9 11.9-7 24.6-16.5 33.4-10.1 9.3-48 22.4-64-25-2.8-8.4-15.4-8.4-18.3 0-17 50.2-56 32.4-64 25-9.5-8.8-12.7-21.5-16.5-33.4-.8-2.5-6.3-5.7-6.3-5.8v-10.8c28.3 3.6 61 5.8 96 5.8s67.7-2.1 96-5.8v10.8c-.1.1-5.6 3.2-6.4 5.8z"&gt;&lt;/path&gt;&lt;/svg&gt;
+
+]
+
+.pull-right[
+
+![](images/qrcode_webb.shinyapps.io.png)
+
+]
+
 
 ---
 
@@ -1034,8 +1055,8 @@ class: middle
 
 ## Inferential statistics for hypothesis testing
 
-<div id="htmlwidget-a0211275a65fef5fe339" class="formattable_widget html-widget " style="width:100%;height:252px;" width="100%" height="252"></div>
-<script type="application/json" data-for="htmlwidget-a0211275a65fef5fe339">{"x":{"html":"<table class=\"table table-condensed\">\n <thead>\n  <tr>\n   <th style=\"text-align:right;\"> Variable Type <\/th>\n   <th style=\"text-align:right;\"> Nominal <\/th>\n   <th style=\"text-align:right;\"> Ordinal <\/th>\n   <th style=\"text-align:right;\"> Continuous <\/th>\n  <\/tr>\n <\/thead>\n<tbody>\n  <tr>\n   <td style=\"text-align:right;\"> <span style=\"font-weight: bold\">Nominal   <\/span> <\/td>\n   <td style=\"text-align:right;\"> Chi-squared Test of Association <\/td>\n   <td style=\"text-align:right;\">  <\/td>\n   <td style=\"text-align:right;\">  <\/td>\n  <\/tr>\n  <tr>\n   <td style=\"text-align:right;\"> <span style=\"font-weight: bold\">Ordinal   <\/span> <\/td>\n   <td style=\"text-align:right;\"> Chi-squared Test of Association <\/td>\n   <td style=\"text-align:right;\"> Chi-squared/Spearman Correlation t-test <\/td>\n   <td style=\"text-align:right;\">  <\/td>\n  <\/tr>\n  <tr>\n   <td style=\"text-align:right;\"> <span style=\"font-weight: bold\">Continuous<\/span> <\/td>\n   <td style=\"text-align:right;\"> <strong>ANOVA/t-test<\/strong> <\/td>\n   <td style=\"text-align:right;\"> <strong>ANOVA/t-test<\/strong> <\/td>\n   <td style=\"text-align:right;\"> Pearson/Spearman Correlation t-test <\/td>\n  <\/tr>\n<\/tbody>\n<\/table>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-e8fb1e252c4c1aa56fc6" class="formattable_widget html-widget " style="width:100%;height:252px;" width="100%" height="252"></div>
+<script type="application/json" data-for="htmlwidget-e8fb1e252c4c1aa56fc6">{"x":{"html":"<table class=\"table table-condensed\">\n <thead>\n  <tr>\n   <th style=\"text-align:right;\"> Variable Type <\/th>\n   <th style=\"text-align:right;\"> Nominal <\/th>\n   <th style=\"text-align:right;\"> Ordinal <\/th>\n   <th style=\"text-align:right;\"> Continuous <\/th>\n  <\/tr>\n <\/thead>\n<tbody>\n  <tr>\n   <td style=\"text-align:right;\"> <span style=\"font-weight: bold\">Nominal   <\/span> <\/td>\n   <td style=\"text-align:right;\"> Chi-squared Test of Association <\/td>\n   <td style=\"text-align:right;\">  <\/td>\n   <td style=\"text-align:right;\">  <\/td>\n  <\/tr>\n  <tr>\n   <td style=\"text-align:right;\"> <span style=\"font-weight: bold\">Ordinal   <\/span> <\/td>\n   <td style=\"text-align:right;\"> Chi-squared Test of Association <\/td>\n   <td style=\"text-align:right;\"> Chi-squared/Spearman Correlation t-test <\/td>\n   <td style=\"text-align:right;\">  <\/td>\n  <\/tr>\n  <tr>\n   <td style=\"text-align:right;\"> <span style=\"font-weight: bold\">Continuous<\/span> <\/td>\n   <td style=\"text-align:right;\"> <strong>ANOVA/t-test<\/strong> <\/td>\n   <td style=\"text-align:right;\"> <strong>ANOVA/t-test<\/strong> <\/td>\n   <td style=\"text-align:right;\"> Pearson/Spearman Correlation t-test <\/td>\n  <\/tr>\n<\/tbody>\n<\/table>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 
@@ -1095,8 +1116,8 @@ class: middle
 
 ## Inferential statistics for hypothesis testing
 
-<div id="htmlwidget-9fd28fb3cdce00af9cc2" class="formattable_widget html-widget " style="width:100%;height:252px;" width="100%" height="252"></div>
-<script type="application/json" data-for="htmlwidget-9fd28fb3cdce00af9cc2">{"x":{"html":"<table class=\"table table-condensed\">\n <thead>\n  <tr>\n   <th style=\"text-align:right;\"> Variable Type <\/th>\n   <th style=\"text-align:right;\"> Nominal <\/th>\n   <th style=\"text-align:right;\"> Ordinal <\/th>\n   <th style=\"text-align:right;\"> Continuous <\/th>\n  <\/tr>\n <\/thead>\n<tbody>\n  <tr>\n   <td style=\"text-align:right;\"> <span style=\"font-weight: bold\">Nominal   <\/span> <\/td>\n   <td style=\"text-align:right;\"> Chi-squared Test of Association <\/td>\n   <td style=\"text-align:right;\">  <\/td>\n   <td style=\"text-align:right;\">  <\/td>\n  <\/tr>\n  <tr>\n   <td style=\"text-align:right;\"> <span style=\"font-weight: bold\">Ordinal   <\/span> <\/td>\n   <td style=\"text-align:right;\"> Chi-squared Test of Association <\/td>\n   <td style=\"text-align:right;\"> Chi-squared/Spearman Correlation t-test <\/td>\n   <td style=\"text-align:right;\">  <\/td>\n  <\/tr>\n  <tr>\n   <td style=\"text-align:right;\"> <span style=\"font-weight: bold\">Continuous<\/span> <\/td>\n   <td style=\"text-align:right;\"> ANOVA/t-test <\/td>\n   <td style=\"text-align:right;\"> ANOVA/t-test <\/td>\n   <td style=\"text-align:right;\"> <strong>Pearson/Spearman Correlation t-test<\/strong> <\/td>\n  <\/tr>\n<\/tbody>\n<\/table>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-64fe15402858308e0748" class="formattable_widget html-widget " style="width:100%;height:252px;" width="100%" height="252"></div>
+<script type="application/json" data-for="htmlwidget-64fe15402858308e0748">{"x":{"html":"<table class=\"table table-condensed\">\n <thead>\n  <tr>\n   <th style=\"text-align:right;\"> Variable Type <\/th>\n   <th style=\"text-align:right;\"> Nominal <\/th>\n   <th style=\"text-align:right;\"> Ordinal <\/th>\n   <th style=\"text-align:right;\"> Continuous <\/th>\n  <\/tr>\n <\/thead>\n<tbody>\n  <tr>\n   <td style=\"text-align:right;\"> <span style=\"font-weight: bold\">Nominal   <\/span> <\/td>\n   <td style=\"text-align:right;\"> Chi-squared Test of Association <\/td>\n   <td style=\"text-align:right;\">  <\/td>\n   <td style=\"text-align:right;\">  <\/td>\n  <\/tr>\n  <tr>\n   <td style=\"text-align:right;\"> <span style=\"font-weight: bold\">Ordinal   <\/span> <\/td>\n   <td style=\"text-align:right;\"> Chi-squared Test of Association <\/td>\n   <td style=\"text-align:right;\"> Chi-squared/Spearman Correlation t-test <\/td>\n   <td style=\"text-align:right;\">  <\/td>\n  <\/tr>\n  <tr>\n   <td style=\"text-align:right;\"> <span style=\"font-weight: bold\">Continuous<\/span> <\/td>\n   <td style=\"text-align:right;\"> ANOVA/t-test <\/td>\n   <td style=\"text-align:right;\"> ANOVA/t-test <\/td>\n   <td style=\"text-align:right;\"> <strong>Pearson/Spearman Correlation t-test<\/strong> <\/td>\n  <\/tr>\n<\/tbody>\n<\/table>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 

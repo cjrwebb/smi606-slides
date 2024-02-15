@@ -432,6 +432,11 @@ experiment_data <- experiment_data %>%
          sweet = 2, 
          enjoy_quants = 3)
 
+
+experiment_data <- experiment_data %>%
+  mutate(timestamp = as.character(timestamp)) %>%
+  filter(str_detect(timestamp, "2023"))
+
 experiment_data %>%
   group_by(sweet) %>%
   summarise(mean_enjoy_quants = mean(enjoy_quants, na.rm = TRUE))

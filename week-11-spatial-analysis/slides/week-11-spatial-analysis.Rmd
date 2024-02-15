@@ -136,8 +136,8 @@ style_duo_accent(
   header_h2_font_size = "1.5rem", 
   header_h3_font_size = "1.25rem", 
   text_font_size = "0.9rem",
-  code_font_size = "0.45rem", 
-  code_inline_background_color = "#F8F8F8", 
+  code_font_size = "0.65rem", 
+  code_inline_font_size = "0.85rem",
   inverse_text_color = "#9ADBE8", 
   background_color = "#F8F8F8", 
   text_color = "#131E29", 
@@ -151,19 +151,6 @@ style_duo_accent(
 
 ```
 
-
-```{r xaringan-panelset, echo=FALSE}
-# Allow for adding panelsets (see example on slide 2)
-xaringanExtra::use_panelset(in_xaringan = TRUE)
-
-style_panelset_tabs(
-  background = "#F8F8F8",
-  active_background = "#F8F8F8",
-  hover_background = "#F8F8F8"
-)
-
-
-```
 
 ```{r xaringanExtra, echo = FALSE}
 # Adds white progress bar to top
@@ -188,6 +175,22 @@ xaringanExtra::use_share_again()
 # searching of slides
 xaringanExtra::use_search(show_icon = TRUE, auto_search = FALSE)
 ```
+
+
+```{r xaringan-panelset, echo=FALSE}
+# Allow for adding panelsets (see example on slide 2)
+xaringanExtra::use_panelset(in_xaringan = TRUE)
+
+style_panelset_tabs(
+  background = "#F8F8F8",
+  active_background = "#F8F8F8",
+  hover_background = "#F8F8F8"
+)
+
+
+```
+
+
 
 ```{r, include = FALSE}
 # Data prep and library loading
@@ -966,7 +969,6 @@ lsoa_data
 
 ```{r}
 
-#
 lsoa_boundaries
 
 ```

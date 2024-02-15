@@ -6,7 +6,7 @@ author:
 date: '`r Sys.Date()`'
 output:
   xaringan::moon_reader:
-    css: ["xaringan-themer.css", "custom.css"]
+    css: ["xaringan-themer.css", "css/custom.css"]
     seal: false
     nature:
       slideNumberFormat: "%current%"
@@ -16,23 +16,38 @@ output:
       ratio: 16:9
       self_contained: true
       countIncrementalSlides: true
+    includes:
+      after_body: header/insert-header-grey.html
 ---
 
-class: middle
+
+class: middle, title
 background-size: contain
 
-# .tuos_purple[SMI606: Assessment 2<br>Guidance & Walkthrough]
 
-### Dr. Calum Webb
-#### Sheffield Methods Institute, the University of Sheffield.
-#### c.j.webb@sheffield.ac.uk
+<br><br>
+
+# SMI606: Assessment 2
+#### Guidance & Walkthrough
+
+<br><br>
+
+**Dr. Calum Webb**<br>
+Sheffield Methods Institute, the University of Sheffield<br>
+[c.j.webb@sheffield.ac.uk](mailto:c.j.webb@sheffield.ac.uk)
 
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
+
+# These packages are required for creating the slides
+# Many will need to be installed from Github
 library(icons)
 library(tidyverse)
+library(xaringan)
 library(xaringanExtra)
 library(xaringanthemer)
+
+# Defaults for code
 knitr::opts_chunk$set(
   fig.width=9, fig.height=3.5, fig.retina=3,
   out.width = "100%",
@@ -43,50 +58,88 @@ knitr::opts_chunk$set(
   fig.show = TRUE,
   hiline = TRUE
 )
+
+# set global theme for ggplot to make background #F8F8F8F8 (off white),
+# but otherwise keep all ggplot themes default (better for teaching)
+theme_set(
+  theme(plot.background = element_rect(fill = "#F8F8F8", colour = "#F8F8F8"), 
+        panel.background = element_rect(fill = "#F8F8F8", colour = "#F8F8F8"),
+        legend.background = element_rect(fill = "#F8F8F8", colour = "#F8F8F8")
+        )
+  )
+
 ```
 
 ```{r xaringan-tile-view, echo=FALSE}
+# Use tile overview by hitting the o key when presenting
 xaringanExtra::use_tile_view()
-#xaringanExtra::use_slide_tone()
 ```
 
 ```{r xaringan-logo, echo=FALSE}
+# Add logo to top right
 xaringanExtra::use_logo(
-  image_url = "images/uni-sheffield.png",
-  exclude_class = c("inverse", "hide_logo")
+  image_url = "header/smi-logo-white.png",
+  exclude_class = c("inverse", "hide_logo"), 
+  width = "180px", position = css_position(top = "1em", right = "2em")
 )
 ```
 
 ```{r xaringan-themer, include=FALSE, warning=FALSE}
-library(xaringanthemer)
-style_duo_accent(
-  primary_color = "#019EE3",
-  secondary_color = "#FCF281",
-  colors = c(tuos_purple = "#030043", grey = "#a8a8a8", tuos_blue ="#019EE3"),
-  header_font_google = xaringanthemer::google_font("Playfair Display", "600", "600i"),
-  text_font_google   = xaringanthemer::google_font("Work Sans", "300", "300i"),
-  #code_font_google   = xaringanthemer::google_font("Lucida Console"),
-  header_h1_font_size = "2.25rem",
-  header_h2_font_size = "1.75rem",
-  header_h3_font_size = "1.5rem", code_font_size = "0.65rem"
-)
 
-tuos_blue <- "#019EE3"
+# Set some global objects containing the colours
+# of the university's branding
+primary_color <- "#131E29"
+secondary_color <- "#440099"
+tuos_blue <- "#9ADBE8"
+white = "#F8F8F8"
 tuos_yellow <- "#FCF281"
-tuos_purple <- "#030043"
-tuos_red <- "#F14469"
+tuos_purple <- "#440099"
+tuos_red <- "#E7004C"
+tuos_midnight <- "#131E29"
+
+# The bulk of the styling is handled by xaringanthemer
+style_duo_accent(
+  primary_color = "#131E29",
+  secondary_color = "#440099",
+  colors = c(tuos_purple = "#440099", 
+             grey = "#131E2960", 
+             tuos_blue ="#9ADBE8",
+             tuos_mint = "#00CE7C"),
+  header_font_google = xaringanthemer::google_font("Source Serif Pro", "600", "600i"),
+  text_font_google   = xaringanthemer::google_font("Source Sans Pro", "300", "300i", "600", "600i"),
+  code_font_google   = xaringanthemer::google_font("Lucida Console"),
+  header_h1_font_size = "2rem",
+  header_h2_font_size = "1.5rem", 
+  header_h3_font_size = "1.25rem", 
+  text_font_size = "0.9rem",
+  code_font_size = "0.65rem", 
+  code_inline_font_size = "0.85rem",
+  inverse_text_color = "#9ADBE8", 
+  background_color = "#F8F8F8", 
+  text_color = "#131E29", 
+  link_color = "#005A8F", 
+  inverse_link_color = "#F8F8F8",
+  text_slide_number_color = "#44009970",
+  table_row_even_background_color = "transparent", 
+  table_border_color = "#44009970",
+  text_bold_font_weight = 600
+)
 
 ```
 
+
 ```{r xaringan-panelset, echo=FALSE}
+# Allow for adding panelsets (see example on slide 2)
 xaringanExtra::use_panelset()
 ```
 
 ```{r xaringanExtra, echo = FALSE}
-xaringanExtra::use_progress_bar(color = "#019EE3", location = "top")
+# Adds white progress bar to top
+xaringanExtra::use_progress_bar(color = "#F8F8F8", location = "top")
 ```
 
 ```{r xaringan-extra-styles, echo = FALSE}
+# Allow for code to be highlighted on hover
 xaringanExtra::use_extra_styles(
   hover_code_line = TRUE,         #<<
   mute_unhighlighted_code = TRUE  #<<
@@ -94,32 +147,14 @@ xaringanExtra::use_extra_styles(
 ```
 
 ```{r share-again, echo=FALSE}
+# Add sharing links and other embedding tools
 xaringanExtra::use_share_again()
-
 ```
 
-```{r metathis, echo=FALSE}
-# Add metadata
-
-# library(metathis)
-# meta() %>%
-#   meta_name("github-repo" = "cjrwebb/cjrwebb.github.io/tree/master/pres/smi") %>% 
-#   meta_social(
-#     title = "In Defence of Ordinary Help: The declining effectiveness of preventative children's services in England",
-#     description = paste(
-#       "On average, an additional £40 spent per child on preventative services in a given year was associated with decreases of nearly 5 children in need per 10,000, but this effectiveness has been declining over the decade."
-#     ),
-#     url = "https://cjrwebb.github.io/pres/smi/smi-research",
-#     image = "https://cjrwebb.github.io/pres/smi/idoh-card.png",
-#     image_alt = paste(
-#       "Title slide of In Defence of Ordinary Help"
-#     ),
-#     og_type = "website",
-#     og_author = "Calum Webb",
-#     twitter_card_type = "summary_large_image",
-#     twitter_creator = "@cjrwebb",
-#     twitter_site = "@cjrwebb"
-#   )
+```{r xaringanExtra-search, echo=FALSE}
+# Add magnifying glass search function to bottom left for quick
+# searching of slides
+xaringanExtra::use_search(show_icon = TRUE, auto_search = FALSE)
 ```
 
 ---
@@ -128,7 +163,7 @@ xaringanExtra::use_share_again()
 
 .pull-left[
 
-[Link to the assessment guidance](https://vle.shef.ac.uk/bbcswebdav/xid-43959194_1).
+[Link to the assessment guidance](https://www.calumwebb.co.uk/teaching/SMI606-content/assessment-2-guidance/assessment-2-details.pdf).
 
 * Structure/Tone/Code
 
@@ -156,7 +191,7 @@ xaringanExtra::use_share_again()
 
 Code, bibliography, code comments do not count.
 
-60% of final mark.
+70% of final mark.
 
 ```{r, echo = FALSE, out.width = "70%"}
 
@@ -174,7 +209,7 @@ knitr::include_graphics("images/assess2.png")
 
 .pull-left[
 
-[Link to the assessment guidance](https://vle.shef.ac.uk/bbcswebdav/xid-43959194_1).
+[Link to the assessment guidance](https://www.calumwebb.co.uk/teaching/SMI606-content/assessment-2-guidance/assessment-2-details.pdf).
 
 * **Structure/Tone/Code**
 
@@ -202,7 +237,7 @@ knitr::include_graphics("images/assess2.png")
 
 Code, bibliography, code comments do not count.
 
-60% of final mark.
+70% of final mark.
 
 ```{r, echo = FALSE, out.width = "70%"}
 
@@ -302,7 +337,7 @@ It is good to have clear, efficient, easy to read, well-explained code but this 
 
 .pull-left[
 
-[Link to the assessment guidance](https://vle.shef.ac.uk/bbcswebdav/xid-43959194_1).
+[Link to the assessment guidance](https://www.calumwebb.co.uk/teaching/SMI606-content/assessment-2-guidance/assessment-2-details.pdf).
 
 * Structure/Tone/Code
 
@@ -330,7 +365,7 @@ It is good to have clear, efficient, easy to read, well-explained code but this 
 
 Code, bibliography, code comments do not count.
 
-60% of final mark.
+70% of final mark.
 
 ```{r, echo = FALSE, out.width = "70%"}
 
@@ -524,7 +559,7 @@ Coming up with a research question...
   * Variables linked to spatial data; no independent or dependent variables but it will be common to compare more than one variable over space ('space' can be thought of as the independent variable), or the same variable in two different areas (cities, regions).
       * Variable distributed over space can be continuous, ordinal, or binary categorical (though most common in aggregate data is continuous)
       * Spatial weight matrix can be distance based (as learned in class and practical) or neighbours (contiguity/adjacency/shared borders) based (see [this guide](https://cran.r-project.org/web/packages/spNetwork/vignettes/SpatialWeightMatrices.html)).
-      * If challenging yourself with a [spatial lag model](https://kimura.univ-montp2.fr/~rousset/spaMM/spaMMintro.pdf) distance based matrices follow a Matérn function, neighbour matrices follow an adjacency function.
+      * If challenging yourself with a [spatial lag model](https://calumwebb.co.uk/teaching/SMI606-content/assessment-2-guidance/spaMMintro.pdf) distance based matrices follow a Matérn function, neighbour matrices follow an adjacency function.
 
 
 ]
@@ -581,7 +616,7 @@ class: middle
 
 .pull-left[
 
-[Link to the assessment guidance](https://vle.shef.ac.uk/bbcswebdav/xid-43959194_1).
+[Link to the assessment guidance](https://www.calumwebb.co.uk/teaching/SMI606-content/assessment-2-guidance/assessment-2-details.pdf).
 
 * Structure/Tone/Code
 
@@ -609,7 +644,7 @@ class: middle
 
 Code, bibliography, code comments do not count.
 
-60% of final mark.
+70% of final mark.
 
 ```{r, echo = FALSE, out.width = "70%"}
 
@@ -823,7 +858,7 @@ Resources and support for literature reviewing is available from the [library](h
 
 .pull-left[
 
-[Link to the assessment guidance](https://vle.shef.ac.uk/bbcswebdav/xid-43959194_1).
+[Link to the assessment guidance](https://www.calumwebb.co.uk/teaching/SMI606-content/assessment-2-guidance/assessment-2-details.pdf).
 
 * Structure/Tone/Code
 
@@ -851,7 +886,7 @@ Resources and support for literature reviewing is available from the [library](h
 
 Code, bibliography, code comments do not count.
 
-60% of final mark.
+70% of final mark.
 
 ```{r, echo = FALSE, out.width = "70%"}
 
@@ -894,7 +929,7 @@ Similar to assessment 1, you need to describe **where your data** (or the specif
 
 .pull-left[
 
-[Link to the assessment guidance](https://vle.shef.ac.uk/bbcswebdav/xid-43959194_1).
+[Link to the assessment guidance](https://www.calumwebb.co.uk/teaching/SMI606-content/assessment-2-guidance/assessment-2-details.pdf).
 
 * Structure/Tone/Code
 
@@ -922,7 +957,7 @@ Similar to assessment 1, you need to describe **where your data** (or the specif
 
 Code, bibliography, code comments do not count.
 
-60% of final mark.
+70% of final mark.
 
 ```{r, echo = FALSE, out.width = "70%"}
 
@@ -949,11 +984,11 @@ knitr::include_graphics("images/assess2.png")
 
 `r icons::feather_icons("circle")` Why did you select the independent variables you selected (which were of substantive interest and which were just because of their potential confounding effects?)
 
-`r icons::feather_icons("circle")` Did you transform/recode your variables in any way? (Recoding: [Week 8 Slides 36-47](https://calumwebb.co.uk/teaching/SMI606-content/week-8/slides/?panelset1=what-will-i-learn%253F2#36), Transforming: [Week 8 Slides 48-56](https://calumwebb.co.uk/teaching/SMI606-content/week-8/slides/?panelset1=what-will-i-learn%253F2#48))
+`r icons::feather_icons("circle")` Did you transform/recode your variables in any way? (Recoding: [Week 8 Slides 37-48](https://calumwebb.co.uk/teaching/SMI606-content/week-8/slides/?panelset1=what-will-i-learn%253F2#37), Transforming: [Week 8 Slides 50-58](https://calumwebb.co.uk/teaching/SMI606-content/week-8/slides/?panelset1=what-will-i-learn%253F2#50))
 
-`r icons::feather_icons("circle")` How did you assess model fit ([R-square](https://calumwebb.co.uk/teaching/SMI606-content/week-7/slides/?panelset1=what-will-i-learn%253F2#48)/[Accuracy](https://calumwebb.co.uk/teaching/SMI606-content/week-9/slides/?panelset1=what-will-i-learn%253F2#60)/[k-fold validation](https://calumwebb.co.uk/teaching/SMI606-content/week-9/slides/?panelset1=what-will-i-learn%253F2#73))?
+`r icons::feather_icons("circle")` How did you assess model fit ([R-square](https://calumwebb.co.uk/teaching/SMI606-content/week-7/slides/?panelset1=what-will-i-learn%253F2#57)/[Accuracy](https://calumwebb.co.uk/teaching/SMI606-content/week-9/slides/?panelset1=what-will-i-learn%253F2#60)/[k-fold validation](https://calumwebb.co.uk/teaching/SMI606-content/week-9/slides/?panelset1=what-will-i-learn%253F2#73))?
 
-`r icons::feather_icons("circle")` How did you check for any violations of assumptions ([linearity, homoscedasticity, outliers/leverage points, normality of residuals](https://calumwebb.co.uk/teaching/SMI606-content/week-8/slides/?panelset1=what-will-i-learn%253F2#57), [multicollinearity](https://calumwebb.co.uk/teaching/SMI606-content/week-8/slides/?panelset1=what-will-i-learn%253F2#69), [autocorrelation](https://calumwebb.co.uk/teaching/SMI606-content/week-9/slides/?panelset1=what-will-i-learn%253F2#93))?
+`r icons::feather_icons("circle")` How did you check for any violations of assumptions ([linearity, homoscedasticity, outliers/leverage points, normality of residuals](https://calumwebb.co.uk/teaching/SMI606-content/week-8/slides/?panelset1=what-will-i-learn%253F2#60), [multicollinearity](https://calumwebb.co.uk/teaching/SMI606-content/week-8/slides/?panelset1=what-will-i-learn%253F2#77), [autocorrelation](https://calumwebb.co.uk/teaching/SMI606-content/week-9/slides/?panelset1=what-will-i-learn%253F2#89))?
 
 
 ]
@@ -964,7 +999,7 @@ knitr::include_graphics("images/assess2.png")
 
 `r icons::feather_icons("circle")` If a generalisable sample, what critical value did you use for interpreting the significance of the results? ([Week 4](https://calumwebb.co.uk/teaching/SMI606-content/week-4/slides/#1))
 
-`r icons::feather_icons("circle")` (Logistic regression) How did you communicate the results (e.g. did you transform coefficients into [odds ratios](https://calumwebb.co.uk/teaching/SMI606-content/week-9/slides/?panelset1=what-will-i-learn%253F2#47) using `exp()`? Did you use [prediction/marginal effects plots](https://calumwebb.co.uk/teaching/SMI606-content/week-9/slides/?panelset1=what-will-i-learn%253F2#53)?)
+`r icons::feather_icons("circle")` (Logistic regression) How did you communicate the results (e.g. did you transform coefficients into [odds ratios](https://calumwebb.co.uk/teaching/SMI606-content/week-9/slides/?panelset1=what-will-i-learn%253F2#48) using `exp()`? Did you use [prediction/marginal effects plots](https://calumwebb.co.uk/teaching/SMI606-content/week-9/slides/?panelset1=what-will-i-learn%253F2#55)?)
 
 ]
 
@@ -978,9 +1013,9 @@ knitr::include_graphics("images/assess2.png")
 
 **Cluster Analysis** ([Week 10](https://calumwebb.co.uk/teaching/SMI606-content/week-10/slides/#1))
 
-`r icons::feather_icons("circle")` Which variables (features) did you include? ([Week 10: Slides 23-24](https://calumwebb.co.uk/teaching/SMI606-content/week-10/slides/?panelset1=what-will-i-learn%253F2#23))
+`r icons::feather_icons("circle")` Which variables (features) did you include? ([Week 10: Slides 24-25](https://calumwebb.co.uk/teaching/SMI606-content/week-10/slides/?panelset1=what-will-i-learn%253F2#24))
 
-`r icons::feather_icons("circle")` Did you transform/recode your variables in any way? (Recoding: [Week 8 Slides 36-47](https://calumwebb.co.uk/teaching/SMI606-content/week-8/slides/?panelset1=what-will-i-learn%253F2#36), Transforming: [Week 8 Slides 48-56](https://calumwebb.co.uk/teaching/SMI606-content/week-8/slides/?panelset1=what-will-i-learn%253F2#48))
+`r icons::feather_icons("circle")` Did you transform/recode your variables in any way? (Recoding: [Week 8 Slides 36-49](https://calumwebb.co.uk/teaching/SMI606-content/week-8/slides/?panelset1=what-will-i-learn%253F2#37), Transforming: [Week 8 Slides 50-57](https://calumwebb.co.uk/teaching/SMI606-content/week-8/slides/?panelset1=what-will-i-learn%253F2#48))
 
 `r icons::feather_icons("circle")` Did you use *k-means* or *Hierarchical Cluster Analysis*?
 
@@ -1044,7 +1079,7 @@ knitr::include_graphics("images/assess2.png")
 
 .pull-left[
 
-[Link to the assessment guidance](https://vle.shef.ac.uk/bbcswebdav/xid-43959194_1).
+[Link to the assessment guidance](https://www.calumwebb.co.uk/teaching/SMI606-content/assessment-2-guidance/assessment-2-details.pdf).
 
 * Structure/Tone/Code
 
@@ -1072,7 +1107,7 @@ knitr::include_graphics("images/assess2.png")
 
 Code, bibliography, code comments do not count.
 
-60% of final mark.
+70% of final mark.
 
 ```{r, echo = FALSE, out.width = "70%"}
 
@@ -1092,7 +1127,7 @@ class: middle
 
 **Some people like to combine their findings and discussion, e.g.** This is fine.
 
-"There was a significant association between age and the likelihood of voting to leave the European Union in the 2016 Brexit Referendum (p<0.05), after adjusting for participants' home region, education levels, and past levels of political engagement. Each additional 10 years of age were associated with a 20% increase in the odds of voting to leave the EU. This finding corresponds with those of Becker, et al. (2017) who reported that support for Leave increased to 60% among voters aged 65 or over, compared to 27% for 18-24 year olds. The probability plot (Figure X) suggests that the strength of this association with was similar in this study even after controlling for region and education levels. This might suggest generational differences in attitudes towards the EU, or differences in the messaging and strategies of the leave and remain campaigns themselves, are a better explanation of support for leaving the EU among older people than the general political ennui of younger people or the lower (average) educational capital of older people required to interrogate the claims made by campaigns."
+"There was a significant association between age and the likelihood of voting to leave the European Union in the 2016 Brexit Referendum (p<0.05), after adjusting for participants' home region, education levels, and past levels of political engagement. Each additional 10 years of age were associated with a 20% increase in the odds of voting to leave the EU. This finding corresponds with those of Becker, et al. (2017) who reported that support for Leave increased to 70% among voters aged 65 or over, compared to 27% for 18-24 year olds. The probability plot (Figure X) suggests that the strength of this association with was similar in this study even after controlling for region and education levels. This might suggest generational differences in attitudes towards the EU, or differences in the messaging and strategies of the leave and remain campaigns themselves, are a better explanation of support for leaving the EU among older people than the general political ennui of younger people or the lower (average) educational capital of older people required to interrogate the claims made by campaigns."
 
 ---
 
@@ -1102,7 +1137,7 @@ class: middle
 
 **Some people like to keep their findings and discussion seperate, e.g.** This is also fine.
 
-"There was a significant association between age and the likelihood of voting to leave the European Union in the 2016 Brexit Referendum (p<0.05), after adjusting for participants' home region, education levels, and past levels of political engagement. Each additional 10 years of age were associated with a 20% increase in the odds of voting to leave the EU. The predicted probability plot (Figure X) suggests that support for leaving the EU was, on average, around 20-30% for people aged between 20 and 30 years old at the time of the survey but increases to between 50 to 60% for people aged between 60 and 70, holding education, region, and past levels of political engagement at average levels."
+"There was a significant association between age and the likelihood of voting to leave the European Union in the 2016 Brexit Referendum (p<0.05), after adjusting for participants' home region, education levels, and past levels of political engagement. Each additional 10 years of age were associated with a 20% increase in the odds of voting to leave the EU. The predicted probability plot (Figure X) suggests that support for leaving the EU was, on average, around 20-30% for people aged between 20 and 30 years old at the time of the survey but increases to between 50 to 70% for people aged between 60 and 70, holding education, region, and past levels of political engagement at average levels."
 
 ... *Later in the discussion section* ...
 
@@ -1119,14 +1154,14 @@ class: middle
 
 **Multiple Linear Regression** ([Week 8](https://calumwebb.co.uk/teaching/SMI606-content/week-8/slides/))
 
-`r icons::feather_icons("circle")` Regression coefficients and interpretation ([Week 7: Slides 47-58](https://calumwebb.co.uk/teaching/SMI606-content/week-7/slides/?panelset1=what-will-i-learn%253F2#47))
+`r icons::feather_icons("circle")` Regression coefficients and interpretation ([Week 7: Slides 57-58](https://calumwebb.co.uk/teaching/SMI606-content/week-7/slides/?panelset1=what-will-i-learn%253F2#57))
   * Remember to use the correct scale units when interpreting coefficients! 
 
-`r icons::feather_icons("circle")` Model fit ([Week 7: Slides 47-58](https://calumwebb.co.uk/teaching/SMI606-content/week-7/slides/?panelset1=what-will-i-learn%253F2#47))
+`r icons::feather_icons("circle")` Model fit ([Week 7: Slides 57-58](https://calumwebb.co.uk/teaching/SMI606-content/week-7/slides/?panelset1=what-will-i-learn%253F2#57))
 
-`r icons::feather_icons("circle")` Null hypothesis significance tests and interpretation, if appropriate (p-values) ([Week 7: Slides 47-58](https://calumwebb.co.uk/teaching/SMI606-content/week-7/slides/?panelset1=what-will-i-learn%253F2#47))
+`r icons::feather_icons("circle")` Null hypothesis significance tests and interpretation, if appropriate (p-values) ([Week 7: Slides 57-58](https://calumwebb.co.uk/teaching/SMI606-content/week-7/slides/?panelset1=what-will-i-learn%253F2#57))
 
-`r icons::feather_icons("circle")` (Optional but can be helpful) Marginal effects/predicted values plot ([Week 8: Slides 17-19](https://calumwebb.co.uk/teaching/SMI606-content/week-8/slides/?panelset1=what-will-i-learn%253F2#17))
+`r icons::feather_icons("circle")` (Optional but can be helpful) Marginal effects/predicted values plot ([Week 8: Slides 18-20](https://calumwebb.co.uk/teaching/SMI606-content/week-8/slides/?panelset1=what-will-i-learn%253F2#18))
 
 
 
@@ -1137,14 +1172,14 @@ class: middle
 <br>
 
 `r icons::feather_icons("circle")` Assumptions (some people like to put these in the discussion section, or in a 'limitations and model checking' section after their discussion but before their conclusions. Either way is fine with me!)
-  * Linearity ([Week 8: Slides 58-59](https://calumwebb.co.uk/teaching/SMI606-content/week-8/slides/?panelset1=what-will-i-learn%253F2#58))
-  * Homoscedasticity ([Week 8: Slides 60-61](https://calumwebb.co.uk/teaching/SMI606-content/week-8/slides/?panelset1=what-will-i-learn%253F2#60))
-  * No outliers or leverage points ([Week 8: Slides 62-65](https://calumwebb.co.uk/teaching/SMI606-content/week-8/slides/?panelset1=what-will-i-learn%253F2#62))
-  * Normality of residuals ([Week 8: Slides 66-67](https://calumwebb.co.uk/teaching/SMI606-content/week-8/slides/?panelset1=what-will-i-learn%253F2#66))
+  * Linearity ([Week 8: Slides 61-62](https://calumwebb.co.uk/teaching/SMI606-content/week-8/slides/?panelset1=what-will-i-learn%253F2#61))
+  * Homoscedasticity ([Week 8: Slides 63-64](https://calumwebb.co.uk/teaching/SMI606-content/week-8/slides/?panelset1=what-will-i-learn%253F2#63))
+  * No outliers or leverage points ([Week 8: Slides 65-68](https://calumwebb.co.uk/teaching/SMI606-content/week-8/slides/?panelset1=what-will-i-learn%253F2#65))
+  * Normality of residuals ([Week 8: Slides 69-70](https://calumwebb.co.uk/teaching/SMI606-content/week-8/slides/?panelset1=what-will-i-learn%253F2#69))
   * No multicollinearity ([Week 8: Slides 69-75](https://calumwebb.co.uk/teaching/SMI606-content/week-8/slides/?panelset1=what-will-i-learn%253F2#69))
-  * No autocorrelation ([Week 9: Slides 89-95](https://calumwebb.co.uk/teaching/SMI606-content/week-9/slides/?panelset1=what-will-i-learn%253F2#89))
+  * No autocorrelation ([Week 9: Slides 72-78](https://calumwebb.co.uk/teaching/SMI606-content/week-8/slides/?panelset1=what-will-i-learn%253F2#72))
   * What could you do if assumptions are violated? 
-    * Linearity, homoscedasticity, outliers, normality: [Week 8 Slide 68](https://calumwebb.co.uk/teaching/SMI606-content/week-8/slides/?panelset1=what-will-i-learn%253F2#68)
+    * Linearity, homoscedasticity, outliers, normality: [Week 8 Slide 71](https://calumwebb.co.uk/teaching/SMI606-content/week-8/slides/?panelset1=what-will-i-learn%253F2#71)
     * Multicollinearity, autocorrelation: [Week 9 Slide 98](https://calumwebb.co.uk/teaching/SMI606-content/week-9/slides/?panelset1=what-will-i-learn%253F2#98)
 
 
@@ -1167,7 +1202,7 @@ class: middle
 `r icons::feather_icons("circle")` Model fit ([Week 9: Slides 60-74](https://calumwebb.co.uk/teaching/SMI606-content/week-9/slides/?panelset1=what-will-i-learn%253F2#60))
   * Only need to pick one: Pseudo $\text{-}R^2$, Accuracy, k-fold cross-validation.
 
-`r icons::feather_icons("circle")` Null hypothesis significance tests and interpretation, if appropriate (p-values) ([Week 7: Slides 47-58](https://calumwebb.co.uk/teaching/SMI606-content/week-7/slides/?panelset1=what-will-i-learn%253F2#47))
+`r icons::feather_icons("circle")` Null hypothesis significance tests and interpretation, if appropriate (p-values) ([Week 7: Slides 53](https://calumwebb.co.uk/teaching/SMI606-content/week-7/slides/?panelset1=what-will-i-learn%253F2#53), [Week 4](https://calumwebb.co.uk/teaching/SMI606-content/week-4/slides/?panelset1=what-will-i-learn%253F2#1))
 
 `r icons::feather_icons("circle")` (Optional but can be helpful) Marginal effects/predicted values plot ([Week 9: Slides 53-57](https://calumwebb.co.uk/teaching/SMI606-content/week-9/slides/?panelset1=what-will-i-learn%253F2#53))
 
@@ -1280,7 +1315,7 @@ It can also be hard to talk about choropleth maps if you don't have certain land
 
 .pull-left[
 
-[Link to the assessment guidance](https://vle.shef.ac.uk/bbcswebdav/xid-43959194_1).
+[Link to the assessment guidance](https://www.calumwebb.co.uk/teaching/SMI606-content/assessment-2-guidance/assessment-2-details.pdf).
 
 * Structure/Tone/Code
 
@@ -1308,7 +1343,7 @@ It can also be hard to talk about choropleth maps if you don't have certain land
 
 Code, bibliography, code comments do not count.
 
-60% of final mark.
+70% of final mark.
 
 ```{r, echo = FALSE, out.width = "70%"}
 
@@ -1482,7 +1517,7 @@ what they mean and how future research might address them.
 
 * Were any of the assumptions violated?
 * If so, how might this being have affected the results you found?
-* What would you recommend to correct for this violation of assumptions? (You don't have to actually do these). Regression Cheatsheets [1](https://calumwebb.co.uk/teaching/SMI606-content/week-8/slides/?panelset1=what-will-i-learn%253F2#68), [2](https://calumwebb.co.uk/teaching/SMI606-content/week-9/slides/?panelset1=what-will-i-learn%253F2#98).
+* What would you recommend to correct for this violation of assumptions? (You don't have to actually do these). Regression Cheatsheets [1](https://calumwebb.co.uk/teaching/SMI606-content/week-8/slides/?panelset1=what-will-i-learn%253F2#71), [2](https://calumwebb.co.uk/teaching/SMI606-content/week-9/slides/?panelset1=what-will-i-learn%253F2#98).
 
 
 ]

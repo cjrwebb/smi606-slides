@@ -231,7 +231,7 @@ Now it's your turn to write a quantile function. This time, I want you to get a 
 
 ```{r}
 
-quantile(hse_data$wtval, probs = c(0.1, 0.9), na.rm = TRUE)
+quantile(hse_data$wtval, probs = c(0.05, 0.95), na.rm = TRUE)
 
 ```
 

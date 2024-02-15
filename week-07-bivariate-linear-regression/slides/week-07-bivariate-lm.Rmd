@@ -552,6 +552,46 @@ class: middle
 
 ]
 
+
+---
+class: middle
+
+## Finding the best fitting line
+
+.pull-left[
+
+#### How do we find the best fitting line? A competition!
+
+* Honour system - no cheating!
+
+* Open the [Shiny app](https://webb.shinyapps.io/find-line/) in your web browser, or download and run the source code in `R`
+
+* In pairs, your task is to get the best fitting line to the data that the app has generated for you by manipulating the intercept and slope values with the sliders.
+
+* Once you've decided on the best fitting line, check the actual results from the linear regression and see how far off you were. Check the residuals plot and see how it changes between your estimate and the linear regression one.
+
+* Whoever gets the closest guess wins!
+
+
+]
+
+
+.pull-right[
+
+```{r, echo = FALSE, height = 450, width = 500}
+
+knitr::include_graphics("images/qrcode_webb.shinyapps.io.png")
+
+```
+
+[https://webb.shinyapps.io/find-line/](https://webb.shinyapps.io/find-line/)
+
+]
+
+
+
+
+
 ---
 class: middle
 
