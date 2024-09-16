@@ -469,7 +469,11 @@ __[House Sales in 2018](https://calumwebb.co.uk/teaching/SMI606-content/week-11/
 
 ]
 
-.center[Put your findings on [this Jamboard Page](https://jamboard.google.com/d/1f6kVxx1ANoMKJ6E7cZqwCU0hmK1CMf-26fIIkLJBfoY/edit?usp=sharing).]
+.center[Put your findings on [this Wooclap Event](https://app.wooclap.com/events/JUFAHE/questions/66e84b49e4f5d5ad4d62e36d).
+
+Event ID: **JUFAHE**
+
+]
 
 
 ---
@@ -602,7 +606,7 @@ grid.draw(epc_mapt)
 class: inverse, middle
 
 Week 11: Spatial Analysis — Part II
-# Spatial Analysis in `R`: Reading in spatial data (boundaries and centroids)
+# Spatial Analysis in R: Reading in spatial data (boundaries and centroids)
 
 
 ---
@@ -904,7 +908,7 @@ lsoa_centres <- st_read("data/lsoa-england-wales-centroids/")
 class: inverse, middle
 
 Week 11: Spatial Analysis — Part III
-# Spatial Analysis in `R`: Joining social science data to spatial data
+# Spatial Analysis in R: Joining social science data to spatial data
 
 
 ---
@@ -1381,7 +1385,7 @@ class: middle
 class: inverse, middle
 
 Week 11: Spatial Analysis — Part V
-# Spatial Analysis in `R`: Spatial Data Visualisation — Cartograms
+# Spatial Analysis in R: Spatial Data Visualisation — Cartograms
 
 
 ---
@@ -1659,7 +1663,7 @@ leaflet(sheffield_data_longlat) %>%
 class: inverse, middle
 
 Week 11: Spatial Analysis — Part VI
-# Spatial Analysis in `R`: Moran's I
+# Spatial Analysis in R: Moran's I
 
 ---
 
@@ -2076,7 +2080,7 @@ background-color: white
 
 # Thank you and well done!
 
-[A reminder of where we started...](https://jamboard.google.com/d/1jFYCgK5wrihDK_Z7lOGvcTi6ZA8EQVJ5DsyHT0EX3Nw/edit?usp=sharing)
+A reminder of where we started...
 
 ]
 

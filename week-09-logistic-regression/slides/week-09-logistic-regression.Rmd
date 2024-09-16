@@ -513,7 +513,7 @@ class: inverse, middle
 
 background-color: white
 
-## Jamboard activity
+## Wooclap activity
 
 .pull-left[
 
@@ -521,7 +521,10 @@ background-color: white
 
 #### What things are you interested in researching that aren't on a continuous scale?
 
-Join the jamboard by clicking [this link](https://jamboard.google.com/d/18mE9FwmOmaa3V7pTwUbpVyuOF5TEVvjp4vszHiDlbeI/edit?usp=sharing), or scanning the QR code on the right, and try and contribute at least one variable that you would be interested in analysing but either can't be measured on, or you haven't seen measured on, a continuous scale.
+Join the wooclap activity by clicking [this link](https://app.wooclap.com/events/AXUMRY/questions/66e8406bafc80076ce296f5d), or scanning the QR code on the right, and try and contribute at least one variable that you would be interested in analysing but either can't be measured on, or you haven't seen measured on, a continuous scale.
+
+Event ID: **AXUMRY**
+
 
 ]
 
@@ -529,7 +532,7 @@ Join the jamboard by clicking [this link](https://jamboard.google.com/d/18mE9Fwm
 
 ```{r, echo = FALSE}
 
-knitr::include_graphics("images/wk-9-jb.png")
+knitr::include_graphics("images/smi606-week-9-wooclap-1.png")
 
 ```
 

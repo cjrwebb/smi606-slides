@@ -395,19 +395,26 @@ grViz("digraph{
 
 .pull-right[
 
-.center[[Link to Jamboard](https://jamboard.google.com/d/1dPnHFUja2h4Vm2vcGYOJaSU43svWGSQXYr5SZHoSuA4/edit?usp=sharing)
+.center[[Link to Wooclap](https://app.wooclap.com/events/LEGKQP/questions/66e83c443fa62027393ec9d2) Event Code: LEGKQP
 
-What other variables could be confounding the relationship between gender and pay?]
+What other variables could be conditioning the relationship between gender and pay?]
 
 <center>
 ```{r, echo = FALSE, out.height=400, out.width=400}
 
-knitr::include_graphics("images/mr-qr.png")
+knitr::include_graphics("images/smi606-week-8-wooclap-1.png")
 
 ```
 </center>
 
 ]
+
+
+---
+
+<br>
+
+<iframe allowfullscreen frameborder="0" height="90%" mozallowfullscreen style="min-width: 500px; min-height: 355px" src="https://app.wooclap.com/events/LEGKQP/questions/66e83c443fa62027393ec9d2" width="100%"></iframe>
 
 
 ---

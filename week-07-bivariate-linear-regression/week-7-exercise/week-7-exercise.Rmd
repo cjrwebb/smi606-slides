@@ -1,5 +1,5 @@
 ---
-title: "Week 7 Exercise"
+title: "Week 6 Exercise"
 author: "Calum Webb"
 date: "27/10/2022"
 output: pdf_document

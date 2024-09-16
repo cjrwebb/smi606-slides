@@ -211,6 +211,8 @@ By the end of this week you will:
 class: middle
 
 
+# Who we are:
+
 .pull-left[
 
 .center[
@@ -218,7 +220,7 @@ class: middle
 
 [c.j.webb@sheffield.ac.uk](mailto:c.j.webb@sheffield.ac.uk)
 
-Research on poverty and the child welfare system in the UK using secondary survey and administrative data in `R`. British Academy Postdoctoral Fellow researching how investment in services for children improves their welfare and safety.
+Research on poverty and the child welfare system in the UK using secondary survey and administrative data in `R`. My most recent project has been about how investment in services for children improves their welfare and safety.
 
 
 ]
@@ -229,11 +231,11 @@ Research on poverty and the child welfare system in the UK using secondary surve
 .pull-right[
 
 .center[
-## Rhiannon Williams
+## Eleanor Bale
 
-[rswilliams2@sheffield.ac.uk](mailto:rswilliams2@sheffield.ac.uk)
+<br>
 
-Rhiannon Williams  is a PhD student and part of the Data Analytics & Society Centre for Doctoral Training. Her research is about housing insecurity.
+Eleanor’s PhD focuses on the impact of migration on segregation and the effect of social frontiers on social and economic factors such as educational outcomes, mental health, and crime. Eleanor is interested in research about inequality, social mobility especially focusing on children’s outcomes.
 
 ]
 
@@ -265,17 +267,17 @@ class: middle
 
 ## Module design, timetable, and support
 
-__Time & Location__: 12:00-12:50 in [The Wave](https://goo.gl/maps/KSuSKKoCcnbrhxRu6) Seminar Room 5, *then* 13:00-14:50 in [SUMS](https://goo.gl/maps/9rrkoAbDPLypUfjY6) Pool IT Room (Tuesdays, Week 1-5, 7-11)  
+__Time & Location__: 12:00-14:50 in [The Wave](https://goo.gl/maps/KSuSKKoCcnbrhxRu6) Computer Room 2a.
 *You can bring your lunch.* 
 
-__Consultation & Feedback Hours__: 16:00-17:00 Tuesdays (Week 1-12)  
-*Can be booked online or face-to-face. See: [how to book](https://calumwebb.co.uk/teaching/appointments/).*
+__Consultation & Feedback Hours__: 10:00-11:00 Tuesdays (Week 1-12) 15:00-16:00 Thursdays (Week 1-12)  
+*Can be booked online or face-to-face. [Book here](https://calendar.app.google/H7Eynbsnyh9S8VvH8).*
 
 ### Maths and Statistics Help (MASH)
 
 The Maths and Statistics Help (MASH) service on Glossop Road provide 1:1 and group support on learning statistics in `R`. You can book a tutorial by [visiting their webpages](https://www.sheffield.ac.uk/mash).
 
-**R for Ultra Beginners** Workshops will be running through the first few weeks of the semester!
+**R for Ultra Beginners** Workshops will usually be running through the first few weeks of the semester!
 
 ---
 class: middle
@@ -318,8 +320,8 @@ outline <- tibble(
               "Relationships between variables",
               "Inference",
               "Causality",
-              "Reading Week",
               "Bivariate Linear Regression",
+              "Reading Week",
               "Multiple Linear Regression",
               "Logistic Regression",
               "Cluster Analysis",
@@ -329,12 +331,12 @@ outline <- tibble(
                 "Mehmetoglu & Mittner (2022) _Chapter 5, Applied Statistics Using R_",
                 "Mehmetoglu & Mittner (2022) _Chapter 6, Applied Statistics Using R_",
                 "Goldthorpe, J. H. '_Causation, Statistics and Sociology_'",
-                "Catch up reading week",
                 "Mehmetoglu & Mittner (2022) _Chapter 7, Applied Statistics Using R_",
+                "Catch up reading week (**Ready for assessment 1!**)",
                 "Mehmetoglu & Mittner (2022) _Chapter 8 & 9, Applied Statistics Using R_",
                 "Mehmetoglu & Mittner (2022) _Chapter 11, Applied Statistics Using R_",
                 "UC Business Analytics `R` Programming Guide 'k-means Cluster Analysis' ([Available free online](https://uc-r.github.io/kmeans_clustering)) '_Hierarchical Cluster Analysis_' ([Available free online](https://uc-r.github.io/hc_clustering))",
-                "Imai, K. Chapter 5.3 '_Quantitative Social Science: An introduction_ (Available online through the library)")
+                "Imai, K. Chapter 5.3 '_Quantitative Social Science: An introduction_ (Available online through the library)  (**Ready for assessment 2!**)")
 )
 
 outline %>%
@@ -359,7 +361,7 @@ outline %>%
 class: middle
 background-color: white
 
-## Why `R`?
+## Why **R**?
 
 .pull-left[
 
@@ -392,7 +394,7 @@ knitr::include_graphics("images/r_first_then.png")
 class: middle
 background-color: white
 
-## Why `R`?
+## Why **R**?
 
 .pull-left[
 
@@ -432,7 +434,7 @@ knitr::include_graphics("images/r_first_then.png")
 class: middle
 
 
-## Base `R`
+## Base .big-code[R]
 
 ```{r, eval=FALSE}
 
@@ -581,21 +583,20 @@ Online resources:
 
 background-color: white
 
-### Exercise: It's normal for people to be coming to this course with wildly <nbsp;>different experiences of statistics and software. 
+### Exercise: Who are you?
 
 .center[
 ```{r, echo=FALSE, out.width="75%"}
 
-knitr::include_graphics("ex_1_bg_qr.png")
+knitr::include_graphics("ex_1_bg.png")
 
 ```
 ]
 
-.center[https://jamboard.google.com/d/1jFYCgK5wrihDK_Z7lOGvcTi6ZA8EQVJ5DsyHT0EX3Nw/edit?usp=sharing]
 
 ???
 
-Jamboard for students to map their experience with statistics and anything they are anxious about
+Mapping exercise for students to map their experience with statistics and anything they are anxious about
 
 
 ---
@@ -1114,7 +1115,7 @@ class: middle
 
 class: middle
 
-## Getting set up in `R`
+## Getting set up in R
 
 
 * .big[Go to the __SMI606 Blackboard page -> Learning Materials -> Week 1__, and follow the tutorial for downloading and installing `R` and Rstudio.]
