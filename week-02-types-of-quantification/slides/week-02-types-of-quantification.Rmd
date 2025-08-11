@@ -1902,6 +1902,7 @@ as.htmlwidget(visuals_tab, width = "100%")
 
 
 ---
+
 class: middle
 
 ```{r, include=FALSE}

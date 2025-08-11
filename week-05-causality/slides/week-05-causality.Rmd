@@ -435,7 +435,7 @@ experiment_data <- experiment_data %>%
 
 experiment_data <- experiment_data %>%
   mutate(timestamp = as.character(timestamp)) %>%
-  filter(str_detect(timestamp, "2023"))
+  filter(str_detect(timestamp, "2024"))
 
 experiment_data %>%
   group_by(sweet) %>%

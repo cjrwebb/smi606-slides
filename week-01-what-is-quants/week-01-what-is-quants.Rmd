@@ -241,7 +241,20 @@ Eleanor’s PhD focuses on the impact of migration on segregation and the effect
 
 ]
 
+---
 
+class: inverse, hide-logo, middle
+
+.center[
+
+```{r, echo = FALSE, out.width="80%"}
+
+knitr::include_graphics("images/cheerleader.png")
+
+
+```
+
+]
 
 
 ---
