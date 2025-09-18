@@ -1,5 +1,5 @@
 ---
-title: "SMI606: Week 2 — Types of quantification"
+title: "EDC459: Week 2 — Types of quantification"
 subtitle: ""  
 author: 
   - "Calum Webb"
@@ -23,9 +23,16 @@ output:
 class: middle
 background-size: contain
 
+<!----- Make a pdf using:
+
+decktape generic --key=ArrowRight --load-pause 1800 --slides '1-65' --size '1216x684'  "week-02-types-of-quantification/slides/week-02-types-of-quantification.html" week-02-types-of-quantification/slides/week-02-types-of-quantification.pdf
+
+----->
+
+
 <br><br>
 
-# .tuos_purple[SMI606: Week 2<br>Types of quantification]
+# .tuos_purple[EDC459: Week 2<br>Types of quantification]
 
 <br><br>
 
@@ -789,11 +796,15 @@ hse_cleaned %>%
 class: middle
 background-color: white
 
+.center[
+
 ```{r, echo = FALSE, out.width="80%"}
 
 knitr::include_graphics("images/summary_statistics.png")
 
 ```
+
+]
 
 ---
 class: inverse, middle
@@ -1010,9 +1021,13 @@ hse_cleaned %>% # my data
 
 ---
 
+
 ## Univariate Descriptive Statistics<br>.tuos_purple[Measures of Central Tendency/Summary Statistics]
 
+
+
 .middle-left[
+
 
 #### What about nominal/categorical variables?
 

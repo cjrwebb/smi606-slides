@@ -1,5 +1,5 @@
 ---
-title: "SMI606: Assessment 2"
+title: "EDC459: Assessment 2"
 subtitle: ""  
 author: 
   - "Calum Webb"
@@ -21,13 +21,22 @@ output:
 ---
 
 
+
 class: middle, title
 background-size: contain
 
 
+<!----- Make a pdf using:
+
+decktape generic --key=ArrowRight --load-pause 3200 --slides '1-53' --size '1216x684'  "week-x-assessment-2-guidance/slides/week-x-assessment-2-walkthrough.html" week-x-assessment-2-guidance/slides/week-x-assessment-2-walkthrough.pdf
+
+----->
+
+
+
 <br><br>
 
-# SMI606: Assessment 2
+# EDC459: Assessment 2
 #### Guidance & Walkthrough
 
 <br><br>

@@ -1,5 +1,5 @@
 ---
-title: "SMI606: Week 7 — Bivariate Linear Regression"
+title: "EDC459: Week 7 — Bivariate Linear Regression"
 subtitle: ""  
 author: 
   - "Calum Webb"
@@ -25,7 +25,7 @@ background-size: contain
 
 <br><br><br>
 
-# .tuos_purple[SMI606: Week 7<br>Bivariate Linear Regression]
+# .tuos_purple[EDC459: Week 7<br>Bivariate Linear Regression]
 
 <br><br>
 

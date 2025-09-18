@@ -46,6 +46,16 @@ usa_data_prepped <- usa_data %>%
 
 ```
 
+
+It's generally also recommended to standardise all of the continuous variables that you are using in a cluster analysis too, as what might look like big gaps between data points might just be linked to the scale that they're on (e.g. the difference between measuring something as being 1000 milimeters away compared to 1 meter). This can be achieved using the `scale()` function. Don't worry, we'll be adding our clusters back onto our original data so we'll still be able to make sense of the differences between groups.
+
+```{r}
+
+usa_data_prepped <- usa_data_prepped %>%
+  mutate_all(scale)
+
+```
+
 They start by using the `factoextra` package, and the `fviz_nbclust` function to try and determine how many clusters they should try to identify.
 
 ```{r}
@@ -134,6 +144,44 @@ usa_data_results %>%
 * Describe and label the three kinds of clusters found in the 3-cluster solution.
 
 
+
+
+---
+
+Some plots have been created to help visualise the differences between clusters more easily. This is achieved using the `pivot_longer` function to first put all of the variables on their own rows. Notice how this is done using the standardised scores so that they are easier to compare. Look at how the structure of the dataset changes:
+
+```{r}
+
+# Create a data frame from our results. Save our cluster in
+# the variable "cluster"
+k2_results <- as_tibble(usa_k2$centers) %>%
+  rowid_to_column(var = "cluster")
+k2_results
+
+k2_results_long <- k2_results %>%
+  # make all of our variable, but not our cluster ID, long format. 
+  # Make our variable column name "variable" and our value name "score"
+  pivot_longer(-cluster, names_to = "variable", values_to = "score") 
+
+k2_results_long
+
+k2_results_long %>%
+  ggplot() +
+  geom_col(aes(x = score, y = variable, fill = factor(cluster)),
+           position = "dodge") +
+  scale_fill_viridis_d() # make the scale more colourblind friendly
+
+```
+
+Of course, with only two clusters this isn't much more helpful than just looking at the table. But the visualisations can be more useful if we want to use multiple clusters. 
+
+Try copy and pasting the code above to the R chunk below and editing it so that it visualises the three cluster solution instead:
+
+```{r}
+
+# Write in your own R code here to complete the exercise
+
+```
 
 
 ---
@@ -228,7 +276,7 @@ usa_data_hca_results %>%
 
 Now we'll explore whether we find similar or different results for crime rates in English Community and Safety Partnerships. 
 
-* Start by loading the `"england_crime_rates.csv"` data into `R` using the `read_csv` function. Save the result to an object called `english_crime`.
+* Start by loading the `"england_crime_rates.csv"` data into `R` using the `read_csv` function. Save the result to an object called `english_crime`. 
 
 ```{r}
 
@@ -243,7 +291,7 @@ Now we'll explore whether we find similar or different results for crime rates i
 ---
 
 
-* Create a version of the data that contains only the numeric type variables and store it in an object called `english_crime_prepped` so that it can be used for k-means and HCA.
+* Create a version of the data that contains only the numeric type variables and store it in an object called `english_crime_prepped` so that it can be used for k-means and HCA. Then, standardise this dataset using the `scale` function.
 
 ```{r}
 
@@ -270,7 +318,7 @@ Let's start with k-means analysis.
 
 ---
 
-* Create a 3-cluster and a 2-cluster solution for the English crime data using the `kmeans` function. Remember to save the results to an object for later use.
+* Create a 3-cluster and a 6-cluster solution for the English crime data using the `kmeans` function. Remember to save the results to an object for later use.
 
 ```{r}
 
@@ -278,7 +326,7 @@ Let's start with k-means analysis.
 
 ```
 
-* Visualise the 2 cluster and 3 cluster solutions using the `fviz_clusters` function.
+* Visualise the 3 cluster and 6 cluster solutions using the `fviz_clusters` function.
 
 ```{r}
 
@@ -287,7 +335,7 @@ Let's start with k-means analysis.
 ```
 
 
-* By calling the k-means objects created earlier, report the proportion of variance that can be explained by the 2-cluster solution and the 3-cluster solution.
+* By calling the k-means objects created earlier, report the proportion of variance that can be explained by the 3-cluster solution and the 6-cluster solution.
 
 ```{r}
 
@@ -304,7 +352,7 @@ Let's start with k-means analysis.
 
 Now, we need to describe the clusters. 
 
-* By either calling the clusters, or adding them to the original data and then calculating summary statistic by group, get summary statistics for all of the clusters from the 2-cluster and 3- cluster solution.
+* Get summary statistics for all of the clusters from the 3-cluster and 6- cluster solution that can be used to describe them. You can either: call the cluster centres table directly from the results, add the cluster membership to the original data and then use group_by and summarise, or modify the code for the visualisation we used above and re-purpose it for this visualisation (or even better, have a go at all three!)
 
 ```{r}
 
@@ -313,7 +361,7 @@ Now, we need to describe the clusters.
 
 ```
 
-* Describe the clusters found in the 2-cluster and 3-cluster solution.
+* Describe the clusters found in the 3-cluster and 6-cluster solution.
 
 
 
@@ -387,7 +435,7 @@ Now we can cut our dendrogram into the number of clusters we believe we identifi
 
 ```
 
-* Now produce some bivariate statistics showing how the crime rates differ by cluster.
+* Now produce some bivariate statistics showing how the crime rates differ by cluster. You can also produce a plot if you think it would be helpful.
 
 ```{r}
 

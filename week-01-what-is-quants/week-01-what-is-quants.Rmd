@@ -1,5 +1,5 @@
 ---
-title: "SMI606: Week 1 — What is quantitative social science?"
+title: "EDC459: Week 1 — What is quantitative social science?"
 subtitle: ""  
 author: 
   - "Calum Webb"
@@ -23,9 +23,16 @@ output:
 class: middle
 background-size: contain
 
+
+<!----- Make a pdf using:
+
+decktape generic --key=ArrowRight --load-pause 1800 --slides '1-43' --size '1216x684'  "week-01-what-is-quants/week-01-what-is-quants.html" week-01-what-is-quants/week-01-what-is-quants.pdf
+
+----->
+
 <br><br>
 
-# .tuos_purple[SMI606: Week 1<br>What is quantitative social science?]
+# .tuos_purple[EDC459: Week 1<br>What is quantitative social science?]
 
 <br><br>
 
@@ -189,7 +196,7 @@ By the end of this week you will:
 .panel[.panel-name[How does this week fit into my course?]
 
 * Help you schedule your independent learning for the rest of the module to fit within the demands of the programme.
-* Give you an indication of when quantitative research projects (or components of projects) may be useful, and see how the content of SMI606 fits together with SMI607 Principles of Social Research I and Principles of Research Design II.
+* Give you an indication of when quantitative research projects (or components of projects) may be useful, and see how the content of EDC459 fits together with Principles of Social Research I and Principles of Research Design II.
 * Introduce you to `R`, a flexible open-source statistical programming language that can be used for quantitative data analysis but also for presenting, reporting, and other purposes.
 
 ]
@@ -203,15 +210,13 @@ By the end of this week you will:
 ???
 
 * Introduce you to the module and instructors, structure and timetable, resources and support available, contingencies for COVID and remote support
-* Introduce the concept of quantitative social science and the assumptions it makes about the human world: why do we use it? What do we assume when we use it? How do we make sense of it? These will be explored more in SMI607 Principles of Social Research I
+* Introduce the concept of quantitative social science and the assumptions it makes about the human world: why do we use it? What do we assume when we use it? How do we make sense of it? These will be explored more in Principles of Social Research I
 * Introduce `R`, install `R`, and talk about the layout of Rstudio, different kinds of variables in the R environment, and how to read in and manipulate data (basic filtering, subsetting).
 
 ---
 
 class: middle
 
-
-# Who we are:
 
 .pull-left[
 
@@ -231,11 +236,10 @@ Research on poverty and the child welfare system in the UK using secondary surve
 .pull-right[
 
 .center[
-## Eleanor Bale
 
 <br>
 
-Eleanor’s PhD focuses on the impact of migration on segregation and the effect of social frontiers on social and economic factors such as educational outcomes, mental health, and crime. Eleanor is interested in research about inequality, social mobility especially focusing on children’s outcomes.
+For any general enquiries about administration during the module — registration, extensions, assessment submission, attendance, timetable issues, and so on — please contact the Student Experience team [smi@sheffield.ac.uk](mailto:smi@sheffield.ac.uk) who will be happy to help you. Remember, as per the module outline, that module leaders cannot grant extensions.
 
 ]
 
@@ -274,17 +278,16 @@ class: middle
 
 * Assessment on two small quantitative research projects where the topic is decided by you.
 
+
 ---
 
 class: middle
 
 ## Module design, timetable, and support
 
-__Time & Location__: 12:00-14:50 in [The Wave](https://goo.gl/maps/KSuSKKoCcnbrhxRu6) Computer Room 2a.
-*You can bring your lunch.* 
+__Time & Location__: Time & Location: 12:00-14:50 in Geography Building, Computer Room B04 (Tuesdays, Week 1-6, 8-11) 
 
-__Consultation & Feedback Hours__: 10:00-11:00 Tuesdays (Week 1-12) 15:00-16:00 Thursdays (Week 1-12)  
-*Can be booked online or face-to-face. [Book here](https://calendar.app.google/H7Eynbsnyh9S8VvH8).*
+__Consultation & Feedback Hours__: 10:00-11:00 Tuesdays (Week 1-12) and 15:00-16:00 Thursdays (Week 1-12). [Book through Google Calendar by clicking here](https://calendar.app.google/H7Eynbsnyh9S8VvH8).
 
 ### Maths and Statistics Help (MASH)
 
@@ -309,7 +312,7 @@ To ensure your independent learning is productive, you should __regularly think 
 
 --
 
-But as a general rule you should follow the reading list and **work through ~1 chapter of the textbook per week**, as well as **finish any practical work started in the class**.
+Reading is not *strictly required*, but it will probably help. Past students have said they found the lecture materials and the workshops sufficient to understand the content. **If you are pressed for time, prioritise completing workshop materials and R challenges in your independent study time.**
 
 --
 
@@ -492,11 +495,11 @@ knitr::include_graphics("images/r_rollercoaster.png")
 ---
 class: middle
 
-## How to use the [reading/resource list](https://calumwebb.co.uk/teaching/SMI606-reading-list/)?
+## How to use the [reading/resource list](https://calumwebb.co.uk/teaching/EDC459-reading-list/)?
 
 .pull-left[
 
-* Probably at least 50% of module conveners effort goes towards putting together a [good quality reading & resource list](https://calumwebb.co.uk/teaching/SMI606-reading-list/). But not all students use it!
+* Probably at least 50% of module conveners effort goes towards putting together a [good quality reading & resource list](https://calumwebb.co.uk/teaching/EDC459-reading-list/). But not all students use it!
 
 ]
 
@@ -517,16 +520,16 @@ knitr::include_graphics("images/cat.svg")
 ---
 class: middle
 
-## How to use the [reading/resource list](https://calumwebb.co.uk/teaching/SMI606-reading-list/)?
+## How to use the [reading/resource list](https://calumwebb.co.uk/teaching/EDC459-reading-list/)?
 
 .pull-left[
 
-* Probably at least 50% of module conveners effort goes towards putting together a [good quality reading & resource list](https://calumwebb.co.uk/teaching/SMI606-reading-list/). But not all students use it!
+* Probably at least 50% of module conveners effort goes towards putting together a [good quality reading & resource list](https://calumwebb.co.uk/teaching/EDC459-reading-list/). But not all students use it!
 
 
 The reading and resource list for this module includes:
 
-* Detailed information about the topic each week as well as __strongly suggested/required preparatory reading__ as well as additional or alternative reading.
+* Detailed information about the topic each week as well as __suggested__ or alternative reading. Where possible, free/online resources have been added as options.
 * Contains extra resources for:
   * Learning `R`
   * Open data to practice on or use for your assessment
@@ -590,6 +593,83 @@ Online resources:
 * [1-to-1 Support](https://students.sheffield.ac.uk/mash/bookings)
 
 ]
+
+---
+
+class: middle
+
+# Academic Misconduct & Integrity
+
+
+.pull-left-big[
+
+Types of academic misconduct: 
+
+* **Plagiarism**
+  * You must not resubmit already submitted work (self-plagiarism) in assessment, even if that work was used in a different course/institution. You must ensure all sources are adequately and correctly cited.
+* **Essay or code buying**
+  * Self-explanatory: all of your work must be your own.
+* **Collusion**
+  * While I encourage you to work together on the class exercises and challenges, you must not work together on your assessments. I'd encourage you to pick different research topics than your friends so that you can still chat about your assessments without collusion
+* **Fabrication**
+  * You'll be expected to use real data and you must not fabricate data for the purpose of assessment.
+* **Generative AI (False Authorship)**
+  * You must not use generative AI to write any of your code for you or to conduct any analysis used in your assessment.
+
+]
+
+.pull-right-small[
+
+.center[
+
+```{r, echo = FALSE, out.width="80%", fig.cap="Generative AI Guidance Available on the Blackboard Pages under Assessment Information"}
+
+knitr::include_graphics("ai-guide.png")
+
+```
+
+]
+
+]
+
+
+---
+
+# TellUS and Student Feedback
+
+.pull-left-big[
+
+The university is committed to **acting on student feedback**. Here are some examples of how the module has been developed based on student feedback in the past:
+
+* Past students wanted answer sheets to be added to the R exercises so that they could get immediate feedback on whether they had interpreted the question correctly. **These have been added to all of the weekly R exercise folders.**
+* Past students wanted there to be more of a bridge between the worksheets and being able to do your own analysis as expected in the assessments. **Each week a challenge has been added that requires you to apply your learning in a slightly less guided way, to help prepare you for the assessment.**
+* Past students wanted more guidance on how to complete the assessments. **There are now two videos with detailed assessment guidance and a walkthrough for completing the first assessment.**
+* Students wanted rapid feedback on their understanding. **Knowledge checks have been added throughout the module.**
+* Students wanted more guidance on how they could and couldn't use generative AI in a way that wouldn't cause concerns about academic misconduct. **AI guidance was developed with specific reference to writing code and doing quantitative research.**
+
+]
+
+
+.pull-right-small[
+
+.center[
+
+```{r, echo = FALSE, out.width="100%"}
+
+knitr::include_graphics("icons8-popular.png")
+
+```
+
+]
+
+]
+
+
+---
+
+class: inverse, middle
+
+# A quick tour of the Blackboard Ultra Course page
 
 
 ---
@@ -935,7 +1015,7 @@ knitr::include_graphics("images/Auguste_Comte.jpg")
 
 .pull-right[
 
-The way we research something reflects (implicitly or explicitly) __how we understand the human world__. You will explore this in much more detail in SMI607 Principles of Social Research I. 
+The way we research something reflects (implicitly or explicitly) __how we understand the human world__. You will explore this in much more detail in Principles of Social Research I. 
 
 * Quantitative research has a long association with Positivism: the __idea that we can apply the same scientific principles we use to study the natural world to understand the human/social world__.
 
@@ -961,7 +1041,7 @@ knitr::include_graphics("images/Auguste_Comte.jpg")
 
 .pull-right[
 
-The way we research something reflects (implicitly or explicitly) __how we understand the human world__. You will explore this in much more detail in SMI607 Principles of Social Research I. 
+The way we research something reflects (implicitly or explicitly) __how we understand the human world__. You will explore this in much more detail in Principles of Social Research I. 
 
 * Quantitative research has a long association with Positivism: the __idea that we can apply the same scientific principles we use to study the natural world to understand the human/social world__.
 
@@ -1131,7 +1211,7 @@ class: middle
 ## Getting set up in R
 
 
-* .big[Go to the __SMI606 Blackboard page -> Learning Materials -> Week 1__, and follow the tutorial for downloading and installing `R` and Rstudio.]
+* .big[Go to the __EDC459 Blackboard page -> Learning Materials -> Week 1__, and follow the tutorial for downloading and installing `R` and Rstudio.]
 * .big[Use the __visual tour of Rstudio sheet__ to familiarise yourself with the software.]
 * .big[Follow the __"Creating a New R Project and Script" tutorial__ to create a new project called "week-1-exercise"]
 

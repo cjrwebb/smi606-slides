@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>SMI606: Week 8 — Multiple Linear Regression</title>
+    <title>EDC459: Week 8 — Multiple Linear Regression</title>
     <meta charset="utf-8" />
     <meta name="author" content="Calum Webb" />
-    <meta name="date" content="2024-09-16" />
+    <meta name="date" content="2025-09-17" />
     <script src="week-08-multiple-lm-noplotly_files/header-attrs/header-attrs.js"></script>
     <link href="week-08-multiple-lm-noplotly_files/tile-view/tile-view.css" rel="stylesheet" />
     <script src="week-08-multiple-lm-noplotly_files/tile-view/tile-view.js"></script>
@@ -21,6 +21,7 @@
     <link href="week-08-multiple-lm-noplotly_files/xaringanExtra-search/search.css" rel="stylesheet" />
     <script src="week-08-multiple-lm-noplotly_files/xaringanExtra-search/search.js"></script>
     <script>window.addEventListener('load', function() { window.xeSearch = new RemarkSearch({"position":"bottom-left","caseSensitive":false,"showIcon":true,"autoSearch":false}) })</script>
+    <link href="week-08-multiple-lm-noplotly_files/htmltools-fill/fill.css" rel="stylesheet" />
     <script src="week-08-multiple-lm-noplotly_files/htmlwidgets/htmlwidgets.js"></script>
     <script src="week-08-multiple-lm-noplotly_files/viz/viz.js"></script>
     <link href="week-08-multiple-lm-noplotly_files/DiagrammeR-styles/styles.css" rel="stylesheet" />
@@ -37,7 +38,7 @@ background-size: contain
 
 &lt;br&gt;&lt;br&gt;&lt;br&gt;
 
-# .tuos_purple[SMI606: Week 8&lt;br&gt;Multiple Linear Regression]
+# .tuos_purple[EDC459: Week 8&lt;br&gt;Multiple Linear Regression]
 
 &lt;br&gt;&lt;br&gt;
 
@@ -86,7 +87,7 @@ top:1em;right:2em;
 
 
 
-<style>.panelset{--panel-tab-background: #F8F8F8;--panel-tab-active-background: #F8F8F8;--panel-tab-hover-background: #F8F8F8;}</style>
+<style>:root{--panel-tab-background:#F8F8F8;--panel-tab-active-background:#F8F8F8;--panel-tab-hover-background:#F8F8F8;}</style>
 
 <style>.xe__progress-bar__container {
   top:0;
@@ -191,7 +192,7 @@ According to the Labour Force Survey 2018, among men and women earning less than
 .pull-left[
 
 
-```r
+``` r
 pay_data %&gt;%
   group_by(gender) %&gt;%
   summarise(mean_pay = mean(pay, na.rm = TRUE),
@@ -222,7 +223,7 @@ pay_data %&gt;%
 .pull-left[
 
 
-```r
+``` r
 pay_data %&gt;%
   group_by(gender) %&gt;%
   summarise(mean_pay = mean(pay, na.rm = TRUE),
@@ -238,7 +239,7 @@ pay_data %&gt;%
 ```
 
 
-```r
+``` r
 model_1 &lt;- lm(data = pay_data, formula = pay ~ gender)
 
 summary(model_1)
@@ -295,7 +296,7 @@ background-color: white
 What other variables could be conditioning the relationship between gender and pay?]
 
 &lt;center&gt;
-&lt;img src="images/smi606-week-8-wooclap-1.png" width="400" height="400" /&gt;
+&lt;img src="images/SMI606-week-8-wooclap-1.png" width="400" height="400" /&gt;
 &lt;/center&gt;
 
 ]
@@ -310,7 +311,7 @@ What other variables could be conditioning the relationship between gender and p
 #### Bivariate Linear Regression
 
 
-```r
+``` r
 bivar_model &lt;- lm(data = pay_data,
                   formula = pay ~ gender)
 
@@ -324,7 +325,7 @@ summary(bivar_model)
 #### Multiple Linear Regression
 
 
-```r
+``` r
 mult_model &lt;- lm(data = pay_data,
                   formula = pay ~ gender + hrs_worked)
 
@@ -342,7 +343,7 @@ summary(mult_model)
 #### Bivariate Linear Regression
 
 
-```r
+``` r
 bivar_model &lt;- lm(data = pay_data,
                   formula = pay ~ gender)
 
@@ -377,7 +378,7 @@ summary(bivar_model)
 #### Multiple Linear Regression
 
 
-```r
+``` r
 mult_model &lt;- lm(data = pay_data,
                   formula = pay ~ gender + hrs_worked)
 
@@ -420,7 +421,7 @@ summary(mult_model)
 Bivariate simple regression model with just gender as a predictor.
 
 
-```r
+``` r
 bivar_model &lt;- lm(data = pay_data,
                   formula = pay ~ gender)
 
@@ -468,7 +469,7 @@ summary(bivar_model)
 Bivariate simple regression model with just hours worked as a predictor.
 
 
-```r
+``` r
 bivar_model &lt;- lm(data = pay_data,
                   formula = pay ~ hrs_worked)
 
@@ -516,7 +517,7 @@ summary(bivar_model)
 Multiple linear regression model with both hours worked and gender as predictors.
 
 
-```r
+``` r
 mult_model &lt;- lm(data = pay_data,
                   formula = pay ~ hrs_worked + gender)
 
@@ -598,7 +599,7 @@ In theory, we can include almost __as many independent variables as we want__ in
 This helps us answer more complex, more interesting research questions with greater nuance.
 
 
-```r
+``` r
 model_2 &lt;- lm(data = pay_data, 
               formula = pay ~ gender + hrs_worked + public_pr_chr)
 
@@ -650,7 +651,7 @@ We can use the `ggeffects` and `effects` packages to create **predictions**, or 
 For example, for **hrs_worked**
 
 
-```r
+``` r
 library(effects)
 library(ggeffects)
 ggeffect(model_2, terms = "hrs_worked")
@@ -665,16 +666,16 @@ ggeffect(model_2, terms = "hrs_worked")
 ```
 ## # Predicted values of pay
 ## 
-## hrs_worked | Predicted |             95% CI
-## -------------------------------------------
-##         15 |    389.82 | [ 327.12,  452.53]
-##         20 |    464.98 | [ 415.92,  514.04]
-##         30 |    615.30 | [ 589.36,  641.24]
-##         35 |    690.46 | [ 668.93,  712.00]
-##         40 |    765.62 | [ 739.30,  791.95]
-##         45 |    840.78 | [ 803.89,  877.67]
-##         50 |    915.94 | [ 866.27,  965.62]
-##         65 |   1141.42 | [1049.68, 1233.17]
+## hrs_worked | Predicted |           95% CI
+## -----------------------------------------
+##         15 |    389.82 |  327.12,  452.53
+##         20 |    464.98 |  415.92,  514.04
+##         30 |    615.30 |  589.36,  641.24
+##         35 |    690.46 |  668.93,  712.00
+##         40 |    765.62 |  739.30,  791.95
+##         45 |    840.78 |  803.89,  877.67
+##         50 |    915.94 |  866.27,  965.62
+##         65 |   1141.42 | 1049.68, 1233.17
 ```
 
 ]
@@ -693,7 +694,7 @@ We can use the `ggeffects` and `effects` packages to create **predictions**, or 
 We can also plot these predictions by adding %&gt;% plot
 
 
-```r
+``` r
 ggeffect(model_2, terms = "hrs_worked") %&gt;% 
   plot()
 ```
@@ -721,7 +722,7 @@ We can use the `ggeffects` and `effects` packages to create **predictions**, or 
 Another example using sector
 
 
-```r
+``` r
 ggeffect(model_2, terms = "public_pr_chr") %&gt;% 
   plot() + coord_flip() 
 ```
@@ -807,7 +808,7 @@ Imagine we also had data for non-binary people and people with who identified th
 We can estimate a regression model as before, but it's clear that there is a **different association between hours worked and pay depending on gender**.
 
 
-```r
+``` r
 model_noint &lt;- lm(data = pay_data_2, formula = pay ~ gender + hrs_worked)
 summary(model_noint)
 ```
@@ -855,7 +856,7 @@ summary(model_noint)
 Visually, it looks like there is a weaker association between hours worked and pay for people who identify as non-binary or other genders than there is for people who identify as female or male.
 
 
-```r
+``` r
 model_noint &lt;- lm(data = pay_data_2, formula = pay ~ gender + hrs_worked)
 summary(model_noint)
 ```
@@ -904,7 +905,7 @@ summary(model_noint)
 We can add interaction terms in R using an asterisk \* between the terms we wish to interact. The interaction effects, e.g. genderMale:hrs_worked tell us how the effect of one changes when the value of the other changes.
 
 
-```r
+``` r
 model_int &lt;- lm(data = pay_data_2, formula = pay ~ gender * hrs_worked)
 summary(model_int)
 ```
@@ -1005,7 +1006,7 @@ We often need to do some tidying of our data to make sure the predictors we incl
 
 
 
-```r
+``` r
 pay_data
 ```
 
@@ -1038,7 +1039,7 @@ When we use a binary variable in a regression model, we __always have to have a 
 .pull-left[
 
 
-```r
+``` r
 model_2 &lt;- lm(data = pay_data, 
               formula = pay ~ gender + hrs_worked + public_pr_chr)
 summary(model_2)
@@ -1085,7 +1086,7 @@ When we use a binary variable in a regression model, we __always have to have a 
 .pull-left[
 
 
-```r
+``` r
 model_2 &lt;- lm(data = pay_data, 
               formula = pay ~ gender + hrs_worked + public_pr_chr)
 summary(model_2)
@@ -1138,7 +1139,7 @@ It's useful for us to be able to manually code our binary/dummy variables, or at
 `dplyr`'s `case_when()` function can be used to create a new variable based on conditional logic.
 
 
-```r
+``` r
 pay_data &lt;- pay_data %&gt;%
   # Mutate creates new variables
   mutate(
@@ -1184,7 +1185,7 @@ Using the new `female` variable now sets the reference group to all men in the s
 .pull-left[
 
 
-```r
+``` r
 model_before &lt;- lm(data = pay_data, 
                    formula = pay ~ gender + hrs_worked)
 
@@ -1218,7 +1219,7 @@ summary(model_before)
 .pull-right[
 
 
-```r
+``` r
 model_after &lt;- lm(data = pay_data, 
                   formula = pay ~ female + hrs_worked)
 
@@ -1259,7 +1260,7 @@ summary(model_after)
 Alternatively, we can turn our variable into a factor (if it's not already) and use `relevel` to set a reference category. This is very useful when you have lots of categories and can't be bothered to manually recode all of the non-reference categories into groups with `case_when`.
 
 
-```r
+``` r
 pay_data &lt;- pay_data %&gt;%
   # Mutate creates new variables
   mutate(
@@ -1295,7 +1296,7 @@ pay_data
 .pull-left[
 
 
-```r
+``` r
 model_chr &lt;- lm(data = pay_data, 
                    formula = pay ~ gender + hrs_worked)
 
@@ -1329,7 +1330,7 @@ summary(model_chr)
 .pull-right[
 
 
-```r
+``` r
 model_fct &lt;- lm(data = pay_data, 
                   formula = pay ~ gender_fct + hrs_worked)
 
@@ -1397,7 +1398,7 @@ For example, the `happy` (how happy are you with your current pay) variable here
 
 
 
-```r
+``` r
 pay_data
 ```
 
@@ -1427,7 +1428,7 @@ We can use the same conditional logic to create groupings.
 First, I check what all the possible values of the variable are with a `tabyl`.
 
 
-```r
+``` r
 pay_data %&gt;% janitor::tabyl(happy)
 ```
 
@@ -1449,7 +1450,7 @@ We can use the same conditional logic to create groupings.
 Then, I can use `case_when` to group these into something different.
 
 
-```r
+``` r
 pay_data &lt;- pay_data %&gt;% 
   mutate(
     happy_bn = case_when(is.na(happy) ~ NA_character_,
@@ -1491,7 +1492,7 @@ pay_data
 Natural log and square root transformations can be very useful when our variables are positively-skewed (right tailed). However, they do change the interpretation of our coefficients slightly: [see a short guide here](https://data.library.virginia.edu/interpreting-log-transformations-in-a-linear-model/). For example, if both X and Y are logged the interpretation becomes for a 1% increase in X what % change is there in Y.
 
 
-```r
+``` r
 lfs_real &lt;- read_csv("lfs_sample.csv")
 
 lfs_real %&gt;%
@@ -1516,7 +1517,7 @@ lfs_real %&gt;%
 Natural log and square root transformations can be very useful when our variables are positively-skewed (right tailed). However, they do change the interpretation of our coefficients slightly: [see a short guide here](https://data.library.virginia.edu/interpreting-log-transformations-in-a-linear-model/). For example, if both X and Y are logged the interpretation becomes for a 1% increase in X what % change is there in Y.
 
 
-```r
+``` r
 lfs_real %&gt;%
   ggplot() +
   geom_histogram(aes(x = grsswk), 
@@ -1607,7 +1608,7 @@ __Transformed__ using `sqrt()`
 # Log and Square Root Transformation
 
 
-```r
+``` r
 lfs_real %&gt;%
   mutate(
     log_grsswk = log(grsswk),
@@ -1626,7 +1627,7 @@ lfs_real %&gt;%
 * If you need to log or take the square root of a variable that has negative or zero values, you can add a __constant__ value to make all of the numbers positive (e.g. Pay + 500). Just remember to remove the constant if back-transforming.
 
 
-```r
+``` r
 lfs_real %&gt;%
   mutate(
     log_grsswk = log(grsswk + 500),
@@ -1710,7 +1711,7 @@ If the .tuos_red[red line] roughly follows the dotted line at 0, the linear fit 
   .pull-right[
 
 
-```r
+``` r
   plot(model_2, which = 1)
 ```
 
@@ -1749,7 +1750,7 @@ If the .tuos_red[red line] roughly follows the dotted line at 0, the linear fit 
   .pull-right[
 
 
-```r
+``` r
   plot(model_real, which = 1)
 ```
 
@@ -1787,7 +1788,7 @@ The red line should be close to be horizontal, and the spread around the line sh
   .pull-right[
 
 
-```r
+``` r
   plot(model_2, which = 3)
 ```
 
@@ -1825,7 +1826,7 @@ The red line should be close to be horizontal, and the spread around the line sh
   .pull-right[
 
 
-```r
+``` r
   plot(model_real, which = 3)
 ```
 
@@ -1865,7 +1866,7 @@ The Cook's distance plot can be generated using `plot(model_2, which = 4)`, and 
   .pull-right[
 
 
-```r
+``` r
 plot(model_2, which = 4)
 ```
 
@@ -1904,7 +1905,7 @@ The Cook's distance plot can be generated using `plot(model_2, which = 4)`, and 
   .pull-right[
 
 
-```r
+``` r
 plot(model_2, which = 5)
 ```
 
@@ -1946,7 +1947,7 @@ The Cook's distance plot can be generated using `plot(model_2, which = 4)`, and 
 Outliers can be removed by row position using the `slice()` function.
 
 
-```r
+``` r
 summary(model_2)
 ```
 
@@ -2009,7 +2010,7 @@ The Cook's distance plot can be generated using `plot(model_2, which = 4)`, and 
 Outliers can be removed by row position using the `slice()` function.
 
 
-```r
+``` r
 pay_data_no_outliers &lt;- pay_data %&gt;%
   slice(-32, -113, -150)
 
@@ -2075,7 +2076,7 @@ If residuals are normally distributed, they should approximately follow the diag
 Approximately normally distributed.
 
 
-```r
+``` r
 plot(model_2, which = 2)
 ```
 
@@ -2114,7 +2115,7 @@ If residuals are normally distributed, they should approximately follow the diag
 Not normally distributed.
 
 
-```r
+``` r
 plot(model_real, which = 2)
 ```
 
@@ -2260,7 +2261,7 @@ class: middle
   * Use the `vif()` function on your model.
   
 
-```r
+``` r
 car::vif(model_2)
 ```
 
@@ -2310,13 +2311,13 @@ class: middle
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-"slideNumberFormat": "%current%",
-"highlightStyle": "github",
-"highlightLines": true,
-"sealed": false,
-"ratio": "16:9",
-"self_contained": true,
-"countIncrementalSlides": true
+  "slideNumberFormat": "%current%",
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "sealed": false,
+  "ratio": "16:9",
+  "self_contained": true,
+  "countIncrementalSlides": true
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));

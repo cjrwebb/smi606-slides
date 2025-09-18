@@ -1,5 +1,5 @@
 ---
-title: "SMI606: Week 8 — Multiple Linear Regression"
+title: "EDC459: Week 8 — Multiple Linear Regression"
 subtitle: ""  
 author: 
   - "Calum Webb"
@@ -23,9 +23,15 @@ output:
 class: middle
 background-size: contain
 
+<!----- Make a pdf using:
+
+decktape generic --key=ArrowRight --load-pause 1800 --slides '1-82' --size '1216x684' --url-load-timeout 80000 --page-load-timeout 40000  "week-08-multiple-linear-regression/slides/week-08-multiple-lm-noplotly.html" week-08-multiple-linear-regression/slides/week-08-multiple-lm-noplotly.pdf
+
+----->
+
 <br><br><br>
 
-# .tuos_purple[SMI606: Week 8<br>Multiple Linear Regression]
+# .tuos_purple[EDC459: Week 8<br>Multiple Linear Regression]
 
 <br><br>
 
@@ -402,7 +408,7 @@ What other variables could be conditioning the relationship between gender and p
 <center>
 ```{r, echo = FALSE, out.height=400, out.width=400}
 
-knitr::include_graphics("images/smi606-week-8-wooclap-1.png")
+knitr::include_graphics("images/SMI606-week-8-wooclap-1.png")
 
 ```
 </center>

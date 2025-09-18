@@ -1,5 +1,5 @@
 ---
-title: "SMI606: Week 10 — Cluster Analysis"
+title: "EDC459: Week 10 — Cluster Analysis"
 subtitle: ""  
 author: 
   - "Calum Webb"
@@ -23,9 +23,15 @@ output:
 class: middle
 background-size: contain
 
+<!----- Make a pdf using:
+
+decktape generic --key=ArrowRight --load-pause 1800 --slides '1-79' --size '1216x684' --url-load-timeout 80000 --page-load-timeout 40000  "week-10-cluster-analysis/slides/week-10-cluster-analysis.html" week-10-cluster-analysis/slides/week-10-cluster-analysis.pdf
+
+----->
+
 <br><br><br>
 
-# .tuos_purple[SMI606: Week 10<br>Cluster Analysis]
+# .tuos_purple[EDC459: Week 10<br>Cluster Analysis]
 
 <br><br>
 
@@ -2547,7 +2553,7 @@ class: middle
 
 ```{r, echo = FALSE, out.width = "60%"}
 
-knitr::include_graphics("images/smi606-week-10-wooclap-2.png")
+knitr::include_graphics("images/SMI606-week-10-wooclap-2.png")
 
 ```
 

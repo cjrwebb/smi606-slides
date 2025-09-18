@@ -1,5 +1,5 @@
 ---
-title: "SMI606: Week 11 — Spatial Analysis"
+title: "EDC459: Week 11 — Spatial Analysis"
 subtitle: ""  
 author: 
   - "Calum Webb"
@@ -23,9 +23,15 @@ output:
 class: middle
 background-size: contain
 
+<!----- Make a pdf using:
+
+decktape generic --key=ArrowRight --load-pause 1800 --slides '1-76' --size '1216x684' --url-load-timeout 80000 --page-load-timeout 40000  "week-11-spatial-analysis/slides/week-11-spatial-analysis.html" week-11-spatial-analysis/slides/week-11-spatial-analysis.pdf
+
+----->
+
 <br><br><br>
 
-# .tuos_purple[SMI606: Week 11<br>Spatial Analysis]
+# .tuos_purple[EDC459: Week 11<br>Spatial Analysis]
 
 <br><br>
 
