@@ -441,7 +441,7 @@ experiment_data <- experiment_data %>%
 
 experiment_data <- experiment_data %>%
   mutate(timestamp = as.character(timestamp)) %>%
-  filter(str_detect(timestamp, "2024"))
+  filter(str_detect(timestamp, "2025"))
 
 experiment_data %>%
   group_by(sweet) %>%
@@ -1379,7 +1379,7 @@ class: middle
 
 #### Is our data a sample or is it the entire population?
 
-* If the data is of the entire population of interest inference (p-values) **are usually not meaningful** because we have nothing larger than our sample we can generalise to.
+* If the data is of the entire population of interest inference (p-values) **are usually not meaningful** because we have nothing larger than our sample we can generalise to ([Alexander, 2015](https://link.springer.com/article/10.1186/s12982-015-0029-4), [Western & Jackman, 2013](https://www.cambridge.org/core/journals/american-political-science-review/article/abs/bayesian-inference-for-comparative-research/DACABB8D7566E6C8FFF9D559C17512B7?utm_campaign=shareaholic&utm_medium=copy_link&utm_source=bookmark)).
 
 --
 

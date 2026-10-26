@@ -239,7 +239,7 @@ Research on poverty and the child welfare system in the UK using secondary surve
 
 <br>
 
-For any general enquiries about administration during the module — registration, extensions, assessment submission, attendance, timetable issues, and so on — please contact the Student Experience team [smi@sheffield.ac.uk](mailto:smi@sheffield.ac.uk) who will be happy to help you. Remember, as per the module outline, that module leaders cannot grant extensions.
+For any general enquiries about administration during the module — registration, extensions, assessment submission, attendance, timetable issues, and so on — please contact [edcpg@sheffield.ac.uk](mailto:edcpg@sheffield.ac.uk) who will be happy to help you. Remember, as per the module outline, that module leaders cannot grant extensions.
 
 ]
 
@@ -265,19 +265,32 @@ knitr::include_graphics("images/cheerleader.png")
 
 class: middle
 
+.pull-left[
+
 ## Module design, timetable, and support
 
 * Introductions to important statistical principles and methods in quantitative social science.
   * Intuition *over* equations.
 
---
-
 * 'Hands-on' experience putting these principles into practice in `R` using real-world data. 
 
---
+* Assessment is a portfolio where Part A is 1,000 words and covers content from Week 1-6, and Part B is 2,000 words and requires you to use one of the methods from Weeks 8-12 to conduct a small, independent, piece of quantitative social research on a topic of your choosing.
 
-* Assessment on two small quantitative research projects where the topic is decided by you.
+]
 
+.pull-right[.center[.middle[
+
+<br>
+
+```{r, echo = FALSE, out.width = "65%"}
+
+knitr::include_graphics("images/icons8-track.svg")
+
+```
+
+]]
+
+]
 
 ---
 
@@ -285,9 +298,9 @@ class: middle
 
 ## Module design, timetable, and support
 
-__Time & Location__: Time & Location: 12:00-14:50 in Geography Building, Computer Room B04 (Tuesdays, Week 1-6, 8-11) 
+__Time & Location__: 14:00-16:50 Tuesdays, The Wave, Computer room 02b, Weeks 1-12
 
-__Consultation & Feedback Hours__: 10:00-11:00 Tuesdays (Week 1-12) and 15:00-16:00 Thursdays (Week 1-12). [Book through Google Calendar by clicking here](https://calendar.app.google/H7Eynbsnyh9S8VvH8).
+__Consultation & Feedback Hours__: 1:00-12:00 Tuesdays (Week 1-12, 13-15 after the Vacation Period) and 15:00-16:00 Thursdays (Week 1-12, 13-15 after the Vacation Period).  [Book through Google Calendar](https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0AHE-tqW5ZvjtjlEvH8TEGQSnwYW5GaERacTb18EjlfN7GgHXUbUxPpOKzBeVuJ4L-w04UppOa).
 
 ### Maths and Statistics Help (MASH)
 
@@ -323,47 +336,47 @@ And lastly, remember to **ask for help if you need it!** There is no such thing 
 
 background-color: white
 
-## What will we learn?
-
 ```{r, echo = FALSE}
 library(tidyverse)
 library(gt)
 
 outline <- tibble(
-  `Week` = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11),
+  `Week` = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
   `Topic` = c("What is quantitative social science?",
               "Types of quantification",
               "Relationships between variables",
               "Inference",
               "Causality",
               "Bivariate Linear Regression",
-              "Reading Week",
+              "Practical Data Tidying & SQL, Assessment Part A",
               "Multiple Linear Regression",
               "Logistic Regression",
               "Cluster Analysis",
-              "Spatial Analysis"),
-  `Required Reading` = c("Powell, T. C. (2019). '_Can Quantitative Research Solve Social Problems?_' & Mehmetoglu & Mittner (2022) _Chapter 1, 2 & 3, Applied Statistics Using R_",
+              "Spatial Analysis",
+              "Network Analysis"),
+  `Recommended Reading` = c("Powell, T. C. (2019). '_Can Quantitative Research Solve Social Problems?_' & Mehmetoglu & Mittner (2022) _Chapter 1, 2 & 3, Applied Statistics Using R_",
                 "Mehmetoglu & Mittner (2022) _Chapter 4, Applied Statistics Using R_",
                 "Mehmetoglu & Mittner (2022) _Chapter 5, Applied Statistics Using R_",
                 "Mehmetoglu & Mittner (2022) _Chapter 6, Applied Statistics Using R_",
                 "Goldthorpe, J. H. '_Causation, Statistics and Sociology_'",
                 "Mehmetoglu & Mittner (2022) _Chapter 7, Applied Statistics Using R_",
-                "Catch up reading week (**Ready for assessment 1!**)",
+                "Kao, Z. C. (N.D.) Select Star SQL. https://selectstarsql.com/",
                 "Mehmetoglu & Mittner (2022) _Chapter 8 & 9, Applied Statistics Using R_",
                 "Mehmetoglu & Mittner (2022) _Chapter 11, Applied Statistics Using R_",
                 "UC Business Analytics `R` Programming Guide 'k-means Cluster Analysis' ([Available free online](https://uc-r.github.io/kmeans_clustering)) '_Hierarchical Cluster Analysis_' ([Available free online](https://uc-r.github.io/hc_clustering))",
-                "Imai, K. Chapter 5.3 '_Quantitative Social Science: An introduction_ (Available online through the library)  (**Ready for assessment 2!**)")
+                "Imai, K. Chapter 5.3 '_Quantitative Social Science: An introduction_ (Available online through the library)",
+                "Fuhse, J., & Mützel, S. (2011). Tackling connections, structure, and meaning in networks: quantitative and qualitative methods in sociological network research. Quality & Quantity, 45(5), 1067-1089. https://doi.org/10.1007/s11135-011-9492-3")
 )
 
 outline %>%
   mutate(
-    `Required Reading` = map(`Required Reading`, gt::md)
+    `Recommended Reading` = map(`Recommended Reading`, gt::md)
   ) %>%
   gt() %>%
   cols_width(
     `Week` ~ px(50),
     `Topic` ~ px(300),
-    `Required Reading` ~ px(750)
+    `Recommended Reading` ~ px(750)
   ) %>%
   cols_align(
     align = "left"
@@ -377,9 +390,9 @@ outline %>%
 class: middle
 background-color: white
 
-## Why **R**?
-
 .pull-left[
+
+## Why **R**?
 
 <br><br><br>
 
@@ -410,9 +423,9 @@ knitr::include_graphics("images/r_first_then.png")
 class: middle
 background-color: white
 
-## Why **R**?
-
 .pull-left[
+
+## Why **R**?
 
 <br><br><br>
 
@@ -495,11 +508,11 @@ knitr::include_graphics("images/r_rollercoaster.png")
 ---
 class: middle
 
-## How to use the [reading/resource list](https://calumwebb.co.uk/teaching/EDC459-reading-list/)?
-
 .pull-left[
 
-* Probably at least 50% of module conveners effort goes towards putting together a [good quality reading & resource list](https://calumwebb.co.uk/teaching/EDC459-reading-list/). But not all students use it!
+## How to use the [reading/resource list](https://calumwebb.co.uk/teaching/SMI606-reading-list/)?
+
+* Probably at least 50% of module conveners effort goes towards putting together a [good quality reading & resource list](https://calumwebb.co.uk/teaching/SMI606-reading-list/). But not all students use it!
 
 ]
 
@@ -520,11 +533,11 @@ knitr::include_graphics("images/cat.svg")
 ---
 class: middle
 
-## How to use the [reading/resource list](https://calumwebb.co.uk/teaching/EDC459-reading-list/)?
-
 .pull-left[
 
-* Probably at least 50% of module conveners effort goes towards putting together a [good quality reading & resource list](https://calumwebb.co.uk/teaching/EDC459-reading-list/). But not all students use it!
+## How to use the [reading/resource list](https://calumwebb.co.uk/teaching/SMI606-reading-list/)?
+
+* Probably at least 50% of module conveners effort goes towards putting together a [good quality reading & resource list](https://calumwebb.co.uk/teaching/SMI606-reading-list/). But not all students use it!
 
 
 The reading and resource list for this module includes:
@@ -696,9 +709,11 @@ Mapping exercise for students to map their experience with statistics and anythi
 
 background-color: white
 
-## What is quantitative social science?
-
 .pull-left[
+
+<br><br><br>
+
+## What is quantitative social science?
 
 <br>
 
@@ -712,6 +727,8 @@ background-color: white
 ]
 
 .pull-right[
+
+<br><br>
 
 .middle[.center[
 
@@ -745,10 +762,11 @@ datasets::occupationalStatus %>%
 
 background-color: white
 
+.pull-left[
+
+<br><br><br>
 
 ## What is quantitative social science?
-
-.pull-left[
 
 <br>
 
@@ -762,6 +780,8 @@ background-color: white
 ]
 
 .pull-right[
+
+<br>
 
 .middle[.center[
 
@@ -783,9 +803,11 @@ knitr::include_graphics("images/operationalisation.png")
 
 background-color: white
 
-## What is quantitative social science?
-
 .pull-left[
+
+<br><br><br>
+
+## What is quantitative social science?
 
 <br>
 
@@ -801,7 +823,7 @@ background-color: white
 .pull-right[
 
 .middle[.center[
-<br>
+<br><br>
 
 ```{r, echo=FALSE, warning = FALSE, message = FALSE, fig.width=4.25, fig.height=4.25, out.height=425, out.width=425, dpi=400}
 
@@ -824,9 +846,11 @@ grid::grid.draw(v_diag)
 
 background-color: white
 
-## What is quantitative social science?
-
 .pull-left[
+
+<br><br><br>
+
+## What is quantitative social science?
 
 <br>
 
@@ -843,7 +867,7 @@ background-color: white
 
 .middle[.center[
 
-<br>
+<br><br>
 
 ``` {r, echo = FALSE, warning = FALSE, message = FALSE, fig.width=4.25, fig.height=4.25, out.height=425, out.width=425, dpi=400}
 
@@ -899,9 +923,11 @@ knitr::include_graphics("images/waffle.png")
 
 background-color: white
 
-## What is quantitative social science?
-
 .pull-left[
+
+<br><br><br>
+
+## What is quantitative social science?
 
 <br>
 
@@ -915,6 +941,8 @@ background-color: white
 ]
 
 .pull-right[
+
+<br>
 
 .middle[.center[
 
@@ -956,9 +984,11 @@ $$\hat{Destination} = 3 + 0.46 \cdot Origin$$
 
 background-color: white
 
-## What is quantitative social science?
-
 .pull-left[
+
+<br><br><br>
+
+## What is quantitative social science?
 
 <br>
 
@@ -975,7 +1005,7 @@ background-color: white
 
 .middle[.center[
 
-<br><br><br>
+<br><br><br><br>
 
 ```{r, echo = FALSE}
 
@@ -1216,7 +1246,7 @@ class: middle
 * .big[Follow the __"Creating a New R Project and Script" tutorial__ to create a new project called "week-1-exercise"]
 
 
-## Week 1 `R` Exercise
+## Week 1 R Exercise
 
 
 * .big[Copy the files in the "__Week 1 R Exercise__" folder in R into your new project directory.]

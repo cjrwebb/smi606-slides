@@ -1427,6 +1427,7 @@ class: middle
 
 There is no `R` exercise this week, instead (if we have any time remaining) you should:
 
-- Look at the __assessment 1 details__ that are now on Blackboard
 - Go back and finish any exercises you've not been able to finish
+- Have a go at any challenges you haven't attempted yet
+- Have a bit of a break!
 - Next week we will practice doing these tests in `R`
