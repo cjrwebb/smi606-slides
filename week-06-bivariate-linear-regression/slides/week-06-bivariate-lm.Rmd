@@ -2281,13 +2281,16 @@ summary(lab_model)
 
 If using Rmarkdown, you can make prettier regression results tables using the `stargazer` package. For example:
 
-```{r, eval = FALSE}
-
+````{r, eval = FALSE}
+```{r, results = 'asis'}
 library(stargazer)
 
-stargazer::stargazer(lab_model, type = "html")
-
-```
+# type = "latex" for pdfs, header = FALSE for 
+# suppressing package author info
+stargazer::stargazer(lab_model, type = "latex",
+                     header = FALSE) 
+```  
+````
 
 <br>
 
@@ -2298,7 +2301,7 @@ stargazer::stargazer(lab_model, type = "html")
 ```{r, results = 'asis', echo = FALSE}
 
 library(stargazer)
-stargazer(lab_model, type = "html")
+stargazer(lab_model, type = "html", header = FALSE, omit.stat = c("f", "ser"))
 
 ```
 
@@ -2369,7 +2372,6 @@ un_data %>%
 
 eu_model <- lm(data = un_data, 
                 formula = lab_force_women ~ in_eu)
-
 summary(eu_model)
 
 ```

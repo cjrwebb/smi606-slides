@@ -440,8 +440,8 @@ experiment_data <- experiment_data %>%
 
 
 experiment_data <- experiment_data %>%
-  mutate(timestamp = as.character(timestamp)) %>%
-  filter(str_detect(timestamp, "2025"))
+  mutate(timestamp = as.character(timestamp)) #%>%
+  #filter(str_detect(timestamp, "2026"))
 
 experiment_data %>%
   group_by(sweet) %>%
